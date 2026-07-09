@@ -44,7 +44,7 @@ class OrdersController < ApplicationController
         end
 
         unless stock_reserved
-            redirect_to product_path(@variant.product), alert: "Not enough stock available"
+            redirect_to game_product_path(game: @variant.product.game_name, id: @variant.product), alert: "Not enough stock available"
             return
         end
 

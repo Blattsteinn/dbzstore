@@ -38,7 +38,6 @@
 
       <%# Description %>
       <div class="hero-desc-panel" id="hero-description">
-        <h2>About this product</h2>
         <div class="hero-desc-body">
           <%= raw markdown(@product.description) %>
         </div>
@@ -101,7 +100,7 @@
           <%= form.label :email, "Email (required)" %>
           <%= form.email_field :email, placeholder: "you@example.com", required: true %>
 
-          <%= form.label :discord, "Discord (optional)" %>
+          <%= form.label :discord, "Instagram / Discord (optional)" %>
           <%= form.text_field :discord, placeholder: "username" %>
 
           <%= button_tag type: 'submit', class: 'hero-stripe-btn' do %>
@@ -116,4 +115,34 @@
       
     </div>
   </div>
+
+  <%# Stripe redirect loading overlay %>
+  <div id="stripe-loading-overlay" class="stripe-loading-overlay">
+    <div class="stripe-loading-card">
+      <div class="stripe-loading-spinner"></div>
+      <p>Redirecting to Stripe, please wait…</p>
+    </div>
+  </div>
 </div>
+
+<script>
+  (function() {
+    var form = document.querySelector('.hero-purchase-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+      // Allow the delayed re-submission to go through
+      if (this.dataset.stripeSubmitting) return;
+      e.preventDefault();
+      // Honor HTML5 form validation (required fields, email format, etc.)
+      if (!this.checkValidity()) {
+        this.reportValidity();
+        return;
+      }
+      this.dataset.stripeSubmitting = '1';
+      document.getElementById('stripe-loading-overlay').style.display = 'flex';
+      var self = this;
+      // Small delay so the browser paints the overlay before navigating
+      setTimeout(function() { self.submit(); }, 150);
+    });
+  })();
+</script>
