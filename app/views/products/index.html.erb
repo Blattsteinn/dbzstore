@@ -10,7 +10,10 @@
     </div>
   </div>
 
-  <div id="search-bar-container">
+  <div> </div>
+  <div> </div>
+  <div> </div>
+ <!-- <div id="search-bar-container">
     <%= form_with url: game_products_url(@game.name), method: :get, class: "search-form" do |form| %>
       <div class="search-input-wrapper">
         <span class="search-icon">🔍</span>
@@ -22,7 +25,7 @@
       </div>
       <%= form.submit "Search" %>
     <% end %>
-  </div>
+  </div> 
 
   <% if params[:product_name].present? %>
     <div class="search-badge">
@@ -31,6 +34,8 @@
     </div>
   <% end %>
 
+-->
+  
   <% if @products.empty? %>
     <div class="empty-state">
       <p class="empty-state-icon">📭</p>

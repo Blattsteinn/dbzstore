@@ -491,11 +491,16 @@
     gap: 1.5rem;
   }
 
+  .hero-desc-panel {
+    order: 1;
+  }
+
   .hero-desc-panel #product-image-container {
     height: 280px;
   }
 
   .hero-purchase-panel {
+    order: -1;
     position: static;
   }
 
@@ -567,7 +572,12 @@
     border-radius: 8px;
   }
 
+  .hero-desc-panel {
+    order: 1;
+  }
+
   .hero-purchase-panel {
+    order: -1;
     padding: 1rem;
     border-radius: 12px;
   }

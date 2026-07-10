@@ -587,10 +587,112 @@ body.products-show {
 }
 
 #image-lightbox img {
-    max-width: 90vw;
-    max-height: 90vh;
+    width: 90vw;
+    height: 90vh;
     object-fit: contain;
     border-radius: 8px;
     cursor: default;
     box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+#image-lightbox .lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+#image-lightbox .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+#image-lightbox .lightbox-counter {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 4px 10px;
+    border-radius: 10px;
+    pointer-events: none;
+}
+
+#image-lightbox .lightbox-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s, color 0.15s;
+}
+
+#image-lightbox .lightbox-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+#image-lightbox .lightbox-prev {
+    left: 16px;
+}
+
+#image-lightbox .lightbox-next {
+    right: 16px;
+}
+
+#image-lightbox .lightbox-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+}
+
+#image-lightbox .lightbox-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.15s, transform 0.15s;
+}
+
+#image-lightbox .lightbox-dot:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+#image-lightbox .lightbox-dot.active {
+    background: white;
+    transform: scale(1.25);
 }

@@ -5,9 +5,11 @@
 
   <%= link_to "← Back", game_products_path(@game.name), class: "hero-back-link" %>
 
-  <div class="product-hero-stage">
+  <div class="product-hero-stage" data-controller="product-view">
     <% if images.any? %>
-      <%= image_tag images.first.image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image" %>
+      <%= image_tag images.first.image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image",
+          style: "cursor: zoom-in",
+          data: { action: "click->product-view#openLightbox" } %>
     <% end %>
     <div class="product-hero-overlay"></div>
 
@@ -16,12 +18,12 @@
       <h1><%= @product.title %></h1>
     </div>
 
-    <div class="product-hero-cta-row">
+    <%# <div class="product-hero-cta-row">
       <a href="#hero-purchase" class="hero-cta-primary">
         Buy Now
       </a>
       <a href="#hero-description" class="hero-cta-secondary">Learn More</a>
-    </div>
+    </div> %>
 
   </div>
 
@@ -35,15 +37,15 @@
           <%= raw markdown(@product.description) %>
         </div>
 
-        <%# Gallery — same carousel as regular show view %>
-        <% if images.size > 1 %>
-          <div id="product-image-container" data-controller="product-view" style="margin-top: 2rem;">
-            <% images.each do |image| %>
-              <%= image_tag image.image, alt: @product.title,
-                  data: { product_view_target: "image", action: "click->product-view#openLightbox" },
-                  style: "cursor: zoom-in" %>
-            <% end %>
+        <%# Gallery — always shown, click to open fullscreen %>
+        <div id="product-image-container" data-controller="product-view" style="margin-top: 2rem;">
+          <% images.each do |image| %>
+            <%= image_tag image.image, alt: @product.title,
+                data: { product_view_target: "image", action: "click->product-view#openLightbox" },
+                style: "cursor: zoom-in" %>
+          <% end %>
 
+          <% if images.size > 1 %>
             <button type="button" class="carousel-arrow carousel-prev" data-action="click->product-view#prevImage" aria-label="Previous image">‹</button>
             <button type="button" class="carousel-arrow carousel-next" data-action="click->product-view#nextImage" aria-label="Next image">›</button>
 
@@ -58,8 +60,8 @@
             </div>
 
             <span class="carousel-counter" data-product-view-target="imageCounter">1 / <%= images.size %></span>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
 
       <%# Purchase panel %>

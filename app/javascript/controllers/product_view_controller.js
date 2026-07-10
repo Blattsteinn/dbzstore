@@ -20,21 +20,110 @@ export default class extends Controller {
     // Remove any existing lightbox first
     this.closeLightbox()
 
+    // Determine the clicked image index
+    const clickedSrc = event.currentTarget.src
+    const sources = this.imageTargets.map(img => img.src)
+    let currentIdx = sources.indexOf(clickedSrc)
+    if (currentIdx === -1) currentIdx = 0
+
     const overlay = document.createElement('div')
     overlay.id = 'image-lightbox'
     overlay.addEventListener('click', () => this.closeLightbox())
 
     const img = document.createElement('img')
-    img.src = event.currentTarget.src
-    img.addEventListener('click', (e) => e.stopPropagation())
+    img.src = sources[currentIdx]
 
-    // Close on Escape key
-    this._escHandler = (e) => { if (e.key === 'Escape') this.closeLightbox() }
+    // ---- Close button ----
+    const closeBtn = document.createElement('button')
+    closeBtn.className = 'lightbox-close'
+    closeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>'
+    closeBtn.setAttribute('aria-label', 'Close')
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      this.closeLightbox()
+    })
+
+    // ---- Counter ----
+    const counter = document.createElement('span')
+    counter.className = 'lightbox-counter'
+    counter.textContent = `${currentIdx + 1} / ${sources.length}`
+
+    // ---- Navigation arrows (only if multiple images) ----
+    const prevArrow = document.createElement('button')
+    prevArrow.className = 'lightbox-arrow lightbox-prev'
+    prevArrow.innerHTML = '‹'
+    prevArrow.setAttribute('aria-label', 'Previous')
+    prevArrow.addEventListener('click', (e) => { e.stopPropagation(); this._lightboxNavigate(-1, sources, img, counter, dots) })
+
+    const nextArrow = document.createElement('button')
+    nextArrow.className = 'lightbox-arrow lightbox-next'
+    nextArrow.innerHTML = '›'
+    nextArrow.setAttribute('aria-label', 'Next')
+    nextArrow.addEventListener('click', (e) => { e.stopPropagation(); this._lightboxNavigate(1, sources, img, counter, dots) })
+
+    // ---- Dots ----
+    const dots = document.createElement('div')
+    dots.className = 'lightbox-dots'
+    const dotElements = []
+    sources.forEach((_, i) => {
+      const dot = document.createElement('button')
+      dot.className = 'lightbox-dot' + (i === currentIdx ? ' active' : '')
+      dot.setAttribute('aria-label', `Image ${i + 1}`)
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation()
+        img.src = sources[i]
+        counter.textContent = `${i + 1} / ${sources.length}`
+        dotElements.forEach(d => d.classList.remove('active'))
+        dot.classList.add('active')
+      })
+      dots.appendChild(dot)
+      dotElements.push(dot)
+    })
+
+    // ---- Keyboard handler ----
+    this._escHandler = (e) => {
+      if (e.key === 'Escape') this.closeLightbox()
+      if (e.key === 'ArrowLeft') this._lightboxNavigate(-1, sources, img, counter, dotElements)
+      if (e.key === 'ArrowRight') this._lightboxNavigate(1, sources, img, counter, dotElements)
+    }
     document.addEventListener('keydown', this._escHandler)
 
+    // ---- Touch swipe ----
+    if (sources.length > 1) {
+      let touchStartX = 0
+      overlay.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX
+      }, { passive: true })
+      overlay.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX
+        if (Math.abs(diff) > 50) {
+          this._lightboxNavigate(diff > 0 ? 1 : -1, sources, img, counter, dotElements)
+        }
+      })
+    }
+
+    overlay.appendChild(closeBtn)
+    overlay.appendChild(counter)
+    if (sources.length > 1) {
+      overlay.appendChild(prevArrow)
+      overlay.appendChild(nextArrow)
+      overlay.appendChild(dots)
+    }
     overlay.appendChild(img)
     document.body.appendChild(overlay)
     document.body.style.overflow = 'hidden'
+  }
+
+  _lightboxNavigate(direction, sources, img, counter, dots) {
+    const currentSrc = img.src
+    let idx = sources.indexOf(currentSrc)
+    if (idx === -1) idx = 0
+    idx = (idx + direction + sources.length) % sources.length
+    img.src = sources[idx]
+    counter.textContent = `${idx + 1} / ${sources.length}`
+    if (dots) {
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx))
+    }
   }
 
   closeLightbox() {
