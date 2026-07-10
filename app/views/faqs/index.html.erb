@@ -9,10 +9,10 @@
 
   <% if @faqs.any? %>
     <% @faqs.each do |faq| %>
-      <div class="card">
-        <dt><%= faq.question %></dt>
-        <dd><%= faq.answer %></dd>
-      </div>
+      <details class="card faq-item">
+        <summary><%= faq.question %></summary>
+        <div class="faq-answer"><%= faq.answer %></div>
+      </details>
     <% end %>
   <% else %>
     <p class="faq-empty">No FAQs available yet.</p>

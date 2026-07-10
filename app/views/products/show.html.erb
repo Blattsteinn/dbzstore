@@ -3,13 +3,6 @@
 
 <div class="product-hero-wrapper">
 
-  <%# Blurred background image (like card design) %>
-  <div class="hero-blur-bg">
-    <% if images.any? %>
-      <%= image_tag images.first.image, alt: "" %>
-    <% end %>
-  </div>
-
   <%= link_to "← Back", game_products_path(@game.name), class: "hero-back-link" %>
 
   <div class="product-hero-stage">

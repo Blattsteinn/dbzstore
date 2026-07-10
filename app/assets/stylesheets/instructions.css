@@ -1,3 +1,52 @@
+
+/* ---------- Timeline steps (used by Design 6) ---------- */
+.itl-step { position: relative; padding-left: 48px; margin-bottom: 2rem; }
+.itl-step::before { content: ''; position: absolute; left: 15px; top: 36px; bottom: -2rem; width: 2px; background: #27272a; }
+.itl-step:last-child::before { display: none; }
+.itl-marker { position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; background: #18181b; border: 2px solid #6366f1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #818cf8; }
+.itl-step h2 { font-size: 17px; font-weight: 600; color: #f1f1f3; margin-bottom: 10px; }
+.itl-step p { color: #a1a1aa; margin-bottom: 6px; }
+.itl-contact { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 10px 0; }
+.itl-contact-item { display: flex; align-items: center; gap: 8px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 10px 14px; }
+.itl-contact-item .label { font-size: 12px; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; }
+.itl-contact-item .value { font-size: 15px; color: #f1f1f3; font-weight: 600; }
+.itl-list { list-style: none; padding: 0; margin: 8px 0 0; }
+.itl-list li { padding: 6px 0; padding-left: 20px; position: relative; color: #a1a1aa; }
+.itl-list li::before { content: '▸'; position: absolute; left: 0; color: #6366f1; font-size: 12px; }
+.itl-warn { background: #18181b; border: 1px solid #f59e0b30; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-top: 1.5rem; color: #a1a1aa; font-size: 14px; }
+.itl-warn strong { color: #fbbf24; }
+@media (max-width: 480px) { .itl-contact { flex-direction: column; } }
+
+/* ---------- Design 6: Timeline + Sidebar ---------- */
+.itls { max-width: 1060px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; font-size: 15px; line-height: 1.6; color: #d4d4d8; position: relative; z-index: 1; }
+.itls-blur-bg { position: fixed; inset: 0; z-index: -88; overflow: hidden; pointer-events: none; }
+.itls-blur-bg img { width: 100%; height: 100%; object-fit: cover; filter: blur(60px) brightness(0.10) saturate(0.5); transform: scale(1.1); }
+.itls-banner { padding: 2rem 2rem 0; }
+.itls-banner h1 { font-size: 2rem; font-weight: 800; color: #fff; letter-spacing: 0.02em; margin: 0; }
+.itls-banner p { font-size: 0.95rem; color: rgba(255,255,255,0.5); margin-top: 6px; }
+.itls-banner .itls-banner-discord { display: inline-block; margin-top: 10px; font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); }
+.itls-card { background: rgba(24,24,27,0.75); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; backdrop-filter: blur(12px); }
+.itls-layout { display: grid; grid-template-columns: 1fr 280px; gap: 0; align-items: start; }
+.itls-main { min-width: 0; padding: 1.75rem; }
+.itls-sidebar { display: flex; flex-direction: column; gap: 1rem; padding: 1.75rem; position: sticky; top: 80px; }
+.itls-side-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 1.25rem; }
+.itls-side-card h3 { font-size: 12px; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.itls-side-card p { font-size: 13px; color: #a1a1aa; line-height: 1.6; }
+.itls-side-card strong { color: #e4e4e7; }
+.itls-side-card ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0; }
+.itls-side-card ol li { padding: 4px 0; font-size: 13px; color: #a1a1aa; }
+.itls-side-card ol li::marker { color: #818cf8; font-weight: 700; font-size: 13px; }
+.itls-warn-card { }
+.itls-warn-card h3 { color: #fbbf24; }
+@media (max-width: 768px) {
+  .itls-layout { grid-template-columns: 1fr; }
+  .itls-sidebar { position: static; }
+  .itls-banner { min-height: 150px; border-radius: 12px; }
+  .itls-banner h1 { font-size: 1.5rem; }
+}
+
+
+/* ---------- Original design (.ic) — preserved below ---------- */
 .ic {
   max-width: 680px;
   margin: 0 auto;
