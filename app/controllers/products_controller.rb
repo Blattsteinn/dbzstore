@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
         @products = Product.visible.includes(:variants, product_images: :image_attachment)
         @products = @products.where(game_name: params[:game])
         @products = @products.where("title ILIKE ?", "%#{params[:product_name]}%") if params[:product_name].present?
-        Rails.logger.debug "PARAMS: #{params.inspect}"
+        @products = @products.order(priority: :asc)
     end
 
     def show
@@ -103,7 +103,7 @@ class ProductsController < ApplicationController
 
     private
     def product_params
-        params.expect(product: [:title, :visibility, :description, :payment_type, :deliverables, :game_name,
+        params.expect(product: [:title, :visibility, :description, :payment_type, :deliverables, :game_name, :priority,
         product_images_attributes: [[:image, :priority, :_destroy, :id]],
         variants_attributes: [[:stock, :price, :title, :description, :_destroy, :id]]
         ])
@@ -112,6 +112,16 @@ class ProductsController < ApplicationController
     def set_game
         @game = Game.find_by!(name: params[:game]) if params[:game].present?
     end
+
+    #solution proposed by AI, name is game's name is derived from product if smth fails
+    # def set_game
+    #     @game = if params[:game].present?
+    #         Game.find_by!(name: params[:game])
+    #     elsif params[:id].present?
+    #         product = Product.find_by(id: params[:id])
+    #         Game.find_by(name: product&.game_name) if product
+    #     end
+    # end
 
     def set_product_for_designs
         @product = Product.includes(:variants, product_images: :image_attachment).find(params[:id])

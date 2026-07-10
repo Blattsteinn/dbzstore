@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_25_122455) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_10_115625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -119,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_25_122455) do
     t.text "description", null: false
     t.string "game_name"
     t.string "payment_type", default: "single_payment", null: false
+    t.integer "priority", default: 1
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.string "visibility", default: "hidden", null: false

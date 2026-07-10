@@ -30,6 +30,12 @@
             <%= form.label :title, "Product title" %>
             <%= form.text_field :title, placeholder: "e.g. 8,000 Dragon Stones Account" %>
           </div>
+
+          <div class="edit-v2-field" style="flex: 2">
+            <%= form.label :priority, "Product priority" %>
+            <%= form.number_field :priority, placeholder: "e.g. 1, 2, 3, ... will be sort" %>
+          </div>
+
           <div class="edit-v2-field">
             <%= form.label :visibility %>
             <%= form.select :visibility, [
@@ -55,7 +61,8 @@
         </div>
       </div>
 
-      <%# ── Checkout ── %>
+     <!-- This here is bullshit, won't be using that
+     <%# ── Checkout ── %>
       <div class="edit-v2-section">
         <div class="edit-v2-section-header">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -78,7 +85,8 @@
               ["Unique Codes & Serials", "serial"]] %>
           </div>
         </div>
-      </div>
+      </div> 
+      -->
 
       <%# ── Variants ── %>
       <div class="edit-v2-section">

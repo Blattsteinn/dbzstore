@@ -29,6 +29,7 @@
               <th>Visibility</th>
               <th>Price</th>
               <th>Stock</th>
+              <th>Priority</th>
               <th class="text-right">Actions</th>
             </tr>
           </thead>
@@ -43,11 +44,10 @@
                     <%= product.visibility == "live" ? "● Live" : "○ Hidden" %>
                   </span>
                 </td>
-                <td class="mono">
-                  <%= product.variants.minimum(:price)&.then { |p| convert_from_cents(p) } || "—" %> €
-                </td>
+                <td class="mono" style="white-space: nowrap;"><%= product.variants.minimum(:price)&.then { |p| convert_from_cents(p) } || "—" %> €</td>
                 <td class="mono"><%= product.variants.sum(:stock) %></td>
-                <td>
+                <td class="mono"><%= product.priority %></td>
+                <td class="text-right">
                   <div class="action-group">
                     <%= link_to "Edit", edit_product_path(product), class: "btn-sm" %>
                     <%= link_to "View", game_product_path(product.game_name, product), target: "_blank", class: "btn-sm btn-sm-muted" %>

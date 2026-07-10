@@ -40,22 +40,42 @@
                 <th>Status</th>
                 <th>Total</th>
                 <th>Date</th>
-                <th>Discord</th>
+                <th>Discord / Insta</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               <% @orders.each do |order| %>
+                <%
+                  copy_line = [
+                    "##{order.public_id}",
+                    order.email,
+                    order.status,
+                    "#{convert_from_cents(order.order_items.sum { |item| item.price * item.quantity })} €",
+                    order.created_at.strftime("%Y-%m-%d, %H:%M"),
+                    order.discord
+                  ].join("\t")
+                %>
                 <tr>
                   <td>
                     <%= link_to dashboard_order_path(order), class: "mono-link" do %>
                       #<%= order.public_id&.first(12) %>
                     <% end %>
                   </td>
-                  <td><%= order.email %></td>
+                  <td class="cell-truncate"><%= order.email %></td>
                   <td><span class="status-badge status-<%= order.status %>"><%= order.status %></span></td>
                   <td class="mono"><%= convert_from_cents(order.order_items.sum { |item| item.price * item.quantity }) %> €</td>
-                  <td><%= order.created_at.strftime("%b %d, %H:%M") %></td>
-                  <td><%= order.discord %> </td>
+                  <td><%= order.created_at.strftime("%Y-%m-%d, %H:%M") %></td>
+                  <td class="cell-truncate"><%= order.discord %></td>
+                  <td>
+                    <button class="btn-sm btn-sm-muted"
+                            data-controller="clipboard"
+                            data-clipboard-text-value="<%= j copy_line %>"
+                            data-action="click->clipboard#copy"
+                            title="Copy row for Excel">
+                      📋
+                    </button>
+                  </td>
                 </tr>
               <% end %>
             </tbody>

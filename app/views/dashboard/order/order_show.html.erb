@@ -20,12 +20,16 @@
               <dd><%= @order.email %></dd>
             </div>
             <div class="detail-row">
+              <dt>Discord / Instagram</dt>
+              <dd><%= @order.discord %></dd>
+            </div>
+            <div class="detail-row">
               <dt>Order ID</dt>
               <dd class="mono"><%= @order.public_id %></dd>
             </div>
             <div class="detail-row">
               <dt>Placed</dt>
-              <dd><%= @order.created_at.strftime("%B %d, %Y %H:%M") %></dd>
+              <dd><%= @order.created_at.strftime("%Y-%m-%d, %H:%M") %></dd>
             </div>
             <div class="detail-row">
               <dt>Status</dt>
