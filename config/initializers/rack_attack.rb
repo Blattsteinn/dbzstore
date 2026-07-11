@@ -10,4 +10,15 @@ class Rack::Attack
       req.params["email"].to_s.downcase.strip.presence
     end
   end
+
+    # Throttle feedback creation: 5 per IP per hour
+  throttle("feedbacks/ip", limit: 5, period: 1.hour) do |req|
+    req.ip if req.path == "/feedbacks" && req.post?
+  end
+
+  # Throttle support messages: 3 per IP per hour
+  throttle("support_messages/ip", limit: 3, period: 1.hour) do |req|
+    req.ip if req.path == "/support_messages" && req.post?
+  end
+
 end

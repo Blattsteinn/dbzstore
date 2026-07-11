@@ -18,6 +18,9 @@
     <% end %>
 
     <%= form_with model: @feedback, class: "feedback-form" do |form| %>
+      <div style="position: absolute; left: -9999px;" hidden="true">
+        <%= text_field_tag :contact_me_by_fax_only, nil, tabindex: -1, autocomplete: "off" %>
+      </div>
 
       <div class="form-group">
         <%= form.label :public_id, "Order" %>

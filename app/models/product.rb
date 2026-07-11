@@ -5,7 +5,6 @@ class Product < ApplicationRecord
     accepts_nested_attributes_for :product_images, allow_destroy: true,
         reject_if: ->(attrs) { attrs["id"].blank? && attrs["image"].blank? }
 
-    has_many :cart_items, dependent: :destroy
     has_many :order_items, dependent: :nullify
 
     has_many :variants, dependent: :destroy

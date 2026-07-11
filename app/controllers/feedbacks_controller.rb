@@ -1,4 +1,9 @@
 class FeedbacksController < ApplicationController
+    before_action :honeypot_check, only: [:create]
+
+    # Users SHOULD be able to submit with just an public_id
+    # We don't need for user's email here.
+
     before_action :authenticate_admin!, only: [ :edit, :update, :destroy ]
 
     def index

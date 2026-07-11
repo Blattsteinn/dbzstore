@@ -2,10 +2,15 @@ require "stripe"
 
 class OrdersController < ApplicationController
     # pending, paid, processing, delivered, cancelled, refunded.
+    before_action :honeypot_check, only: [:create]
     before_action :authenticate_admin!, only: [ :update, :destroy ]
 
     def create
-        unless params[:email].present? && params[:variant_id].present? && params[:quantity].present?
+        valid = params[:email].match?(URI::MailTo::EMAIL_REGEXP) &&
+            params[:variant_id].present? &&
+            params[:quantity].present?
+        
+        unless valid
             redirect_to products_path, alert: "Wrong inputs"
             return
         end
@@ -76,8 +81,15 @@ class OrdersController < ApplicationController
             redirect_to product_path(@variant.product), alert: "Payment could not be initiated: #{e.message}"
     end
 
+    # DEFINED in stripe_session = Stripe::Checkout::Session.create (look above)
     def cancel_stripe_checkout
         @order = Order.find_by!(public_id: params[:public_id])
+
+        #we cant cancel completed order
+        if @order.status == "paid"
+            return
+        end
+
         if @order.status == "pending"
             @order.restore_stock!
             @order.destroy
@@ -87,7 +99,7 @@ class OrdersController < ApplicationController
         end
     end
 
-    # Admin methods
+
     def update
         @order = Order.find(params[:id])
         @order.update!(update_params)

@@ -14,6 +14,10 @@ class ApplicationController < ActionController::Base
     redirect_to root_path, alert: "You must be an admin" unless current_user.admin?
   end
 
-  
+  def honeypot_check
+    if params[:contact_me_by_fax_only].present?
+      head :ok
+    end
+  end
 
 end

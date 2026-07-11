@@ -1,6 +1,7 @@
 class SupportMessagesController < ApplicationController
     before_action :authenticate_admin!, only: [:index, :show, :destroy, :update]
-
+    before_action :honeypot_check, only: [:create]
+    
     def index
         @support_messages = SupportMessage.all
     end
