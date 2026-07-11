@@ -11,7 +11,7 @@
           <span class="feedback-rating">
             <%= "★" * feedback.rating %><%= "☆" * (5 - feedback.rating) %>
           </span>
-          <span class="feedback-order"> <%= feedback.order.created_at %></span>
+          <span class="feedback-order"> <%= feedback.order.created_at.strftime('%Y %B %d') %></span>
         </div>
         <p class="feedback-body"><%= feedback.feedback %></p>
       </div>

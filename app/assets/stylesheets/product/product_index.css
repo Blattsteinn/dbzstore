@@ -128,7 +128,8 @@
     text-align: left; 
     margin: 0;   
     white-space: nowrap;
-    overflow: hidden;    
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 100%;
     font-weight: 1000;
   

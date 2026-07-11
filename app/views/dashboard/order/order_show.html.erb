@@ -12,7 +12,26 @@
 
     <div class="dashboard-grid">
       <div class="dashboard-card">
-        <div class="card-header"><h3>Order Details</h3></div>
+        <div class="card-header"><h3>Order Details</h3>
+        <% copy_line = [
+                    "##{@order.public_id}",
+                    @order.email,
+                    @order.order_items.first.product.title,
+                    @order.order_items.first.variant.title,
+                    @order.status,
+                    "#{convert_from_cents(@order.order_items.sum { |item| item.price * item.quantity })} €",
+                    @order.created_at.strftime("%Y-%m-%d %H:%M"),
+                    @order.discord
+                  ].join("\t")%>
+
+          <button class="btn-sm btn-sm-muted"
+          data-controller="clipboard"
+          data-clipboard-text-value="<%= j copy_line %>"
+          data-action="click->clipboard#copy"
+          title="Copy row for Excel"> Copy</button>
+        
+        </div>
+
         <div class="card-body">
           <dl class="detail-list">
             <div class="detail-row">
@@ -35,7 +54,15 @@
               <dt>Status</dt>
               <dd><span class="status-badge status-<%= @order.status %>"><%= @order.status %></span></dd>
             </div>
-          </dl>
+            <div class="detail-row">
+              <dt>Product</dt>
+              <dd><%= @order.order_items.first.product.title  %></dd>
+            </div>
+            <div class="detail-row">
+              <dt>Operating system</dt>
+              <dd><%= @order.order_items.first.variant.title %></dd>
+            </div>
+          </dl> 
         </div>
       </div>
 
@@ -93,6 +120,7 @@
       </div>
     </div>
 
+    <br>
     <div style="margin-top: 1rem;">
       <%= link_to "← Back to Orders", dashboard_orders_path, class: "btn-sm btn-sm-muted" %>
       <%= button_to "Delete Order", order_path(@order), method: :delete,

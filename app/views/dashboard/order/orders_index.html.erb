@@ -37,6 +37,8 @@
               <tr>
                 <th>Order</th>
                 <th>Email</th>
+                <th>Product</th>
+                <!--<th>OS </th>-->
                 <th>Status</th>
                 <th>Total</th>
                 <th>Date</th>
@@ -50,9 +52,11 @@
                   copy_line = [
                     "##{order.public_id}",
                     order.email,
+                    order.order_items.first.product.title,
+                    order.order_items.first.variant.title,
                     order.status,
                     "#{convert_from_cents(order.order_items.sum { |item| item.price * item.quantity })} €",
-                    order.created_at.strftime("%Y-%m-%d, %H:%M"),
+                    order.created_at.strftime("%Y-%m-%d %H:%M"),
                     order.discord
                   ].join("\t")
                 %>
@@ -63,9 +67,15 @@
                     <% end %>
                   </td>
                   <td class="cell-truncate"><%= order.email %></td>
+                  <%# LMAO THE LENGTH %>
+                  <td class="cell-truncate"><%= order.order_items.first.product.title %></td>
+                  <!-- skip OS Here
+                  <%# Weird relationship %>
+                  <td class="cell-truncate"><%= order.order_items.first.variant.title %></td>
+                  -->
                   <td><span class="status-badge status-<%= order.status %>"><%= order.status %></span></td>
-                  <td class="mono"><%= convert_from_cents(order.order_items.sum { |item| item.price * item.quantity }) %> €</td>
-                  <td><%= order.created_at.strftime("%Y-%m-%d, %H:%M") %></td>
+                  <td class="mono"><%= convert_from_cents(order.order_items.sum { |item| item.price * item.quantity }) %>€</td>
+                  <td class="status-date-font"><%= order.created_at.strftime("%Y-%m-%d %H:%M") %></td>
                   <td class="cell-truncate"><%= order.discord %></td>
                   <td>
                     <button class="btn-sm btn-sm-muted"
