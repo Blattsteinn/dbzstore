@@ -44,8 +44,8 @@
                     <%= product.visibility == "live" ? "● Live" : "○ Hidden" %>
                   </span>
                 </td>
-                <td class="mono" style="white-space: nowrap;"><%= product.variants.minimum(:price)&.then { |p| convert_from_cents(p) } || "—" %> €</td>
-                <td class="mono"><%= product.variants.sum(:stock) %></td>
+                <td class="mono" style="white-space: nowrap;"><%= product.variants.filter_map(&:price).min&.then { |p| convert_from_cents(p) } || "—" %> €</td>
+                <td class="mono"><%= product.variants.sum(&:stock) %></td>
                 <td class="mono"><%= product.priority %></td>
                 <td class="text-right">
                   <div class="action-group">

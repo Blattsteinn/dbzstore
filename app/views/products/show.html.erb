@@ -1,5 +1,5 @@
 <% images = @product.product_images.to_a %>
-<% min_price = convert_from_cents(@product.variants.where.not(stock: 0).minimum(:price)) %>
+<% min_price = convert_from_cents(@product.variants.select { |v| v.stock > 0 }.map(&:price).min) %>
 
 <div class="product-hero-wrapper">
 

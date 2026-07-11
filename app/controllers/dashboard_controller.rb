@@ -13,12 +13,12 @@ class DashboardController < ApplicationController
     end
 
     def products_index
-        @products = Product.all #sidebar-nav.order(title: "desc")
+        @products = Product.includes(:variants).all
         render "dashboard/product/products_index"
     end
 
     def orders_index
-        @orders = Order.all
+        @orders = Order.includes(order_items: [:product, :variant]).all
         @orders = @orders.where(status: params[:status]) if params[:status].present?
         render "dashboard/order/orders_index"
     end

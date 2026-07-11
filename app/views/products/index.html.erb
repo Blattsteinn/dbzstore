@@ -67,13 +67,8 @@
         </div>
 
         <div class="text-container">
-            <% stock = 0 %>
-            <% product.variants.each do |variant| %>
-                  <% stock += variant.stock %>
-            <% end %>
-
-            <p class="product-price"> <%= convert_from_cents(product.variants.minimum(:price)) %> EUR </p>
-            <p class="product-stock"> <%= stock %> in stock </p>
+            <p class="product-price"> <%= convert_from_cents(product.variants.filter_map(&:price).min) %> EUR </p>
+            <p class="product-stock"> <%= product.variants.sum(&:stock) %> in stock </p>
         </div>
       <% end%>
 
