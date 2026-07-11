@@ -3,8 +3,10 @@ class DashboardController < ApplicationController
     before_action :set_open_support
 
     def index
-        @revenue = Order.where(status: "paid").joins(:order_items)
-                        .sum("order_items.price * order_items.quantity")
+        @revenue = Rails.cache.fetch("dashboard_revenue", expires_in: 1.hour) do
+        Order.where(status: "paid").joins(:order_items)
+            .sum("order_items.price * order_items.quantity")
+        end
 
         @total_orders    = Order.count
         @paid_orders     = Order.where(status: "paid").count

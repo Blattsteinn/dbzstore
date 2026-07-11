@@ -20,7 +20,7 @@
       <% @games.each do |game| %>
         <%= link_to game_products_path(game.name), class: "game-card" do %>
           <div class="game-card-image">
-            <%= image_tag "#{game.name}.png", alt: game.official_name, onerror: "this.style.display='none'" %>
+            <%= image_tag "#{game.name}.png", alt: game.official_name, onerror: "this.style.display='none'", loading: "lazy" %>
           </div>
           <span class="game-card-name"><%= game.official_name %></span>
           <span class="game-card-hint">Browse Accounts →</span>

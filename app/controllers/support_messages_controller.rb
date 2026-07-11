@@ -3,7 +3,7 @@ class SupportMessagesController < ApplicationController
     before_action :honeypot_check, only: [:create]
     
     def index
-        @support_messages = SupportMessage.all
+        @support_messages = SupportMessage.all.includes(:order)
     end
 
     def show

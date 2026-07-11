@@ -7,7 +7,7 @@
 
   <div class="product-hero-stage" data-controller="product-view">
     <% if images.any? %>
-      <%= image_tag images.first.image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image",
+      <%= image_tag images.first.image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image", loading: "lazy",
           style: "cursor: zoom-in",
           data: { action: "click->product-view#openLightbox" } %>
     <% end %>
@@ -40,7 +40,7 @@
         <%# Gallery — always shown, click to open fullscreen %>
         <div id="product-image-container" data-controller="product-view" style="margin-top: 2rem;">
           <% images.each do |image| %>
-            <%= image_tag image.image, alt: @product.title,
+            <%= image_tag image.image, alt: @product.title, loading: "lazy",
                 data: { product_view_target: "image", action: "click->product-view#openLightbox" },
                 style: "cursor: zoom-in" %>
           <% end %>
@@ -99,7 +99,7 @@
           <%= form.text_field :discord, placeholder: "username" %>
 
           <%= button_tag type: 'submit', class: 'hero-stripe-btn' do %>
-            <%= image_tag 'stripe.png', alt: 'Pay with Stripe', style: "height:20px" %>
+            <%= image_tag 'stripe.png', alt: 'Pay with Stripe', style: "height:20px", loading: "lazy" %>
           <% end %>
 
           <p class="hero-payment-methods">

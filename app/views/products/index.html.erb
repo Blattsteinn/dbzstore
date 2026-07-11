@@ -57,7 +57,7 @@
 
         <div class="image-container">
           <% product.product_images.each do |image| %>
-              <%= image_tag image.image, alt: product.title %>
+              <%= image_tag image.image, alt: product.title, loading: "lazy"%>
               <% break %> <%# Break for now%>
           <% end %>
         </div>

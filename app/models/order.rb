@@ -11,7 +11,11 @@ class Order < ApplicationRecord
     has_many :support_messages, dependent: :destroy
 
     def restore_stock!
-        order_items.reset.includes(:variant).each { |item| item.variant.increment!(:stock, item.quantity) }
+        ActiveRecord::Base.transaction do
+            order_items.includes(:variant).find_each do |item|
+            Variant.where(id: item.variant_id).update_counters(item.variant_id, stock: item.quantity)
+            end
+        end
     end
 
     def paid?
