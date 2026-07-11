@@ -12,6 +12,10 @@ class DashboardController < ApplicationController
         @paid_orders     = Order.where(status: "paid").count
         @pending_orders  = Order.where(status: "pending").count
         @recent_orders   = Order.order(created_at: :desc).limit(8)
+
+        @product_views        = Ahoy::Event.where(name: "Viewed products").count
+        @product_views_today  = Ahoy::Event.where(name: "Viewed products").where(time: Time.current.all_day).count
+        @unique_visitors_week = Ahoy::Visit.where(started_at: 7.days.ago..).count
     end
 
     def products_index

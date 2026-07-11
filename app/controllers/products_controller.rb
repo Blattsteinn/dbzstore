@@ -8,6 +8,8 @@ class ProductsController < ApplicationController
         @products = @products.where(game_name: params[:game])
         # @products = @products.where("title ILIKE ?", "%#{params[:product_name]}%") if params[:product_name].present?
         @products = @products.order(priority: :asc)
+
+        ahoy.track "Viewed products", game: @game&.name
     end
 
     def show

@@ -226,6 +226,16 @@
   color: #fbbf24;
 }
 
+.stat-visitors .stat-icon {
+  background: #ec489915;
+  color: #f472b6;
+}
+
+.stat-views .stat-icon {
+  background: #8b5cf615;
+  color: #a78bfa;
+}
+
 .stat-info {
   display: flex;
   flex-direction: column;

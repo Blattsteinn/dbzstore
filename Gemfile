@@ -77,3 +77,6 @@ gem "dotenv-rails", groups: [ :development, :test ]
 
 gem 'redcarpet' #md formatting
 gem 'resend'
+
+# Site data tracking
+gem "ahoy_matey"
