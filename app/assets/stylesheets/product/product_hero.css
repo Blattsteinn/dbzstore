@@ -419,6 +419,12 @@
   margin-top: 0.5rem;
 }
 
+.hero-payment-methods-small{
+  text-align: center;
+  font-size: 0.60rem;
+  color: #52525b;
+  margin-top: 0.5rem;
+}
 /* Back link */
 .hero-back-link {
   position: absolute;
