@@ -20,12 +20,11 @@
                 <tr>
                   <th>Date</th>
                   <th>Country</th>
-                  <th>Region</th>
-                  <th>City</th>
                   <th>Device</th>
                   <th>Browser</th>
                   <th>OS</th>
                   <th>Landing Page</th>
+                  <th>IP</th>
                   <th>Events</th>
                 </tr>
               </thead>
@@ -38,20 +37,6 @@
                     <td>
                       <% if visit.country.present? %>
                         <%= visit.country %>
-                      <% else %>
-                        <span class="text-muted">—</span>
-                      <% end %>
-                    </td>
-                    <td>
-                      <% if visit.region.present? %>
-                        <%= visit.region %>
-                      <% else %>
-                        <span class="text-muted">—</span>
-                      <% end %>
-                    </td>
-                    <td>
-                      <% if visit.city.present? %>
-                        <%= visit.city %>
                       <% else %>
                         <span class="text-muted">—</span>
                       <% end %>
@@ -72,6 +57,7 @@
                         <span class="text-muted">—</span>
                       <% end %>
                     </td>
+                    <td><%= visit.ip %></td>
                     <td><%= visit.events.size %></td>
                   </tr>
                 <% end %>
