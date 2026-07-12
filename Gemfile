@@ -80,3 +80,4 @@ gem 'resend'
 
 # Site data tracking
 gem "ahoy_matey"
+gem "geocoder"

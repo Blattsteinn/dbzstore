@@ -23,7 +23,7 @@ class StripeWebhooksController < ApplicationController
       return if order.paid?
 
       order.update!(status: "paid")
-      PurchaseSuccessMailer.successful_purchase(order).deliver_later
+      PurchaseSuccessMailer.successful_purchase(order).deliver_now
 
     elsif event.type == "checkout.session.expired"
       order = Order.find_by(stripe_session_id: event.data.object.id)

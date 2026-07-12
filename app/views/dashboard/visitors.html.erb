@@ -1,0 +1,87 @@
+<div id="dashboard-container">
+  <%= render "dashboard/sidebar" %>
+
+  <main id="dashboard-main">
+    <header class="dashboard-page-header">
+      <h1>Visitors</h1>
+      <p class="text-muted">Recent visits to your store</p>
+    </header>
+
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3>Latest Visits</h3>
+        <span class="text-muted"><%= @visits.size %> shown</span>
+      </div>
+      <div class="card-body">
+        <% if @visits.any? %>
+          <div style="overflow-x: auto;">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Country</th>
+                  <th>Region</th>
+                  <th>City</th>
+                  <th>Device</th>
+                  <th>Browser</th>
+                  <th>OS</th>
+                  <th>Landing Page</th>
+                  <th>Events</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @visits.each do |visit| %>
+                  <tr>
+                    <td title="<%= visit.started_at&.strftime("%Y-%m-%d %H:%M UTC") %>">
+                      <%= time_ago_in_words(visit.started_at) %> ago
+                    </td>
+                    <td>
+                      <% if visit.country.present? %>
+                        <%= visit.country %>
+                      <% else %>
+                        <span class="text-muted">—</span>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if visit.region.present? %>
+                        <%= visit.region %>
+                      <% else %>
+                        <span class="text-muted">—</span>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if visit.city.present? %>
+                        <%= visit.city %>
+                      <% else %>
+                        <span class="text-muted">—</span>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if visit.device_type.present? %>
+                        <%= visit.device_type.titleize %>
+                      <% else %>
+                        <span class="text-muted">—</span>
+                      <% end %>
+                    </td>
+                    <td><%= visit.browser || "—" %></td>
+                    <td><%= visit.os || "—" %></td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                      <% if visit.landing_page.present? %>
+                        <%= link_to visit.landing_page.truncate(40), visit.landing_page, target: "_blank", rel: "noopener" %>
+                      <% else %>
+                        <span class="text-muted">—</span>
+                      <% end %>
+                    </td>
+                    <td><%= visit.events.size %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-muted" style="padding: 2rem; text-align: center;">No visits recorded yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

@@ -42,6 +42,8 @@ Rails.application.routes.draw do
 
   get "dashboard/faq_index", to: "dashboard#faq_index", as: "dashboard_faqs"
 
+  get "dashboard/visitors", to: "dashboard#visitors", as: "dashboard_visitors"
+
   # -----------------------------
 
   root "games#index"
