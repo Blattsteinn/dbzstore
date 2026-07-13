@@ -1,4 +1,8 @@
 class Ahoy::Store < Ahoy::DatabaseStore
+  def track_visit(data)
+    data[:ip] = request.headers["X-Forwarded-For"]&.split(",")&.first&.strip.presence || request.remote_ip
+    super(data)
+  end
 end
 
 # set to true for JavaScript tracking
