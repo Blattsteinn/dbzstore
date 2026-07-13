@@ -86,7 +86,7 @@ Rails.application.configure do
   config.hosts = [
     "accountrift.com",
     /.*\.accountrift\.com/,
-    /.*\.up\.railway\.app/     # ← add this line
+    /.*\.up\.railway\.app/
   ]
   #
   # Skip DNS rebinding protection for the default health check endpoint.
