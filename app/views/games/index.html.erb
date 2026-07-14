@@ -17,6 +17,8 @@
     </div>
 
     <div id="games-container">
+    <%# Yes DB query in views, 
+      but not the end of the world, rarely visited page now anyway  #%>
     <% game = Game.find_by(name: 'dokkan') %>
       <%# @games.each do |game| %>
         <%= link_to game_products_path(game.name), class: "game-card" do %>
@@ -26,6 +28,7 @@
           <span class="game-card-name"><%= game.official_name %></span>
           <span class="game-card-hint">Browse Accounts →</span>
         <% end %>
+
       <%# end %>
     </div>
   <% else %>

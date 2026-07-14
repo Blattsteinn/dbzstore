@@ -23,6 +23,7 @@ class StripeWebhooksController < ApplicationController
       return if order.paid?
 
       order.update!(status: "paid")
+      # Can't use deliver_later; smth goes wrong & it never gets sent
       PurchaseSuccessMailer.successful_purchase(order).deliver_now
 
     elsif event.type == "checkout.session.expired"

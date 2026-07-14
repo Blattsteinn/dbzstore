@@ -2,6 +2,7 @@ class Order < ApplicationRecord
 
     before_validation :generate_public_id, on: :create
     validates :status, inclusion: { in: %w[pending paid processing delivered cancelled refunded] }
+    validates :email, presence: true
 
     # after_create_commit { PurchaseSuccess.successful_purchase(self).deliver_later }
 

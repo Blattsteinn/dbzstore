@@ -1,25 +1,18 @@
 require 'redcarpet'
 
+MARKDOWN_RENDERER = Redcarpet::Markdown.new(
+  Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true, link_attributes: { target: "_blank", rel: "noopener noreferrer" }),
+  autolink: true, tables: true
+)
+
 module ProductsHelper
     def convert_from_cents(cents)
         return 0 if cents.nil?
-        cents = cents * 1.0 / 100
+        cents /= 100.0
     end
 
     def markdown(text)
-        renderer = Redcarpet::Render::HTML.new(
-            hard_wrap: true,
-            filter_html: true,
-            link_attributes: { target: "_blank", rel: "noopener noreferrer" }
-        )
-
-        markdown = Redcarpet::Markdown.new(
-            renderer,
-            autolink: true,
-            tables: true
-        )
-
-        sanitize(markdown.render(text))
+        sanitize(MARKDOWN_RENDERER.render(text))
     end
 
 end

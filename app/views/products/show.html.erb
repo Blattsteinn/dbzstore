@@ -1,16 +1,14 @@
 <% images = @product.product_images.to_a %>
-<% min_price = convert_from_cents(@product.variants.select { |v| v.stock > 0 }.map(&:price).min) %>
 
 <div class="product-hero-wrapper">
 
   <%= link_to "← Back", game_products_path(@game.name), class: "hero-back-link" %>
 
   <div class="product-hero-stage" data-controller="product-view">
-    <% if images.any? %>
-      <%= image_tag images.first.image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image", loading: "lazy",
+      <%= image_tag @product.primary_image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image", loading: "lazy",
           style: "cursor: zoom-in",
-          data: { action: "click->product-view#openLightbox" } %>
-    <% end %>
+          data: { action: "click->product-view#openLightbox" } if @product.primary_image %>
+
     <div class="product-hero-overlay"></div>
 
     <div class="product-hero-content">

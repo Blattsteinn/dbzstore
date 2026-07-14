@@ -15,4 +15,9 @@ class Product < ApplicationRecord
     validates :payment_type,    presence: true
     validates :title,           presence: true
     validates :visibility,      presence: true
+
+    def primary_image
+        product_images.first&.image
+    end
+
 end

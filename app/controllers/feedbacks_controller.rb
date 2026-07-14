@@ -7,7 +7,7 @@ class FeedbacksController < ApplicationController
     before_action :authenticate_admin!, only: [ :edit, :update, :destroy ]
 
     def index
-        @feedbacks = Feedback.includes(:order).all
+        @pagy, @feedbacks = pagy(:offset, Feedback.includes(:order).all, limit: 10)
     end
 
     def new

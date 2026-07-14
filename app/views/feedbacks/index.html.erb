@@ -4,6 +4,8 @@
     <%= link_to "Leave Feedback", new_feedback_path, class: "feedback-new-link" %>
   </div>
 
+  <%== @pagy.series_nav %>
+  <br>
   <div id="feedbacks-grid">
     <% @feedbacks.each do |feedback| %>
       <div class="feedback-box">
