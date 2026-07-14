@@ -20,6 +20,10 @@ class OrdersController < ApplicationController
         @variant  = Variant.includes(:product).find_by(id: params[:variant_id].to_i)
         @product  = @variant.product
         @quantity = params[:quantity].to_i
+
+        # Note: at current design quantity is always 1.
+        # It sure does add more headache now, but it's easier to keep it 
+        # that way if we ever want to make a cart or whatever functionality
         unless @quantity >= 1
             redirect_to products_path, alert: "Invalid quantity"
             return

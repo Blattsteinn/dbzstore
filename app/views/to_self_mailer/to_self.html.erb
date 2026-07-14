@@ -1,0 +1,64 @@
+<!-- Header -->
+<div style="margin-bottom: 1.5rem;">
+  <h1 style="font-size: 22px; font-weight: 500; margin: 0 0 6px 0; color: #f0f0f0;">💰 New Order Received</h1>
+  <p style="font-size: 14px; color: #999; margin: 0;">Order <strong style="color: #f0f0f0;">#<%= @order.public_id %></strong> has been paid and is ready for delivery.</p>
+</div>
+
+<!-- Customer Info -->
+<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
+  <h2 style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin: 0 0 12px 0;">Customer</h2>
+  <table style="width: 100%; border-collapse: collapse;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td style="padding: 6px 0; font-size: 13px; color: #888; min-width: 80px;">Email</td>
+      <td style="padding: 6px 0; font-size: 15px; color: #f0f0f0; font-weight: 500;"><%= @order.email %></td>
+    </tr>
+    <% if @order.discord.present? %>
+    <tr>
+      <td style="padding: 6px 0; font-size: 13px; color: #888;">Discord</td>
+      <td style="padding: 6px 0; font-size: 15px; color: #f0f0f0; font-weight: 500;"><%= @order.discord %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td style="padding: 6px 0; font-size: 13px; color: #888;">Date</td>
+      <td style="padding: 6px 0; font-size: 15px; color: #f0f0f0; font-weight: 500;"><%= @order.created_at.strftime("%B %d, %Y at %H:%M") %></td>
+    </tr>
+  </table>
+</div>
+
+<!-- Order Items -->
+<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
+  <h2 style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin: 0 0 12px 0;">Order Items</h2>
+  <table style="width: 100%; border-collapse: collapse;" cellpadding="0" cellspacing="0" border="0">
+    <thead>
+      <tr>
+        <th style="padding: 6px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 11px; color: #666; text-align: left; text-transform: uppercase; letter-spacing: 0.05em;">Product</th>
+        <th style="padding: 6px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 11px; color: #666; text-align: left; text-transform: uppercase; letter-spacing: 0.05em;">Variant</th>
+        <th style="padding: 6px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 11px; color: #666; text-align: center; text-transform: uppercase; letter-spacing: 0.05em;">Qty</th>
+        <th style="padding: 6px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 11px; color: #666; text-align: right; text-transform: uppercase; letter-spacing: 0.05em;">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @order.order_items.each do |item| %>
+      <tr>
+        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #ddd;"><%= item.product.title %></td>
+        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888;"><%= item.variant.title %></td>
+        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888; text-align: center;">×<%= item.quantity %></td>
+        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #f0f0f0; text-align: right; font-weight: 500;">€<%= format("%.2f", item.price / 100.0) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" style="padding: 10px 0 0 0; font-size: 13px; color: #888; text-align: right;">Total</td>
+        <td style="padding: 10px 0 0 0; font-size: 16px; color: #4ade80; text-align: right; font-weight: 600;">
+          €<%= format("%.2f", @order.order_items.sum { |i| i.price * i.quantity } / 100.0) %>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- Fulfillment Reminder -->
+<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-left: 3px solid #4ade80; border-radius: 0; padding: 12px 14px; font-size: 14px; color: #aaa; margin-top: 4px;">
+  <strong style="color: #f0f0f0;">Action needed:</strong> Contact the customer via email or Discord to deliver their account. Customer expects delivery within 10 hours.
+</div>

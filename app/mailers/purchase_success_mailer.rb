@@ -4,4 +4,5 @@ class PurchaseSuccessMailer < ApplicationMailer
     @email = order.email
     mail(to: @email, subject: "Order #{@order.public_id} delivery")
   end
+
 end

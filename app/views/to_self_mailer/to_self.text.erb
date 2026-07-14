@@ -1,0 +1,20 @@
+NEW ORDER RECEIVED — #<%= @order.public_id %>
+=====================================
+
+CUSTOMER
+  Email:   <%= @order.email %>
+<% if @order.discord.present? %>
+  Discord: <%= @order.discord %>
+<% end %>
+  Date:    <%= @order.created_at.strftime("%B %d, %Y at %H:%M") %>
+
+ORDER ITEMS
+-------------------------------------
+<% @order.order_items.each do |item| %>
+  <%= item.product.title %> — <%= item.variant.title %>
+  Qty: <%= item.quantity %>  |  €<%= format("%.2f", item.price / 100.0) %>
+<% end %>
+-------------------------------------
+  TOTAL: €<%= format("%.2f", @order.order_items.sum { |i| i.price * i.quantity } / 100.0) %>
+
+ACTION NEEDED: Contact the customer to deliver their account.
