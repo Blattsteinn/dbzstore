@@ -69,6 +69,11 @@
         <%= form_with url: orders_path, method: :post, data: { turbo: false },
               html: { class: "hero-purchase-form" } do |form| %>
 
+              <%= form.text_field :contact_me_by_fax_only, 
+              style: "position:absolute;left:-9999px;", 
+              tabindex: "-1", 
+              autocomplete: "off", hidden: true%>
+
           <div class="hero-variant-list">
             <% @product.variants.each do |variant| %>
               <% next if variant.stock <= 0 %>

@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   def honeypot_check
     if params[:contact_me_by_fax_only].present?
       head :ok
+      return
     end
   end
 

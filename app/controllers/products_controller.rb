@@ -1,7 +1,6 @@
 class ProductsController < ApplicationController
     before_action :authenticate_admin!, except: [:index, :show]
-    before_action :set_game, only: [:index, :show, :show_hero, :show_minimal, :show_split, :show_card, :show_gallery]
-    before_action :set_product_for_designs, only: [:show_hero, :show_minimal, :show_split, :show_card, :show_gallery]
+    before_action :set_game, only: [:index, :show]
 
     def index
         @products = Product.visible.includes(:variants, product_images: :image_attachment)

@@ -22,7 +22,11 @@ class StripeWebhooksController < ApplicationController
       return unless order
       return if order.paid?
 
+      order.order_items.includes(:variant).find_each do |item|
+        item.variant.decrement!(:stock, item.quantity)
+      end
       order.update!(status: "paid")
+
       # Can't use deliver_later; smth goes wrong & it never gets sent
       PurchaseSuccessMailer.successful_purchase(order).deliver_now
 
@@ -30,12 +34,7 @@ class StripeWebhooksController < ApplicationController
       order = Order.find_by(stripe_session_id: event.data.object.id)
       return unless order
       return unless order.status == "pending"
-
-      ActiveRecord::Base.transaction do
-        order.restore_stock!
-        order.destroy
-      end
-
+      order.destroy
     end
 
     render plain: "OK", status: :ok

@@ -18,40 +18,29 @@ class OrdersController < ApplicationController
         @discord  = params[:discord]
         @email    = params[:email]
         @variant  = Variant.includes(:product).find_by(id: params[:variant_id].to_i)
+        @product  = @variant.product
         @quantity = params[:quantity].to_i
+        unless @quantity >= 1
+            redirect_to products_path, alert: "Invalid quantity"
+            return
+        end
 
         unless @variant
             redirect_to products_path, alert: "Invalid product"
             return
         end
 
-        # --- Reserve stock atomically to prevent race conditions ---
-        stock_reserved = false
 
-        ActiveRecord::Base.transaction do
-            @variant.with_lock do
-                if @variant.stock >= @quantity
-                    @variant.decrement!(:stock, @quantity)
-                    stock_reserved = true
-                end
-            end
-
-            raise ActiveRecord::Rollback unless stock_reserved
-
-            @order = Order.create!(email: @email, discord: @discord)
-            OrderItem.create!(
-                order_id: @order.id,
-                product_id: @variant.product_id,
-                variant_id: @variant.id,
-                quantity: @quantity,
-                price: @variant.price,
-            )
-        end
-
-        unless stock_reserved
-            redirect_to game_product_path(game: @variant.product.game_name, id: @variant.product), alert: "Not enough stock available"
-            return
-        end
+        # -- NOTE: We do not care about race conditions.
+        # -- The volume of this website is not that huge for it to actually matter.
+        @order = Order.create!(email: @email, discord: @discord)
+        OrderItem.create!(
+            order_id: @order.id,
+            product_id: @variant.product_id,
+            variant_id: @variant.id,
+            quantity: @quantity,
+            price: @variant.price,
+        )
 
         # --- Set-up for Stripe ---
         line_items = @order.order_items.map do |item|
@@ -74,28 +63,19 @@ class OrdersController < ApplicationController
         redirect_to stripe_session.url, allow_other_host: true
 
         rescue Stripe::StripeError => e
-            if @order
-                @order.restore_stock!
-                @order.destroy
-            end
-            redirect_to product_path(@variant.product), alert: "Payment could not be initiated: #{e.message}"
-    end
+            @order&.destroy
+            Rails.logger.error("Stripe error: #{e.message}")
+            redirect_to game_products_path(@product.game_name), alert: "Payment could not be initiated, smth went wrong with Stripe"
+        end
 
     # DEFINED in stripe_session = Stripe::Checkout::Session.create (look above)
     def cancel_stripe_checkout
         @order = Order.find_by!(public_id: params[:public_id])
 
-        #we cant cancel completed order
-        if @order.status == "paid"
-            return
-        end
-
         if @order.status == "pending"
-            @order.restore_stock!
+            product = @order.order_items.first.product
             @order.destroy
-            redirect_to products_path, notice: "Checkout cancelled."
-        else
-            redirect_to products_path, alert: "This order cannot be cancelled."
+            redirect_to product, alert: "Payment cancelled"
         end
     end
 

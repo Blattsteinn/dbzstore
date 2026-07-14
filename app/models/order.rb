@@ -11,13 +11,6 @@ class Order < ApplicationRecord
     has_many :feedbacks, dependent: :destroy
     has_many :support_messages, dependent: :destroy
 
-    def restore_stock!
-        ActiveRecord::Base.transaction do
-            order_items.includes(:variant).find_each do |item|
-            Variant.where(id: item.variant_id).update_counters(item.variant_id, stock: item.quantity)
-            end
-        end
-    end
 
     def paid?
         status == "paid"
