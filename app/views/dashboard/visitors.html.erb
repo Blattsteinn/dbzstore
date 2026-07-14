@@ -8,6 +8,8 @@
     </header>
 
     <div class="dashboard-card">
+    <%== @pagy.series_nav %>
+    <%== @pagy.info_tag %>
       <div class="card-header">
         <h3>Latest Visits</h3>
         <span class="text-muted"><%= @visits.size %> shown</span>

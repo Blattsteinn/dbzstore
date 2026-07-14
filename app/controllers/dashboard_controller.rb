@@ -51,9 +51,9 @@ class DashboardController < ApplicationController
     end
 
     def visitors
-        @visits = Ahoy::Visit.includes(:events)
-                              .order(started_at: :desc)
-                              .limit(200)
+        # @pagy, @records = pagy(:offset, Product.some_scope, **options)
+        @pagy, @visits = pagy(:offset, Ahoy::Visit.includes(:events)
+                              .order(started_at: :desc), limit: 20)
     end
 
     private

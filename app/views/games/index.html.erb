@@ -17,15 +17,16 @@
     </div>
 
     <div id="games-container">
-      <% @games.each do |game| %>
+    <% game = Game.find_by(name: 'dokkan') %>
+      <%# @games.each do |game| %>
         <%= link_to game_products_path(game.name), class: "game-card" do %>
           <div class="game-card-image">
-            <%= image_tag "#{game.name}.png", alt: game.official_name, onerror: "this.style.display='none'", loading: "lazy" %>
+            <%= image_tag "#{game.name}.jpg", alt: game.official_name, onerror: "this.style.display='none'", loading: "lazy" %>
           </div>
           <span class="game-card-name"><%= game.official_name %></span>
           <span class="game-card-hint">Browse Accounts →</span>
         <% end %>
-      <% end %>
+      <%# end %>
     </div>
   <% else %>
     <div id="games-container">

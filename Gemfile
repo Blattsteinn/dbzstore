@@ -82,3 +82,6 @@ gem 'resend'
 gem "ahoy_matey"
 gem "geocoder"
 gem "maxminddb"
+
+# Page pagination
+gem 'pagy', '~> 43.6' # MINOR version restriction, to avoid breaking changes

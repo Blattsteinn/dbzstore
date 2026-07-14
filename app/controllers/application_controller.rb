@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pagy::Method
+  
   # Shifting away from User Based as site will function as userless.
   # before_action :authenticate_user!
 
