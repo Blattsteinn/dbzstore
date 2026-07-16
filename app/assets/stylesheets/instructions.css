@@ -15,7 +15,11 @@
 .itl-list li::before { content: '▸'; position: absolute; left: 0; color: #6366f1; font-size: 12px; }
 .itl-warn { background: #18181b; border: 1px solid #f59e0b30; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-top: 1.5rem; color: #a1a1aa; font-size: 14px; }
 .itl-warn strong { color: #fbbf24; }
-@media (max-width: 480px) { .itl-contact { flex-direction: column; } }
+@media (max-width: 600px) {
+  .itl-contact { flex-direction: column; }
+  .itl-contact-item { align-items: flex-start; flex-direction: column; }
+  .itl-contact-item .value { overflow-wrap: anywhere; }
+}
 
 /* ---------- Design 6: Timeline + Sidebar ---------- */
 .itls { max-width: 1060px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; font-size: 15px; line-height: 1.6; color: #d4d4d8; position: relative; z-index: 1; }

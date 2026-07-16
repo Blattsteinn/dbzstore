@@ -56,6 +56,13 @@ nav .nav-user {
   color: rgba(255, 255, 255, 0.5);
 }
 
+@media (max-width: 480px) {
+  nav {
+    gap: 2px;
+    padding: 0;
+  }
+}
+
 /* Cart icon + counter */
 nav .nav-cart {
   display: flex;
