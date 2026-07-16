@@ -71,9 +71,22 @@
 
     <% end %>
 
-       <% flash.each do |type, message| %>
-      <div class="alert alert-danger">
-              <%= message %>
+    <% flash.each do |type, message| %>
+      <% 
+        alert_class = case type.to_s
+                      when "notice", "success"
+                        "alert-success"
+                      when "alert", "error"
+                        "alert-error"
+                      else
+                        "alert-info"
+                      end
+      %>
+      <div class="alert <%= alert_class %>">
+        <span class="alert-icon">
+          <% if alert_class == "alert-success" %>✅<% elsif alert_class == "alert-error" %>❌<% else %>ℹ️<% end %>
+        </span>
+        <span><%= message %></span>
       </div>
     <% end %>
         

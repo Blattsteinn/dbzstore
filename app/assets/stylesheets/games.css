@@ -71,7 +71,7 @@
 /* == Section Header == */
 .games-section-header {
   width: 100%;
-  text-align: left;
+  text-align: center;
   padding-top: 8px;
 }
 
@@ -93,7 +93,8 @@
 /* == Games Grid == */
 #games-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 280px);
+  grid-template-columns: repeat(auto-fit, 280px);
+  justify-content: center;
   gap: 20px;
   width: 100%;
 }

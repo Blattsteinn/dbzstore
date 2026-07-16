@@ -95,8 +95,9 @@
 
           <%= form.hidden_field :quantity, value: 1 %>
 
-          <%= form.label :email, "Email (required)" %>
-          <%= form.email_field :email, placeholder: "you@example.com", required: true %>
+              <%= form.label :email, "Email (required)" %>
+              <%= form.email_field :email, placeholder: "you@example.com", required: true,
+                data: { action: "focus->checkout-form#positionEmailField" } %>
 
           <%= form.label :discord, "Instagram / Discord (optional)" %>
           <%= form.text_field :discord, placeholder: "username" %>

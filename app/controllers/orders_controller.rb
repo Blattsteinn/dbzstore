@@ -69,7 +69,7 @@ class OrdersController < ApplicationController
         rescue Stripe::StripeError => e
             @order&.destroy
             Rails.logger.error("Stripe error: #{e.message}")
-            redirect_to game_products_path(@product.game_name), alert: "Payment could not be initiated, smth went wrong with Stripe"
+            redirect_to game_products_path(@product.game_name), alert: "Payment could not be initiated, Error: #{e.message}"
         end
 
     # DEFINED in stripe_session = Stripe::Checkout::Session.create (look above)
@@ -79,7 +79,7 @@ class OrdersController < ApplicationController
         if @order.status == "pending"
             product = @order.order_items.first.product
             @order.destroy
-            redirect_to product, alert: "Payment cancelled"
+            redirect_to game_products_path(product.game_name), alert: "Payment was cancelled"
         end
     end
 

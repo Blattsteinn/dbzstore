@@ -5,6 +5,19 @@ export default class extends Controller {
     this.submitting = false
   }
 
+  positionEmailField(event) {
+    if (!window.matchMedia("(max-width: 480px)").matches) return
+
+    const field = event.currentTarget
+    window.setTimeout(() => {
+      const viewportHeight = window.visualViewport?.height || window.innerHeight
+      const fieldTop = field.getBoundingClientRect().top
+      const scrollTop = window.scrollY + fieldTop - viewportHeight * 0.25
+
+      window.scrollTo({ top: Math.max(scrollTop, 0), behavior: "smooth" })
+    }, 150)
+  }
+
   submit(event) {
     if (this.submitting) return
 

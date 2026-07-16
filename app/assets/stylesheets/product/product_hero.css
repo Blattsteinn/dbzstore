@@ -655,7 +655,7 @@
   .hero-purchase-form input[type="email"],
   .hero-purchase-form input[type="text"] {
     padding: 0.5rem 0.75rem;
-    font-size: 0.8125rem;
+    font-size: 1rem;
   }
 
   .hero-payment-badges {
