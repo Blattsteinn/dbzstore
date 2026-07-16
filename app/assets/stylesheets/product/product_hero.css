@@ -369,7 +369,59 @@
   letter-spacing: 0.04em;
 }
 
-.hero-stripe-btn {
+/* Payment method badges */
+.hero-payment-badges {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-payment-label {
+  flex-basis: 100%;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #71717a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25rem;
+}
+
+.payment-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 42px;
+  padding: 0 0.75rem;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  flex-shrink: 0;
+}
+
+.payment-logo--apple-pay {
+  width: 50px !important;
+  height: auto !important;
+  max-width: none !important;
+}
+
+.payment-logo--google-pay {
+  width: 40px !important;
+  height: auto !important;
+  max-width: none !important;
+}
+
+.payment-logo--paypal-pay {
+  width: 30px !important;
+  height: auto !important;
+  max-width: none !important;
+}
+
+.hero-checkout-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -389,7 +441,7 @@
   overflow: hidden;
 }
 
-.hero-stripe-btn::after {
+.hero-checkout-btn::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -398,18 +450,14 @@
   transition: transform 0.5s;
 }
 
-.hero-stripe-btn:hover::after {
+.hero-checkout-btn:hover::after {
   transform: translateX(100%);
 }
 
-.hero-stripe-btn:hover {
+.hero-checkout-btn:hover {
   background: #312e81;
   transform: translateY(-1px);
   box-shadow: 0 6px 28px rgba(99, 102, 241, 0.1);
-}
-
-.hero-stripe-btn img {
-  height: 20px;
 }
 
 .hero-payment-methods {
@@ -420,7 +468,7 @@
 }
 
 .hero-payment-methods-small{
-  text-align: center;
+  text-align: flex-start;
   font-size: 0.60rem;
   color: #52525b;
   margin-top: 0.5rem;
@@ -610,7 +658,29 @@
     font-size: 0.8125rem;
   }
 
-  .hero-stripe-btn {
+  .hero-payment-badges {
+    gap: 0.375rem;
+  }
+
+  .hero-payment-label {
+    font-size: 0.625rem;
+    margin-right: 0;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.125rem;
+  }
+
+  .payment-badge {
+    width: 40px;
+    height: 32px;
+    padding: 0 0.375rem;
+  }
+
+  .payment-badge img {
+    height: 16px;
+  }
+
+  .hero-checkout-btn {
     padding: 0.75rem;
     font-size: 0.9375rem;
   }

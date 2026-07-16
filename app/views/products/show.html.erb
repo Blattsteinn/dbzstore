@@ -66,7 +66,7 @@
       <div class="hero-purchase-panel" id="hero-purchase">
         <p class="panel-title">Select variant &amp; purchase</p>
 
-        <%= form_with url: orders_path, method: :post, data: { turbo: false },
+        <%= form_with url: orders_path, method: :post, data: { turbo: false, controller: "checkout-form", action: "submit->checkout-form#submit" },
               html: { class: "hero-purchase-form" } do |form| %>
 
               <%= form.text_field :contact_me_by_fax_only, 
@@ -101,16 +101,32 @@
           <%= form.label :discord, "Instagram / Discord (optional)" %>
           <%= form.text_field :discord, placeholder: "username" %>
 
-          <%= button_tag type: 'submit', class: 'hero-stripe-btn' do %>
-            <%= image_tag 'stripe.png', alt: 'Pay with Stripe', style: "height:20px", loading: "lazy" %>
+          <%# Payment method badges — drop these PNGs into app/assets/images/ %>
+          <div class="hero-payment-badges">
+            <span class="hero-payment-label">Supported methods:</span>
+            <span class="payment-badge">
+              <%= image_tag 'visa.png', alt: 'Visa', loading: "lazy", class: 'payment-logo--paypal-pay' %>
+            </span>
+            <span class="payment-badge">
+              <%= image_tag 'mastercard.png', alt: 'Mastercard', loading: "lazy" %>
+            </span>
+            <span class="payment-badge">
+              <%= image_tag 'paypal.png', alt: 'PayPal', loading: "lazy",  class: 'payment-logo--paypal-pay' %>
+            </span>
+            <span class="payment-badge">
+              <%= image_tag 'apple-pay.png', alt: 'Apple Pay', class: 'payment-logo--apple-pay', loading: "lazy" %>
+            </span>
+            <span class="payment-badge">
+              <%= image_tag 'google-pay.png', alt: 'Google Pay', class: 'payment-logo--google-pay', loading: "lazy" %>
+            </span>
+          </div>
+
+          <%= button_tag type: 'submit', class: 'hero-checkout-btn' do %>
+            Continue to secure payment
           <% end %>
 
           <p class="hero-payment-methods">
-            Stripe accepts: Card · Apple Pay · Google Pay
-          </p>
-
-          <p class="hero-payment-methods-small">
-            For more payment methods contact me on Instagram (@dokkanarnis)
+            🔒 Secure checkout powered by Stripe
           </p>
         <% end %>
       </div>
@@ -122,29 +138,9 @@
   <div id="stripe-loading-overlay" class="stripe-loading-overlay">
     <div class="stripe-loading-card">
       <div class="stripe-loading-spinner"></div>
-      <p>Redirecting to Stripe, please wait…</p>
+      <p>Redirecting to secure checkout, please wait…</p>
     </div>
   </div>
 </div>
 
-<script>
-  (function() {
-    var form = document.querySelector('.hero-purchase-form');
-    if (!form) return;
-    form.addEventListener('submit', function(e) {
-      // Allow the delayed re-submission to go through
-      if (this.dataset.stripeSubmitting) return;
-      e.preventDefault();
-      // Honor HTML5 form validation (required fields, email format, etc.)
-      if (!this.checkValidity()) {
-        this.reportValidity();
-        return;
-      }
-      this.dataset.stripeSubmitting = '1';
-      document.getElementById('stripe-loading-overlay').style.display = 'flex';
-      var self = this;
-      // Small delay so the browser paints the overlay before navigating
-      setTimeout(function() { self.submit(); }, 150);
-    });
-  })();
-</script>
+
