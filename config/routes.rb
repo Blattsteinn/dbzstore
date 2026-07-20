@@ -46,7 +46,8 @@ Rails.application.routes.draw do
 
   # -----------------------------
 
-  root "games#index"
+  root to: redirect("/dokkan/products")
+
 
   get "instructions", to: "instructions#instructions", as: "instructions"
   get "tos", to: "tos#index", as: "tos"
