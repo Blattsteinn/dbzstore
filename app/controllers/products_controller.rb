@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
     before_action :set_game, only: [:index, :show]
 
     def index
-        @products = Product.visible.includes(:variants, product_images: :image_attachment)
+        @products = Product.visible.includes(:variants, product_images: { image_attachment: :blob })
         @products = @products.where(game_name: params[:game])
         # @products = @products.where("title ILIKE ?", "%#{params[:product_name]}%") if params[:product_name].present?
         @products = @products.order(priority: :asc)

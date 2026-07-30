@@ -20,4 +20,14 @@ class Product < ApplicationRecord
         product_images.first&.image
     end
 
+    def thumbnail
+    return unless primary_image.attached?
+
+    primary_image.variant(
+        resize_to_limit: [600, 600],
+        format: :webp,
+        saver: { quality: 75 }
+    )
+    end
+
 end

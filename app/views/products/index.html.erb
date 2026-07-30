@@ -56,7 +56,7 @@
       <%= link_to game_product_path(@game.name, product), class: "product-box" do %> 
 
         <div class="image-container">
-          <%= image_tag product.primary_image, alt: product.title, loading: "lazy" if product.primary_image %>
+          <%= image_tag product.thumbnail, alt: product.title, loading: "lazy" if product.primary_image %>
         </div>
 
         <div class="title-box">
