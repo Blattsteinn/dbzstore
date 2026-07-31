@@ -38,7 +38,7 @@
       <nav class="<%= controller_name %>-<%= action_name %>">
         <%= link_to "Products", root_path %>
         <%= link_to "Support", new_support_message_path %>
-        <%= link_to "Feedback", feedbacks_path %>
+        <%# link_to "Feedback", feedbacks_path %>
         <%= link_to "FAQ", faqs_path %>
         
         <% if current_user.admin? %>
@@ -64,7 +64,7 @@
       <nav class="<%= controller_name %>-<%= action_name %>">
         <%= link_to "Products", root_path %>
         <%= link_to "Support", new_support_message_path %>
-        <%= link_to "Feedback", feedbacks_path %>
+        <%# link_to "Feedback", feedbacks_path %>
         <%= link_to "FAQ", faqs_path %>
 
       </nav>

@@ -19,17 +19,16 @@
     <div id="games-container">
     <%# Yes DB query in views, 
       but not the end of the world, rarely visited page now anyway  #%>
-    <% game = Game.find_by(name: 'dokkan') %>
-      <%# @games.each do |game| %>
+      <% @games.each do |game| %>
         <%= link_to game_products_path(game.name), class: "game-card" do %>
           <div class="game-card-image">
-            <%= image_tag "#{game.name}.jpg", alt: game.official_name, onerror: "this.style.display='none'", loading: "lazy" %>
+            <%= image_tag "#{game.name}.jpg", alt: game.official_name, onerror: "this.style.display='none'", loading: "lazy"  %>
           </div>
           <span class="game-card-name"><%= game.official_name %></span>
           <span class="game-card-hint">Browse Accounts →</span>
         <% end %>
 
-      <%# end %>
+      <% end %>
     </div>
   <% else %>
     <div id="games-container">

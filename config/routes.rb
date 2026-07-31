@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   get ":game/products", to: "products#index", as: :game_products
   get ":game/products/:id", to: "products#show", as: :game_product
-  
+  get "games", to: "games#index", as: :games
   resources :products do
     member do
       patch :product_visibility
