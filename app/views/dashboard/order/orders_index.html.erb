@@ -55,7 +55,7 @@
                     order.order_items.first.product.title,
                     order.order_items.first.variant.title,
                     order.status,
-                    "#{convert_from_cents(order.order_items.sum { |item| item.price * item.quantity })} €",
+                    "#{convert_from_cents(order.order_items.sum { |item| item.price * item.quantity })}",
                     order.created_at.strftime("%Y-%m-%d %H:%M"),
                     order.discord
                   ].join("\t")

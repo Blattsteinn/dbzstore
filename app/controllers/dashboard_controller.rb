@@ -25,7 +25,7 @@ class DashboardController < ApplicationController
     end
 
     def orders_index
-        @orders = Order.includes(order_items: [:product, :variant]).all
+        @orders = Order.includes(order_items: [:product, :variant]).all.order(created_at: :desc)
         @orders = @orders.where(status: params[:status]) if params[:status].present?
         render "dashboard/order/orders_index"
     end
