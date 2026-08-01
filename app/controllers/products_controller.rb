@@ -104,7 +104,7 @@ class ProductsController < ApplicationController
 
     private
     def product_params
-        params.expect(product: [:title, :visibility, :description, :payment_type, :deliverables, :game_name, :priority,
+        params.expect(product: [:title, :visibility, :description, :italian_description, :payment_type, :deliverables, :game_name, :priority,
         product_images_attributes: [[:image, :priority, :_destroy, :id]],
         variants_attributes: [[:stock, :price, :title, :description, :_destroy, :id]]
         ])
