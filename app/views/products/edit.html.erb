@@ -48,11 +48,7 @@
 
         <div class="edit-v2-field">
           <%= form.label :game_name, "Game" %>
-          <%= form.select :game_name, [
-            ["DBZ Dokkan Battle", "dokkan"],
-            ["One Piece Treasure Cruise (OPTC)", "optc"],
-            ["Game 3", "3"],
-            ["Game 4", "4"]] %>
+          <%= form.select :game_name, Game.all.map { |game| [game.official_name, game.name]} %>
         </div>
 
         <div class="edit-v2-field">

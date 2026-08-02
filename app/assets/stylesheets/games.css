@@ -203,7 +203,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-align: center;
-  opacity: 0;
+  /* opacity: 0; */
   transform: translateY(4px);
   transition: opacity 0.25s ease, transform 0.25s ease;
 }

@@ -34,7 +34,7 @@ Variant.find_or_create_by!(product: product, title: "Android") do |v|
 end
 
 Game.create!(name: "dokkan", official_name: "DBZ Dokkan Battle")
-Game.create!(name: "optc",   official_name: "One Piece Treasure Cruise (OPTC)")
+# Game.create!(name: "optc",   official_name: "One Piece Treasure Cruise (OPTC)")
 Game.create!(name: "legends",   official_name: "DRAGON BALL LEGENDS")
 
 # puts "Test product ready: #{product.title}"
