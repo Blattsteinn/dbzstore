@@ -20,6 +20,26 @@
       <div class="dash-flash dash-flash-error"><%= flash[:alert] %></div>
     <% end %>
 
+    <div class="toolbar-controls">
+      <details class="filter-dropdown">
+        <summary class="btn-sm btn-sm-muted">Filter by Game</summary>
+        <div class="filter-panel">
+          <%= form_with url: dashboard_products_path, method: :get do |form| %>
+            <label class="filter-label" for="game_name">Game</label>
+            <%= form.select :game_name,
+                [["All games", ""]] + Game.all.map { |game| [game.official_name, game.name] },
+                { selected: params[:game_name] },
+                class: "form-select filter-select" %>
+
+            <div class="filter-actions">
+              <%= form.submit "Apply", class: "btn-sm" %>
+              <%= link_to "Reset", dashboard_products_path, class: "btn-sm btn-sm-muted" %>
+            </div>
+          <% end %>
+        </div>
+      </details>
+    </div>
+    <br>
     <div class="dashboard-card">
       <div class="card-body" style="padding: 0;">
         <table class="dash-table dash-table--products">

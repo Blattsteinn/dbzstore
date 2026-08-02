@@ -21,6 +21,7 @@ class DashboardController < ApplicationController
 
     def products_index
         @products = Product.includes(:variants).all
+        @products = @products.where(game_name: params[:game_name]) if params[:game_name].present?
         render "dashboard/product/products_index"
     end
 
