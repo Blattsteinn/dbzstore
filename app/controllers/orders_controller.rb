@@ -15,22 +15,24 @@ class OrdersController < ApplicationController
             return
         end
 
+        # Not using Discord no more;
         @discord  = params[:discord]
         @email    = params[:email]
         @variant  = Variant.includes(:product).find_by(id: params[:variant_id].to_i)
+
+        unless @variant
+            redirect_to games_path, alert: "Invalid product"
+            return
+        end
+
         @product  = @variant.product
         @quantity = params[:quantity].to_i
 
         # Note: at current design quantity is always 1.
         # It sure does add more headache now, but it's easier to keep it 
         # that way if we ever want to make a cart or whatever functionality
-        unless @quantity >= 1
-            redirect_to products_path, alert: "Invalid quantity"
-            return
-        end
-
-        unless @variant
-            redirect_to products_path, alert: "Invalid product"
+        if @quantity != 1
+            redirect_to games_path, alert: "Invalid quantity"
             return
         end
 
@@ -80,6 +82,8 @@ class OrdersController < ApplicationController
             product = @order.order_items.first.product
             @order.destroy
             redirect_to game_products_path(product.game_name), alert: "Payment was cancelled"
+        else
+            redirect_to instructions_url
         end
     end
 
@@ -102,6 +106,6 @@ class OrdersController < ApplicationController
     end
 
     def order_params
-     params.expect(order: [:product_id, :variant_id, :quantity, :price, :discord ])
+     params.expect(order: [:product_id, :variant_id, :quantity, :price])
     end
 end
