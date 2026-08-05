@@ -79,7 +79,13 @@
             <span class="carousel-counter" data-product-view-target="imageCounter">1 / <%= images.size %></span>
           <% end %>
         </div>
+
+        <div class="hero-desc-body">
+        <%= raw markdown(@text) %>
+        </div>
+
       </div>
+
 
 
 
@@ -102,9 +108,6 @@
                 <%= form.radio_button :variant_id, variant.id, required: true %>
                 <div class="hero-variant-info">
                   <p class="v-name"><%= variant.title %></p>
-                  <% if variant.description.present? %>
-                    <p class="v-desc"><%= variant.description %></p>
-                  <% end %>
                 </div>
                 <div>
                   <p class="hero-variant-price"><%= convert_from_cents(variant.price) %>€</p>
@@ -153,9 +156,7 @@
         <% end %>
       </div>
 
-      <div class="hero-desc-body">
-        <%= raw markdown(@text) %>
-      </div>
+
 
     </div>
 
