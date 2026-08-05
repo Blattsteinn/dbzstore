@@ -18,6 +18,9 @@ class ProductsController < ApplicationController
         end
 
         @descriptions = @product.localized_descriptions
+        @text = "## Contact (if no email received)
+- Instagram / Discord: @dokkanarnis
+- Email: dokkanriftmanagement@tuta.com"
     end
 
     def new

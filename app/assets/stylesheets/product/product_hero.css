@@ -2,7 +2,7 @@
    Design 1 — Hero / Immersive
    Full-screen hero image, overlay details, scroll-down layout
    ================================================================ */
-
+.product-hero-detail-grid > .hero-desc-body { color: #a1a1aa; }
 .product-hero-wrapper {
   position: relative;
   min-height: calc(100vh - 56px);

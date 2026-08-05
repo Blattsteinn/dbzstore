@@ -152,8 +152,15 @@
           </p>
         <% end %>
       </div>
-      
+
+      <div class="hero-desc-body">
+        <%= raw markdown(@text) %>
+      </div>
+
     </div>
+
+
+
   </div>
 
   <%# Stripe redirect loading overlay %>
@@ -163,6 +170,8 @@
       <p>Redirecting to secure checkout, please wait…</p>
     </div>
   </div>
+
+
 </div>
 
 
