@@ -1,76 +1,432 @@
-<div class="itls">
-  <div class="itls-card">
-    <div class="itls-banner">
-      <h1>Account delivery instructions</h1>
-      <p>Please read carefully before contacting me.</p>
-      <span class="itls-banner-discord">Instagram / Discord: @dokkanarnis</span>
-    </div>
+<div data-controller="language-switcher-instructions">
+  <br>
+  <div class="itls itls--langbar">
+    <div class="lang-switcher"
+          data-language-switcher-instructions-target="langSwitcher"
+          data-action="click->language-switcher-instructions#toggleDropdown">
+      <span class="lang-current">
+        <%= image_tag 'globe.png', alt: 'Language', class: 'lang-globe' %>
+        <span class="lang-label" data-language-switcher-instructions-target="langLabel">EN</span>
+      </span>
+      <span class="lang-dropdown-arrow">▾</span>
+      <div class="lang-dropdown" data-language-switcher-instructions-target="dropdown">
 
-    <div class="itls-body">
-    <div class="itls-layout">
-      <div class="itls-main">
-        <div class="itl-step">
-          <div class="itl-marker">1</div>
-          <h2>Contact me</h2>
-          <p>Reach out via one of the channels below — Instagram is preferred.</p>
-          <div class="itl-contact">
-            <div class="itl-contact-item">
-              <span class="label">Instagram / Discord</span>
-              <span class="value">@dokkanarnis</span>
-            </div>
-            <div class="itl-contact-item">
-              <span class="label">Email</span>
-              <span class="value">dokkanriftmanagement@tuta.com</span>
-            </div>
-          </div>
-          <p style="font-size:13px; color:#71717a;">Can't DM on Discord / Instagram? Message me on email instead.</p>
-        </div>
+        <button type="button" class="lang-option lang-option--active"
+                data-language-switcher-instructions-target="enLabel"
+                data-action="click->language-switcher-instructions#switchToEnglish">
+          English
+        </button>
 
-        <div class="itl-step">
-          <div class="itl-marker">2</div>
-          <h2>Include in your message</h2>
-          <ul class="itl-list">
-            <li>Your <strong style="color:#f1f1f3;">Order ID</strong> (check email)</li>
-            <li>Operating system — <strong style="color:#f1f1f3;">iOS</strong> or <strong style="color:#f1f1f3;">Android</strong></li>
-            <li>A Google account <strong style="color:#f1f1f3;">email and password</strong> for linking — create a fresh one, don't use your personal account.</li>
-          </ul>
-        </div>
+        <button type="button" class="lang-option"
+                data-language-switcher-instructions-target="itLabel"
+                data-action="click->language-switcher-instructions#switchToItalian">
+          Italiano
+        </button>
 
-        <div class="itl-step">
-          <div class="itl-marker">3</div>
-          <h2>Response time</h2>
-          <p>We try to link all accounts immediately after purchase. Google usually triggers a security check, so <strong style="color:#f1f1f3;">you'll need to be online</strong> to confirm it.</p>
-          <p style="font-size:13px; color:#71717a;">Allow up to 10 hours for a response — we may be offline.</p>
-        </div>
+        <button type="button" class="lang-option"
+                data-language-switcher-instructions-target="frLabel"
+                data-action="click->language-switcher-instructions#switchToFrench">
+          French
+        </button>
 
-        <br>
-        <div class="itl-warn">
-          <strong>Important:</strong> We will never ask for your <em>primary</em> personal account password. If anyone does, don't share it.
-        </div>
+        <button type="button" class="lang-option"
+                data-language-switcher-instructions-target="esLabel"
+                data-action="click->language-switcher-instructions#switchToSpanish">
+          Spanish
+        </button>
+
+        <button type="button" class="lang-option"
+                data-language-switcher-instructions-target="deLabel"
+                data-action="click->language-switcher-instructions#switchToGerman">
+          German
+        </button>
+
       </div>
-
-      <aside class="itls-sidebar">
-        <div class="itls-side-card">
-          <h3>Quick Summary</h3>
-          <ol>
-            <li>DM <strong>@dokkanarnis</strong> on Instagram</li>
-            <li>Send your Order ID + OS</li>
-            <li>Provide a fresh Google account</li>
-            <li>Stay online for security check</li>
-          </ol>
-        </div>
-
-        <div class="itls-side-card itls-warn-card">
-          <h3>Security Notice</h3>
-          <p>We will <strong>never</strong> ask for your <em>primary</em> personal account password.</p>
-        </div>
-
-        <div class="itls-side-card">
-          <h3>Response Time</h3>
-          <p>Usually immediate. Allow up to <strong>10 hours</strong> — We may be offline.</p>
-        </div>
-      </aside>
     </div>
   </div>
+
+  <div class="itls" id="english" data-language-switcher-instructions-target="enBody">
+    <div class="itls-card">
+      <div class="itls-banner">
+        <h1>Account delivery instructions</h1>
+        <p>Please read carefully before contacting me.</p>
+        <span class="itls-banner-discord">Instagram / Discord: <%= @username %> </span>
+      </div>
+
+      <div class="itls-body">
+        <div class="itls-layout">
+          <div class="itls-main">
+            <div class="itl-step">
+              <div class="itl-marker">1</div>
+              <h2>Contact me</h2>
+              <p>Reach out via one of the channels below — Instagram is preferred.</p>
+              <div class="itl-contact">
+                <div class="itl-contact-item">
+                  <span class="label">Instagram / Discord</span>
+                  <span class="value"><%= @username %></span>
+                </div>
+                <div class="itl-contact-item">
+                  <span class="label">Email</span>
+                  <span class="value"><%= @email %></span>
+                </div>
+              </div>
+              <p style="font-size:13px; color:#71717a;">Can't DM on Discord / Instagram? Message me on email instead.</p>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">2</div>
+              <h2>Include in your message</h2>
+              <ul class="itl-list">
+                <li>Your <strong style="color:#f1f1f3;">Order ID</strong> (check email)</li>
+                <li>Operating system — <strong style="color:#f1f1f3;">iOS</strong> or <strong style="color:#f1f1f3;">Android</strong></li>
+                <li>A Google account <strong style="color:#f1f1f3;">email and password</strong> for linking — create a fresh one, don't use your personal account.</li>
+              </ul>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">3</div>
+              <h2>Response time</h2>
+              <p>We try to link all accounts immediately after purchase. Google usually triggers a security check, so <strong style="color:#f1f1f3;">you'll need to be online</strong> to confirm it.</p>
+              <p style="font-size:13px; color:#71717a;">Allow up to 10 hours for a response — we may be offline.</p>
+            </div>
+
+            <br>
+            <div class="itl-warn">
+              <strong>Important:</strong> We will never ask for your <em>primary</em> personal account password. If anyone does, don't share it.
+            </div>
+          </div>
+
+          <aside class="itls-sidebar">
+            <div class="itls-side-card">
+              <h3>Quick Summary</h3>
+              <ol>
+                <li>DM <strong><%= @username %></strong> on Instagram</li>
+                <li>Send your Order ID + OS</li>
+                <li>Provide a fresh Google account</li>
+                <li>Stay online for security check</li>
+              </ol>
+            </div>
+
+            <div class="itls-side-card itls-warn-card">
+              <h3>Security Notice</h3>
+              <p>We will <strong>never</strong> ask for your <em>primary</em> personal account password.</p>
+            </div>
+
+            <div class="itls-side-card">
+              <h3>Response Time</h3>
+              <p>Usually immediate. Allow up to <strong>10 hours</strong> — We may be offline.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="itls" id="italian" hidden data-language-switcher-instructions-target="itBody">
+    <div class="itls-card">
+      <div class="itls-banner">
+        <h1>Istruzioni per la consegna dell'account</h1>
+        <p>Leggi attentamente prima di contattarmi.</p>
+        <span class="itls-banner-discord">Instagram / Discord: <%= @username %></span>
+      </div>
+
+      <div class="itls-body">
+        <div class="itls-layout">
+          <div class="itls-main">
+            <div class="itl-step">
+              <div class="itl-marker">1</div>
+              <h2>Contattami</h2>
+              <p>Contattami tramite uno dei canali qui sotto — Instagram è il metodo preferito.</p>
+              <div class="itl-contact">
+                <div class="itl-contact-item">
+                  <span class="label">Instagram / Discord</span>
+                  <span class="value"><%= @username %></span>
+                </div>
+                <div class="itl-contact-item">
+                  <span class="label">Email</span>
+                  <span class="value"><%= @email %></span>
+                </div>
+              </div>
+              <p style="font-size:13px; color:#71717a;">Non riesci a inviare un messaggio su Discord o Instagram? Contattami via email.</p>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">2</div>
+              <h2>Includi nel messaggio</h2>
+              <ul class="itl-list">
+                <li>Il tuo <strong style="color:#f1f1f3;">ID ordine</strong> (controlla l'email)</li>
+                <li>Sistema operativo — <strong style="color:#f1f1f3;">iOS</strong> oppure <strong style="color:#f1f1f3;">Android</strong></li>
+                <li>Un account Google con <strong style="color:#f1f1f3;">email e password</strong> da collegare — creane uno nuovo e non utilizzare il tuo account personale.</li>
+              </ul>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">3</div>
+              <h2>Tempi di risposta</h2>
+              <p>Cerchiamo di collegare tutti gli account subito dopo l'acquisto. Google di solito richiede una verifica di sicurezza, quindi <strong style="color:#f1f1f3;">dovrai essere online</strong> per confermarla.</p>
+              <p style="font-size:13px; color:#71717a;">Consenti fino a 10 ore per una risposta: potremmo essere offline.</p>
+            </div>
+
+            <br>
+            <div class="itl-warn">
+              <strong>Importante:</strong> Non ti chiederemo <em>mai</em> la password del tuo account personale <em>principale</em>. Se qualcuno lo fa, non condividerla.
+            </div>
+          </div>
+
+          <aside class="itls-sidebar">
+            <div class="itls-side-card">
+              <h3>Riepilogo rapido</h3>
+              <ol>
+                <li>Invia un DM a <strong><%= @username %></strong> su Instagram</li>
+                <li>Invia il tuo ID ordine + sistema operativo</li>
+                <li>Fornisci un nuovo account Google</li>
+                <li>Rimani online per la verifica di sicurezza</li>
+              </ol>
+            </div>
+
+            <div class="itls-side-card itls-warn-card">
+              <h3>Avviso di sicurezza</h3>
+              <p>Non ti chiederemo <strong>mai</strong> la password del tuo account personale <em>principale</em>.</p>
+            </div>
+
+            <div class="itls-side-card">
+              <h3>Tempi di risposta</h3>
+              <p>Di solito immediati. Consenti fino a <strong>10 ore</strong>: potremmo essere offline.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="itls" id="french" hidden data-language-switcher-instructions-target="frBody">
+    <div class="itls-card">
+      <div class="itls-banner">
+        <h1>Instructions pour la livraison du compte</h1>
+        <p>Veuillez lire attentivement avant de me contacter.</p>
+        <span class="itls-banner-discord">Instagram / Discord : <%= @username %></span>
+      </div>
+
+      <div class="itls-body">
+        <div class="itls-layout">
+          <div class="itls-main">
+            <div class="itl-step">
+              <div class="itl-marker">1</div>
+              <h2>Contactez-moi</h2>
+              <p>Contactez-moi via l'un des moyens ci-dessous — Instagram est à privilégier.</p>
+              <div class="itl-contact">
+                <div class="itl-contact-item">
+                  <span class="label">Instagram / Discord</span>
+                  <span class="value"><%= @username %></span>
+                </div>
+                <div class="itl-contact-item">
+                  <span class="label">E-mail</span>
+                  <span class="value"><%= @email %></span>
+                </div>
+              </div>
+              <p style="font-size:13px; color:#71717a;">Impossible de m'envoyer un message sur Discord ou Instagram ? Contactez-moi par e-mail.</p>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">2</div>
+              <h2>Incluez dans votre message</h2>
+              <ul class="itl-list">
+                <li>Votre <strong style="color:#f1f1f3;">numéro de commande</strong> (consultez votre e-mail)</li>
+                <li>Système d'exploitation — <strong style="color:#f1f1f3;">iOS</strong> ou <strong style="color:#f1f1f3;">Android</strong></li>
+                <li>Un compte Google avec son <strong style="color:#f1f1f3;">adresse e-mail et son mot de passe</strong> à associer — créez-en un nouveau et n'utilisez pas votre compte personnel.</li>
+              </ul>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">3</div>
+              <h2>Délai de réponse</h2>
+              <p>Nous essayons de lier tous les comptes immédiatement après l'achat. Google déclenche généralement une vérification de sécurité, vous devrez donc <strong style="color:#f1f1f3;">être en ligne</strong> pour la confirmer.</p>
+              <p style="font-size:13px; color:#71717a;">Prévoyez jusqu'à 10 heures pour une réponse — nous pouvons être hors ligne.</p>
+            </div>
+
+            <br>
+            <div class="itl-warn">
+              <strong>Important :</strong> Nous ne vous demanderons <em>jamais</em> le mot de passe de votre compte personnel <em>principal</em>. Si quelqu'un le fait, ne le partagez pas.
+            </div>
+          </div>
+
+          <aside class="itls-sidebar">
+            <div class="itls-side-card">
+              <h3>Résumé rapide</h3>
+              <ol>
+                <li>Envoyez un DM à <strong><%= @username %></strong> sur Instagram</li>
+                <li>Envoyez votre numéro de commande + votre système d'exploitation</li>
+                <li>Fournissez un nouveau compte Google</li>
+                <li>Restez en ligne pour la vérification de sécurité</li>
+              </ol>
+            </div>
+
+            <div class="itls-side-card itls-warn-card">
+              <h3>Avis de sécurité</h3>
+              <p>Nous ne vous demanderons <strong>jamais</strong> le mot de passe de votre compte personnel <em>principal</em>.</p>
+            </div>
+
+            <div class="itls-side-card">
+              <h3>Délai de réponse</h3>
+              <p>Généralement immédiat. Prévoyez jusqu'à <strong>10 heures</strong> — nous pouvons être hors ligne.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="itls" id="spanish" hidden data-language-switcher-instructions-target="esBody">
+    <div class="itls-card">
+      <div class="itls-banner">
+        <h1>Instrucciones para la entrega de la cuenta</h1>
+        <p>Por favor, lee esto atentamente antes de contactarme.</p>
+        <span class="itls-banner-discord">Instagram / Discord: <%= @username %></span>
+      </div>
+
+      <div class="itls-body">
+        <div class="itls-layout">
+          <div class="itls-main">
+            <div class="itl-step">
+              <div class="itl-marker">1</div>
+              <h2>Contáctame</h2>
+              <p>Ponte en contacto conmigo a través de uno de los canales indicados abajo; Instagram es el método preferido.</p>
+              <div class="itl-contact">
+                <div class="itl-contact-item">
+                  <span class="label">Instagram / Discord</span>
+                  <span class="value"><%= @username %></span>
+                </div>
+                <div class="itl-contact-item">
+                  <span class="label">Correo electrónico</span>
+                  <span class="value"><%= @email %></span>
+                </div>
+              </div>
+              <p style="font-size:13px; color:#71717a;">¿No puedes enviar un mensaje por Discord o Instagram? Contáctame por correo electrónico.</p>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">2</div>
+              <h2>Incluye en tu mensaje</h2>
+              <ul class="itl-list">
+                <li>Tu <strong style="color:#f1f1f3;">ID del pedido</strong> (revisa tu correo electrónico)</li>
+                <li>Sistema operativo: <strong style="color:#f1f1f3;">iOS</strong> o <strong style="color:#f1f1f3;">Android</strong></li>
+                <li>Una cuenta de Google con su <strong style="color:#f1f1f3;">correo electrónico y contraseña</strong> para vincularla. Crea una cuenta nueva y no utilices tu cuenta personal.</li>
+              </ul>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">3</div>
+              <h2>Tiempo de respuesta</h2>
+              <p>Intentamos vincular todas las cuentas inmediatamente después de la compra. Google suele solicitar una verificación de seguridad, por lo que <strong style="color:#f1f1f3;">deberás estar en línea</strong> para confirmarla.</p>
+              <p style="font-size:13px; color:#71717a;">Espera hasta 10 horas para recibir una respuesta; es posible que estemos desconectados.</p>
+            </div>
+
+            <br>
+            <div class="itl-warn">
+              <strong>Importante:</strong> Nunca te pediremos la contraseña de tu cuenta personal <em>principal</em>. Si alguien lo hace, no la compartas.
+            </div>
+          </div>
+
+          <aside class="itls-sidebar">
+            <div class="itls-side-card">
+              <h3>Resumen rápido</h3>
+              <ol>
+                <li>Envía un mensaje directo a <strong><%= @username %></strong> en Instagram</li>
+                <li>Envía tu ID del pedido + sistema operativo</li>
+                <li>Proporciona una cuenta de Google nueva</li>
+                <li>Mantente en línea para la verificación de seguridad</li>
+              </ol>
+            </div>
+
+            <div class="itls-side-card itls-warn-card">
+              <h3>Aviso de seguridad</h3>
+              <p><strong>Nunca</strong> te pediremos la contraseña de tu cuenta personal <em>principal</em>.</p>
+            </div>
+
+            <div class="itls-side-card">
+              <h3>Tiempo de respuesta</h3>
+              <p>Normalmente es inmediato. Espera hasta <strong>10 horas</strong>; es posible que estemos desconectados.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="itls" id="german" hidden data-language-switcher-instructions-target="deBody">
+    <div class="itls-card">
+      <div class="itls-banner">
+        <h1>Anweisungen zur Kontobereitstellung</h1>
+        <p>Bitte lies diese Informationen sorgfältig durch, bevor du mich kontaktierst.</p>
+        <span class="itls-banner-discord">Instagram / Discord: <%= @username %></span>
+      </div>
+
+      <div class="itls-body">
+        <div class="itls-layout">
+          <div class="itls-main">
+            <div class="itl-step">
+              <div class="itl-marker">1</div>
+              <h2>Kontaktiere mich</h2>
+              <p>Kontaktiere mich über einen der unten aufgeführten Kanäle – Instagram wird bevorzugt.</p>
+              <div class="itl-contact">
+                <div class="itl-contact-item">
+                  <span class="label">Instagram / Discord</span>
+                  <span class="value"><%= @username %></span>
+                </div>
+                <div class="itl-contact-item">
+                  <span class="label">E-Mail</span>
+                  <span class="value"><%= @email %></span>
+                </div>
+              </div>
+              <p style="font-size:13px; color:#71717a;">Du kannst mir auf Discord oder Instagram keine Nachricht senden? Dann kontaktiere mich stattdessen per E-Mail.</p>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">2</div>
+              <h2>Folgendes sollte deine Nachricht enthalten</h2>
+              <ul class="itl-list">
+                <li>Deine <strong style="color:#f1f1f3;">Bestellnummer</strong> (siehe E-Mail)</li>
+                <li>Betriebssystem – <strong style="color:#f1f1f3;">iOS</strong> oder <strong style="color:#f1f1f3;">Android</strong></li>
+                <li>Ein Google-Konto mit <strong style="color:#f1f1f3;">E-Mail-Adresse und Passwort</strong> zum Verknüpfen – erstelle dafür ein neues Konto und verwende nicht dein persönliches Konto.</li>
+              </ul>
+            </div>
+
+            <div class="itl-step">
+              <div class="itl-marker">3</div>
+              <h2>Antwortzeit</h2>
+              <p>Wir versuchen, alle Konten direkt nach dem Kauf zu verknüpfen. Google führt in der Regel eine Sicherheitsüberprüfung durch, daher musst du <strong style="color:#f1f1f3;">online sein</strong>, um diese zu bestätigen.</p>
+              <p style="font-size:13px; color:#71717a;">Bitte rechne mit einer Antwort innerhalb von bis zu 10 Stunden – wir könnten offline sein.</p>
+            </div>
+
+            <br>
+            <div class="itl-warn">
+              <strong>Wichtig:</strong> Wir werden dich <em>niemals</em> nach dem Passwort deines <em>persönlichen Hauptkontos</em> fragen. Falls dies jemand tut, teile es nicht mit.
+            </div>
+          </div>
+
+          <aside class="itls-sidebar">
+            <div class="itls-side-card">
+              <h3>Kurzfassung</h3>
+              <ol>
+                <li>Sende eine DM an <strong><%= @username %></strong> auf Instagram</li>
+                <li>Sende deine Bestellnummer + dein Betriebssystem</li>
+                <li>Stelle ein neues Google-Konto bereit</li>
+                <li>Bleibe für die Sicherheitsüberprüfung online</li>
+              </ol>
+            </div>
+
+            <div class="itls-side-card itls-warn-card">
+              <h3>Sicherheitshinweis</h3>
+              <p>Wir werden dich <strong>niemals</strong> nach dem Passwort deines <em>persönlichen Hauptkontos</em> fragen.</p>
+            </div>
+
+            <div class="itls-side-card">
+              <h3>Antwortzeit</h3>
+              <p>In der Regel sofort. Bitte rechne mit bis zu <strong>10 Stunden</strong> – wir könnten offline sein.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

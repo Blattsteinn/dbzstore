@@ -23,6 +23,18 @@
 
 /* ---------- Design 6: Timeline + Sidebar ---------- */
 .itls { max-width: 1060px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; font-size: 15px; line-height: 1.6; color: #d4d4d8; position: relative; z-index: 1; }
+
+/* Language switcher bar — sits above the card, right-aligned with it */
+.itls--langbar {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0;
+  padding-bottom: 0.5rem;
+  z-index: 5; /* keep the open dropdown above the card */
+}
+.itls--langbar .lang-switcher {
+  float: none;
+}
 .itls-blur-bg { position: fixed; inset: 0; z-index: -88; overflow: hidden; pointer-events: none; }
 .itls-blur-bg img { width: 100%; height: 100%; object-fit: cover; filter: blur(60px) brightness(0.10) saturate(0.5); transform: scale(1.1); }
 .itls-banner { padding: 2rem 2rem 0; }
