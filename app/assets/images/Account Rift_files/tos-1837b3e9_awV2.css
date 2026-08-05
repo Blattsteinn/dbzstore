@@ -1,0 +1,78 @@
+.tos {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+  color: #ccc;
+}
+
+.tos-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.tos-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin-bottom: 4px;
+}
+
+.tos-header p {
+  font-size: 13px;
+  color: #888;
+}
+
+.tos .card {
+  background: #1a1a1b;
+  border: 0.5px solid #3a3a3c;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 14px;
+}
+
+.tos .card h2 {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #aaa;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid #2a2a2c;
+}
+
+.tos .card p {
+  margin-bottom: 10px;
+  color: #bbb;
+}
+
+.tos .card p:last-child {
+  margin-bottom: 0;
+}
+
+.tos .card p strong {
+  color: #f0f0f0;
+}
+
+.tos .card ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.tos .card ul li {
+  margin-bottom: 6px;
+  color: #bbb;
+}
+
+.tos .card ol {
+  padding-left: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.tos .card ol li {
+  margin-bottom: 6px;
+  color: #bbb;
+}

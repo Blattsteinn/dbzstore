@@ -37,7 +37,9 @@ Game.create!(name: "dokkan", official_name: "DBZ Dokkan Battle")
 # Game.create!(name: "optc",   official_name: "One Piece Treasure Cruise (OPTC)")
 Game.create!(name: "legends",   official_name: "DRAGON BALL LEGENDS")
 
-# puts "Test product ready: #{product.title}"
-# puts "  Variants: #{product.variants.pluck(:title).join(', ')}"
-# puts "  Images:   #{product.product_images.count}"
-# puts "  Seeding complete!"
+
+Language.create!(name: "en", full_name: "English")
+Language.create!(name: "it", full_name: "Italiano")
+Language.create!(name: "fr", full_name: "Français")
+Language.create!(name: "de", full_name: "Deutsch")
+Language.create!(name: "es", full_name: "Español")

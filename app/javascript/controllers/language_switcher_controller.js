@@ -1,10 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["dropdown", "enBody", "itBody", "enLabel", "itLabel", "langLabel"]
+  static targets = ["dropdown", "langLabel", "langButton"]
+  static values = { languages: Array }
 
   connect() {
-    this.currentLang = "en" // default: English visible, label shows "EN"
+    // Prefer English; fall back to the first available language.
+    const defaultLang = this.languagesValue.includes("en") ? "en" : this.languagesValue[0]
+    this.langLabelTarget.innerText = (defaultLang || "EN").toUpperCase()
+    this.setActiveLanguage(defaultLang)
+    this.hideAllDescriptions()
+    this.showDescription(defaultLang)
   }
 
   toggleDropdown(event) {
@@ -12,37 +18,52 @@ export default class extends Controller {
     this.dropdownTarget.classList.toggle("lang-dropdown--open")
   }
 
-  switchToEnglish(event) {
+  // Single action for every language button. The language comes from a
+  // data-param, never from a dynamically-generated method name.
+  switchTo(event) {
+    event.preventDefault()
     event.stopPropagation()
-    this.itBodyTarget.classList.add("desc-body--hidden")
-    this.itBodyTarget.classList.remove("desc-body--visible")
-    this.enBodyTarget.classList.remove("desc-body--hidden")
-    this.enBodyTarget.classList.add("desc-body--visible")
-    this.enLabelTarget.classList.add("lang-option--active")
-    this.itLabelTarget.classList.remove("lang-option--active")
-    this.langLabelTarget.textContent = "EN"
-    this.currentLang = "en"
+
+    const lang = event.params.lang
+    if (!this.languagesValue.includes(lang)) return // allowlist guard
+
+    this.hideAllDescriptions()
+    this.langLabelTarget.innerText = lang.toUpperCase()
+    this.showDescription(lang)
+    this.setActiveLanguage(lang)
     this.hideDropdown()
   }
 
-  switchToItalian(event) {
-    event.stopPropagation()
-    this.enBodyTarget.classList.add("desc-body--hidden")
-    this.enBodyTarget.classList.remove("desc-body--visible")
-    this.itBodyTarget.classList.remove("desc-body--hidden")
-    this.itBodyTarget.classList.add("desc-body--visible")
-    this.itLabelTarget.classList.add("lang-option--active")
-    this.enLabelTarget.classList.remove("lang-option--active")
-    this.langLabelTarget.textContent = "IT"
-    this.currentLang = "it"
-    this.hideDropdown()
+  // ---- helpers ----
+
+  // Moves the "active" highlight to the button matching the given language.
+  setActiveLanguage(lang) {
+    this.langButtonTargets.forEach((button) => {
+      const isActive = button.dataset.languageSwitcherLangParam === lang
+      button.classList.toggle("lang-option--active", isActive)
+    })
+  }
+
+  hideAllDescriptions() {
+    for (const lang of this.languagesValue) {
+      this.setDescriptionHidden(lang, true)
+    }
+  }
+
+  showDescription(lang) {
+    this.setDescriptionHidden(lang, false)
+  }
+
+  setDescriptionHidden(lang, hidden) {
+    const element = document.getElementById(lang)
+    if (element) element.hidden = hidden // missing language → safe no-op
   }
 
   hideDropdown() {
     this.dropdownTarget.classList.remove("lang-dropdown--open")
   }
 
-  // Close dropdown when clicking outside
+  // Optional: wire with data-action="click@window->language-switcher#closeOnClickOutside"
   closeOnClickOutside(event) {
     if (!this.element.contains(event.target)) {
       this.hideDropdown()

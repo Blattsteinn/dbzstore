@@ -12,10 +12,12 @@ class ProductsController < ApplicationController
     end
 
     def show
-        @product = Product.includes(:variants, product_images: :image_attachment).find(params[:id])
+        @product = Product.includes(:variants, :localized_descriptions, product_images: :image_attachment).find(params[:id])
         unless @product.visibility == "live"
             redirect_to products_path
         end
+
+        @descriptions = @product.localized_descriptions
     end
 
     def new
@@ -35,10 +37,13 @@ class ProductsController < ApplicationController
 
     def edit
         @product = Product.includes(:variants, product_images: :image_attachment).find(params[:id])
+        @languages = Language.all
     end
 
     def update
+        #raise params.inspect
         @product = Product.find(params[:id])
+        @languages = Language.all
         @product.assign_attributes(product_params)
 
 
@@ -104,8 +109,11 @@ class ProductsController < ApplicationController
 
     private
     def product_params
+        # Nested attributes include :id, because they are used only within product#edit/update
+        # Destroy is an optimal parameter that marks for destruction.
         params.expect(product: [:title, :visibility, :description, :italian_description, :payment_type, :deliverables, :game_name, :priority,
         product_images_attributes: [[:image, :priority, :_destroy, :id]],
+        localized_descriptions_attributes: [[:language_id, :description, :_destroy, :id]],
         variants_attributes: [[:stock, :price, :title, :description, :_destroy, :id]]
         ])
     end

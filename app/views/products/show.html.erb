@@ -16,13 +16,6 @@
       <h1><%= @product.title %></h1>
     </div>
 
-    <%# <div class="product-hero-cta-row">
-      <a href="#hero-purchase" class="hero-cta-primary">
-        Buy Now
-      </a>
-      <a href="#hero-description" class="hero-cta-secondary">Learn More</a>
-    </div> %>
-
   </div>
 
   <%# ---- Detail section ---- %>
@@ -30,7 +23,9 @@
     <div class="product-hero-detail-grid">
 
       <%# Description %>
-      <div class="hero-desc-panel" id="hero-description" data-controller="language-switcher">
+      <div class="hero-desc-panel" id="hero-description"
+           data-controller="language-switcher"
+           data-language-switcher-languages-value='["en","es","fr","de","it"]'>
         <%# Language switcher %>
         <div class="lang-switcher"
              data-action="click->language-switcher#toggleDropdown"
@@ -41,27 +36,24 @@
           </span>
           <span class="lang-dropdown-arrow">▾</span>
           <div class="lang-dropdown" data-language-switcher-target="dropdown">
-            <button type="button" class="lang-option lang-option--active"
-                    data-language-switcher-target="enLabel"
-                    data-action="click->language-switcher#switchToEnglish">
-              English
-            </button>
-            <button type="button" class="lang-option"
-                    data-language-switcher-target="itLabel"
-                    data-action="click->language-switcher#switchToItalian">
-              Italiano
-            </button>
+            <% @descriptions.each do |desc| %>
+              <button type="button" class="lang-option"
+                      data-language-switcher-target="langButton"
+                      data-action="click->language-switcher#switchTo"
+                      data-language-switcher-lang-param="<%= desc.language.name %>">
+                <%= desc.language.full_name %>
+              </button>
+            <% end %>
           </div>
         </div>
 
-        <div class="hero-desc-body desc-body--visible" data-language-switcher-target="enBody">
-          <%= raw markdown(@product.description) %>
-        </div>
+        <% @descriptions.each do |desc| %>
+          <div class="hero-desc-body" id= <%=desc.language.name%> hidden>
+            <%= raw markdown(desc.description) %>
+          </div>
+        <% end %>
 
-        <div class="hero-desc-body desc-body--hidden" data-language-switcher-target="itBody">
-          <%= raw markdown(@product.italian_description) %>
-        </div>
-
+      
         <%# Gallery — always shown, click to open fullscreen %>
         <div id="product-image-container" data-controller="product-view" style="margin-top: 2rem;">
           <% images.each do |image| %>
@@ -88,6 +80,8 @@
           <% end %>
         </div>
       </div>
+
+
 
       <%# Purchase panel %>
       <div class="hero-purchase-panel" id="hero-purchase">

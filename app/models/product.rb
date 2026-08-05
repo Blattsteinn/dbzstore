@@ -6,12 +6,17 @@ class Product < ApplicationRecord
 
     has_many :product_images, -> { order(priority: :asc) }, dependent: :destroy
     accepts_nested_attributes_for :product_images, allow_destroy: true,
-        reject_if: ->(attrs) { attrs["id"].blank? && attrs["image"].blank? }
+        reject_if: ->(attrs) {  attrs["image"].blank? }
 
     has_many :order_items, dependent: :nullify
 
     has_many :variants, dependent: :destroy
     accepts_nested_attributes_for :variants, allow_destroy: true, reject_if: :all_blank
+
+    has_many :localized_descriptions, dependent: :destroy
+    accepts_nested_attributes_for :localized_descriptions, allow_destroy: true, 
+        reject_if: ->(attrs) { attrs["description"].blank? }
+    
 
     validates :deliverables,    presence: true
     validates :description,     presence: true

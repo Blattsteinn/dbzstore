@@ -1,0 +1,154 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+
+body{
+    --color-dark-blue: #161617;
+    --color-lighter-blue: #0d1521;
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: var(--color-dark-blue);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+.flash-notice {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    pointer-events: none;
+    background-color: #1a3a1a;
+    color: #90ee90;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #2d5a2d;
+    animation: toast-fade 3s ease-in-out forwards;
+}
+
+@keyframes toast-fade {
+    0%   { opacity: 1; transform: translateY(0); }
+    70%  { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(0.5rem); }
+}
+
+.field_with_errors input,
+.field_with_errors textarea,
+.field_with_errors select {
+  border-color: red;
+}
+
+.field_with_errors label {
+  color: red;
+}
+
+/* ========================== */
+/* == Shared page gradient (products, feedbacks, faqs, support) == */
+body.games-index,
+body.products-index,
+body.feedbacks-index,
+body.feedbacks-new,
+body.faqs-index,
+body.faqs-new,
+body.faqs-edit,
+body.support_messages-new,
+body.support_messages-index,
+body.support_messages-show {
+  background: linear-gradient(135deg, #07070d 0%, #080c17 40%, #051422 70%, #1a112b 100%);
+  background-attachment: fixed;
+}
+
+nav.games-index,
+nav.products-index,
+nav.feedbacks-index,
+nav.feedbacks-new,
+nav.faqs-index,
+nav.faqs-new,
+nav.faqs-edit,
+nav.support_messages-new,
+nav.support_messages-index,
+nav.support_messages-show {
+  background-color: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+
+/* ========================== */
+/* == Footer == */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin-top: 3rem;
+  border-top: 0.5px solid #3a3a3c;
+  font-size: 13px;
+  color: #888;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  color: #888;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: #ccc;
+}
+
+/* ========================== */
+/* == Flash Alert Banners == */
+.alert {
+  max-width: 800px;
+  margin: 1rem auto 0;
+  padding: 0.85rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  animation: alert-slide-in 0.3s ease-out;
+  border: 1px solid transparent;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.alert-success {
+  background-color: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
+.alert-error {
+  background-color: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.alert-info {
+  background-color: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+@keyframes alert-slide-in {
+  from { opacity: 0; transform: translateY(-0.5rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}

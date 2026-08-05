@@ -1,0 +1,226 @@
+#feedbacks-index-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.feedbacks-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.feedbacks-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.feedbacks-header-row .feedbacks-title {
+  margin-bottom: 0;
+}
+
+.feedback-new-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0c0c0d;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.feedback-new-link:hover {
+  opacity: 0.85;
+}
+
+#feedbacks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.feedback-box {
+  overflow: auto;    /* scrollbar appears only when needed */
+
+  height: 200px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 15px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.feedback-box:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feedback-rating {
+  color: #f59e0b;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.feedback-order {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.feedback-body {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+.feedback-meta {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: auto;
+}
+
+/* ── New feedback page ── */
+
+#feedback-new-page {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.feedback-form-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #545153;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.feedback-form-header {
+  margin-bottom: 1.5rem;
+}
+
+.feedback-form-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #fff;
+}
+
+.feedback-form-header p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.feedback-errors {
+  background: rgba(185, 28, 28, 0.15);
+  border: 1px solid rgba(252, 165, 165, 0.4);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  color: #fca5a5;
+}
+
+.feedback-errors ul {
+  margin: 0.4rem 0 0 1.2rem;
+}
+
+.feedback-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+
+.feedback-form label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0 0.4rem;
+}
+
+.form-input {
+  border: 1px solid #545153;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.form-input option {
+  background: #161617;
+  color: #fff;
+}
+
+.form-input--short {
+  max-width: 100px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn-cancel {
+  padding: 0.5rem 1.1rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid #545153;
+  background: transparent;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.btn-submit {
+  padding: 0.5rem 1.25rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  color: #0c0c0d;
+  background: #fff;
+  transition: opacity 0.15s;
+}
+
+.btn-submit:hover {
+  opacity: 0.85;
+}

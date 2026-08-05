@@ -63,32 +63,35 @@
 
       </div>
 
-     <!-- This here is bullshit, won't be using that
-     <%# ── Checkout ── %>
-      <div class="edit-v2-section">
-        <div class="edit-v2-section-header">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-          Checkout
+      <%# ── Localized descriptions ── %>
+      <div class="edit-v2-section edit-v2-languages" data-controller="collapse">
+        <div class="edit-v2-section-header edit-v2-languages-header" data-collapse-target="header" data-action="click->collapse#toggle" role="button" tabindex="0" aria-expanded="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+          <span>Localized descriptions</span>
+          <span class="edit-v2-languages-chevron">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
         </div>
-
-        <div class="edit-v2-row">
-          <div class="edit-v2-field">
-            <%= form.label :payment_type, "Payment type" %>
-            <%= form.select :payment_type, [
-              ["Single Payment", "single_payment"],
-              ["Subscription", "subscription"],
-              ["Pay What You Want", "any"]] %>
-          </div>
-          <div class="edit-v2-field">
-            <%= form.label :deliverables, "Deliverable type" %>
-            <%= form.select :deliverables, [
-              ["Static Value", "static"],
-              ["License Key", "licence"],
-              ["Unique Codes & Serials", "serial"]] %>
-          </div>
+        <div class="edit-v2-languages-body" data-collapse-target="body">
+          <% @languages.each do |lang| %>
+            <% existing = @product.localized_descriptions.find { |ld| ld.language_id == lang.id } %>
+            <%= form.fields_for :localized_descriptions, existing || LocalizedDescription.new(language_id: lang.id) do |description| %>
+              <div class="edit-v2-language">
+                <div class="edit-v2-language-head">
+                  <%= description.label :description, lang.full_name %>
+                  <label class="edit-v2-language-remove">
+                    <%= description.check_box :_destroy %>
+                    Remove
+                  </label>
+                </div>
+                <%= description.hidden_field :language_id, value: lang.id %>
+                <%= description.textarea :description, placeholder: "Description in #{lang.full_name}…" %>
+              </div>
+            <% end %>
+          <% end %>
         </div>
-      </div> 
-      -->
+      </div>
+      
 
       <%# ── Variants ── %>
       <div class="edit-v2-section">

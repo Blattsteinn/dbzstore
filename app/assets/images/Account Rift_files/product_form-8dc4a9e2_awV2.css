@@ -1,0 +1,274 @@
+/* ==========================================
+   Product Form (new / edit) — dark card style
+   ========================================== */
+
+.pf {
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+
+.pf-header {
+  margin-bottom: 1.5rem;
+}
+
+.pf-header h1 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.pf-header p {
+  font-size: 14px;
+  color: #999;
+}
+
+/* ---- Card ---- */
+.pf .card {
+  background: #1a1a1b;
+  border: 0.5px solid #3a3a3c;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 12px;
+}
+
+.pf .card h2,
+.pf .card summary {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #888;
+  margin-bottom: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.pf .card summary::-webkit-details-marker {
+  display: none;
+}
+
+.pf .card summary::before {
+  content: "▸ ";
+  font-size: 10px;
+  display: inline-block;
+  transition: transform 0.15s;
+  margin-right: 2px;
+}
+
+.pf .card details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+/* ---- Form fields ---- */
+.pf .field {
+  margin-bottom: 14px;
+}
+
+.pf .field:last-child {
+  margin-bottom: 0;
+}
+
+.pf .field label {
+  display: block;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.pf .field input[type="text"],
+.pf .field input[type="number"],
+.pf .field input[type="email"],
+.pf .field input[type="file"],
+.pf .field textarea,
+.pf .field select {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 14px;
+  background: #0c0c0d;
+  border: 0.5px solid #3a3a3c;
+  border-radius: 8px;
+  color: #ddd;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.pf .field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.pf .field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+.pf .field input:focus,
+.pf .field textarea:focus,
+.pf .field select:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
+}
+
+/* ---- Sub-card (variants / images) ---- */
+.pf .sub-card {
+  background: #0c0c0d;
+  border: 0.5px solid #2a2a2c;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 10px 0;
+}
+
+.pf .sub-card .field {
+  margin-bottom: 10px;
+}
+
+/* ---- Buttons ---- */
+.pf .btn-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pf button,
+.pf .btn,
+.pf input[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0d1321;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  font-family: inherit;
+}
+
+.pf button:hover,
+.pf .btn:hover,
+.pf input[type="submit"]:hover {
+  opacity: 0.85;
+}
+
+.pf .btn-secondary {
+  color: #ccc;
+  background: #222224;
+  border: 0.5px solid #3a3a3c;
+}
+
+.pf .btn-secondary:hover {
+  background: #2a2a2c;
+}
+
+.pf .btn-danger {
+  background: transparent;
+  color: #e06060;
+  border: 0.5px solid #3a3a3c;
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+.pf .btn-danger:hover {
+  background: rgba(224, 96, 96, 0.1);
+  border-color: #e06060;
+}
+
+/* ---- Checkbox row ---- */
+.pf .field-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.pf .field-inline label {
+  font-size: 14px;
+  color: #ddd;
+  margin: 0;
+  cursor: pointer;
+}
+
+.pf .field-inline input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 0.5px solid #3a3a3c;
+  border-radius: 4px;
+  background: #0c0c0d;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.pf .field-inline input[type="checkbox"]:checked {
+  background: white;
+  border-color: white;
+}
+
+/* ---- Inline image preview ---- */
+.pf .image-preview {
+  max-width: 200px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* ---- Link to product ---- */
+.pf .pf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: color 0.15s;
+}
+
+.pf .pf-link:hover {
+  color: white;
+}
+
+/* ---- flash message ---- */
+.pf .flash {
+  background: #1a1a1b;
+  border: 0.5px solid #3a3a3c;
+  border-left: 3px solid #e06060;
+  border-radius: 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #e06060;
+  margin-bottom: 12px;
+}
+
+/* ---- submit card ---- */
+.pf .submit-card {
+  display: flex;
+  justify-content: flex-end;
+  background: #1a1a1b;
+  border: 0.5px solid #3a3a3c;
+  border-radius: 12px;
+  padding: 10px 1.25rem;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .pf {
+    padding: 1rem 0.5rem;
+  }
+
+  .pf-header h1 {
+    font-size: 18px;
+  }
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_31_140213) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_05_093129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -119,6 +119,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_140213) do
     t.index ["name"], name: "index_games_on_name", unique: true
   end
 
+  create_table "languages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "full_name"
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "localized_descriptions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.bigint "language_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["language_id"], name: "index_localized_descriptions_on_language_id"
+    t.index ["product_id", "language_id"], name: "index_localized_descriptions_on_product_id_and_language_id", unique: true
+    t.index ["product_id"], name: "index_localized_descriptions_on_product_id"
+  end
+
   create_table "order_items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "order_id", null: false
@@ -223,6 +241,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_140213) do
   add_foreign_key "cart_items", "products"
   add_foreign_key "cart_items", "users"
   add_foreign_key "feedbacks", "orders"
+  add_foreign_key "localized_descriptions", "languages"
+  add_foreign_key "localized_descriptions", "products"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "order_items", "variants"
