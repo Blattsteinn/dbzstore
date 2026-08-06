@@ -1,5 +1,5 @@
 class Discount < ApplicationRecord
-    validates :code, presence: true
+    validates :code, presence: true, uniqueness: true
 
     validates :amount, presence: true, numericality: {
         only_integer: true,
@@ -15,6 +15,6 @@ class Discount < ApplicationRecord
 
   def redeem!
     return false unless available?
-    update!(remaining: remaining - 1s)
+    update!(remaining: remaining - 1)
   end
 end

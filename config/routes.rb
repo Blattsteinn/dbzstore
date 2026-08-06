@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   get "dashboard/faq_index", to: "dashboard#faq_index", as: "dashboard_faqs"
 
   get "dashboard/visitors", to: "dashboard#visitors", as: "dashboard_visitors"
+  get "dashboard/discount_index", to: "dashboard#discount_index", as: "dashboard_discounts"
 
   # -----------------------------
 
@@ -57,5 +58,5 @@ Rails.application.routes.draw do
 
   resources :support_messages, only: [:index, :show, :new, :create, :destroy, :update]
   resources :faqs, only: [:index, :new, :create, :destroy, :update, :edit]
-  resources :discounts
+  resources :discounts, only: [:new, :create, :destroy, :update, :edit]
 end

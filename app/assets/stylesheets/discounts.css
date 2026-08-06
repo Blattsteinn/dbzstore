@@ -1,0 +1,112 @@
+/* ==========================================
+   Discounts — dark card style
+   ========================================== */
+
+/* ---- New / Edit form ---- */
+.discount-form {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.discount-header {
+  margin-bottom: 1.5rem;
+}
+
+.discount-header h1 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.discount-header p {
+  font-size: 14px;
+  color: #999;
+}
+
+.discount-header a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.discount-header a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.discount-form .card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid #3a3a3c;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.discount-form .field {
+  margin-bottom: 14px;
+}
+
+.discount-form .field:last-child {
+  margin-bottom: 0;
+}
+
+.discount-form .field label {
+  display: block;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.discount-form .field input[type="text"],
+.discount-form .field input[type="number"] {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid #545153;
+  border-radius: 8px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.discount-form .field input:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
+}
+
+.discount-form input[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0d1321;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  font-family: inherit;
+}
+
+.discount-form input[type="submit"]:hover {
+  opacity: 0.85;
+}
+
+.discount-form .submit-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 480px) {
+  .discount-form {
+    padding: 1rem 0.5rem;
+  }
+
+  .discount-header h1 {
+    font-size: 18px;
+  }
+}

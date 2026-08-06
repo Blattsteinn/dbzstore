@@ -1,0 +1,55 @@
+<div id="dashboard-container">
+  <%= render "dashboard/sidebar" %>
+
+  <main id="dashboard-main">
+    <header class="dashboard-page-header">
+      <div>
+        <h1>Discounts</h1>
+        <p class="text-muted"><%= @discounts.count %> entries</p>
+      </div>
+      <%= link_to "+ New Discount", new_discount_path, class: "btn-primary" %>
+    </header>
+
+    <div class="dashboard-card">
+      <div class="card-body" style="padding: 0;">
+        <% if @discounts.any? %>
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Amount</th>
+                <th>Remaining</th>
+                <th>Created</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @discounts.each do |discount| %>
+                <tr>
+                  <td><strong><%= discount.code %></strong></td>
+                  <td><%= discount.amount %></td>
+                  <td>
+                    <span class="status-badge <%= discount.remaining.positive? ? "status-open" : "status-closed" %>">
+                      <%= discount.remaining %>
+                    </span>
+                  </td>
+                  <td><%= discount.created_at.strftime("%b %d, %Y") %></td>
+                  <td>
+                    <div class="action-group">
+                      <%= link_to "Edit", edit_discount_path(discount), class: "btn-sm" %>
+                      <%= button_to "Delete", discount_path(discount), method: :delete,
+                          class: "btn-sm btn-sm-danger", form_class: "inline-form",
+                          data: { turbo_confirm: "Delete this discount?" } %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="empty-state">No discounts yet. <%= link_to "Create one", new_discount_path %>.</p>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

@@ -18,7 +18,8 @@ class DiscountsController < ApplicationController
     @discount.remaining = @discount.amount
     
     if @discount.save
-      redirect_to discounts_path
+      flash[:notice] = "Created successfully."
+      redirect_to dashboard_discounts_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,7 +33,8 @@ class DiscountsController < ApplicationController
     @discount = Discount.find(params[:id])
 
     if @discount.update(params.expect(discount: [:code, :amount, :remaining]))
-      redirect_to discounts_path
+      flash[:notice] = "Saved successfully."
+      redirect_to dashboard_discounts_path
     else
       render :new, status: :unprocessable_entity
     end

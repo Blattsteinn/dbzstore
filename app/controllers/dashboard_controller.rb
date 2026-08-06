@@ -57,6 +57,11 @@ class DashboardController < ApplicationController
                               .order(started_at: :desc), limit: 20)
     end
 
+    def discount_index
+        @discounts = Discount.all
+        render "dashboard/discount/discount_index"
+    end
+
     private
 
     def set_open_support

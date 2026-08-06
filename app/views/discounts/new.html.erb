@@ -1,15 +1,30 @@
-
-<%= form_with model: @discount do |f| %>
-    <%= f.label :code %> <br>
-    <%= f.text_field :code %>
-    <br>
-
-    <%= f.label :amount %> <br>
-    <%= f.number_field :amount %>
-    <br>
-    <br>
-    
-    <%= f.submit %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "discounts" %>
 <% end %>
 
-   <%= link_to "back to all?", discounts_path %>
+<%= render "shared/errors", object: @discount %>
+
+<div class="discount-form">
+  <div class="discount-header">
+    <h1>New Discount</h1>
+    <p><%= link_to "← back to all", dashboard_discounts_path %></p>
+  </div>
+
+  <%= form_with model: @discount do |form| %>
+    <div class="card">
+      <div class="field">
+        <%= form.label :code %>
+        <%= form.text_field :code %>
+      </div>
+
+      <div class="field">
+        <%= form.label :amount %>
+        <%= form.number_field :amount %>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <%= form.submit "Create Discount" %>
+    </div>
+  <% end %>
+</div>
