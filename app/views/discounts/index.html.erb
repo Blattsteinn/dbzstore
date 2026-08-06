@@ -1,0 +1,17 @@
+
+<% if @discounts.empty? %>
+ <p> No discounts here </p>
+<% end %>
+
+<% @discounts.each do |discount| %>
+    <%= discount.code %>
+    <%= discount.amount %>
+    <%= discount.remaining %>
+    <%= link_to "view me", discount_path(discount) %>
+    <hr>
+<% end %>
+
+<br>
+<br>
+<hr>
+<%= link_to "create_discount", new_discount_path %>

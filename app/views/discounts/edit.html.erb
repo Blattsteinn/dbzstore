@@ -1,0 +1,17 @@
+<%= form_with model: @discount do |f| %>
+    <%= f.label :code %> <br>
+    <%= f.text_field :code %>
+    <br>
+
+    <%= f.label :amount %> <br>
+    <%= f.number_field :amount %>
+    <br>
+
+    <%= f.label :remaining %> <br>
+    <%= f.number_field :remaining %>
+    <br>
+    
+    <%= f.submit %>
+<% end %>
+
+   <%= link_to "back to all?", discounts_path %>

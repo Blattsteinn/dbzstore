@@ -57,4 +57,5 @@ Rails.application.routes.draw do
 
   resources :support_messages, only: [:index, :show, :new, :create, :destroy, :update]
   resources :faqs, only: [:index, :new, :create, :destroy, :update, :edit]
+  resources :discounts
 end
