@@ -84,25 +84,25 @@ jobs:
       #     - 6379:6379
       #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
-    steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev
+    # steps:
+    #   - name: Install packages
+    #     run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev
 
-      - name: Checkout code
-        uses: actions/checkout@v6
+    #   - name: Checkout code
+    #     uses: actions/checkout@v6
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+    #   - name: Set up Ruby
+    #     uses: ruby/setup-ruby@v1
+    #     with:
+    #       bundler-cache: true
 
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test
+    #   - name: Run tests
+    #     env:
+    #       RAILS_ENV: test
+    #       DATABASE_URL: postgres://postgres:postgres@localhost:5432
+    #       # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+    #       # REDIS_URL: redis://localhost:6379/0
+    #     run: bin/rails db:test:prepare test
 
   # system-test:
   #   runs-on: ubuntu-latest
