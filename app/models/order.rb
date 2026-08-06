@@ -11,6 +11,7 @@ class Order < ApplicationRecord
     has_many :feedbacks, dependent: :destroy
     has_many :support_messages, dependent: :destroy
 
+    belongs_to :discount, optional: true
 
     def paid?
         status == "paid"

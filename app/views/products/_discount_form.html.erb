@@ -1,0 +1,17 @@
+<%= form_with url: check_discount_path, method: :get,
+    html: { class: "discount-form" },
+    data: { controller: "discount", action: "submit->discount#apply"} do |form| %>
+
+  <%= form.label :code, "Discount code" %>
+
+  <div class="discount-input-row">
+    <%= form.text_field :code, class: "discount-input",
+        placeholder: "Enter code",
+        data: { discount_target: "input" } %>
+
+    <%= form.submit "Apply", class: "discount-submit",
+        data: { discount_target: "button" } %>
+  </div>
+
+  <p class="discount-status" data-discount-target="status"></p>
+<% end %>

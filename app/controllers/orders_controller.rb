@@ -20,6 +20,8 @@ class OrdersController < ApplicationController
         @email    = params[:email]
         @variant  = Variant.includes(:product).find_by(id: params[:variant_id].to_i)
 
+        @discount_id, @percentage = set_discount(params[:code])
+        
         unless @variant
             redirect_to games_path, alert: "Invalid product"
             return
@@ -39,13 +41,18 @@ class OrdersController < ApplicationController
 
         # -- NOTE: We do not care about race conditions.
         # -- The volume of this website is not that huge for it to actually matter.
-        @order = Order.create!(email: @email, discord: @discord)
+        @order = Order.create!(email: @email, discord: @discord,
+                    discount_id: @discount_id, discount_percentage: @percentage)
+        
+        discount_multiplier = (100 - @percentage) / 100.0
+        discounted_price =  @variant.price * discount_multiplier
+        
         OrderItem.create!(
             order_id: @order.id,
             product_id: @variant.product_id,
             variant_id: @variant.id,
             quantity: @quantity,
-            price: @variant.price,
+            price: discounted_price.round,
         )
 
         # --- Set-up for Stripe ---
@@ -107,5 +114,12 @@ class OrdersController < ApplicationController
 
     def order_params
      params.expect(order: [:product_id, :variant_id, :quantity, :price])
+    end
+
+    def set_discount(code)
+        discount = Discount.find_by(code: code)
+        return [nil, 0] if discount.nil?
+
+        [discount.id, discount.percentage]
     end
 end

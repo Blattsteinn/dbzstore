@@ -1,5 +1,5 @@
 class DiscountsController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_admin!, except: [:check_discount]
 
   def index
     @discounts = Discount.all
@@ -32,7 +32,7 @@ class DiscountsController < ApplicationController
   def update
     @discount = Discount.find(params[:id])
 
-    if @discount.update(params.expect(discount: [:code, :amount, :remaining]))
+    if @discount.update(params.expect(discount: [:code, :amount, :remaining, :percentage]))
       flash[:notice] = "Saved successfully."
       redirect_to dashboard_discounts_path
     else
@@ -46,10 +46,19 @@ class DiscountsController < ApplicationController
     redirect_to discounts_path
   end
 
+  def check_discount
+    discount = Discount.find_by(code: params[:code])
+    if discount&.available?
+      render json: { valid: true, percentage: discount.percentage}
+    else
+      render json: { valid: false }
+    end
+  end
+
   private
   
   def discount_params
-    params.expect(discount: [:code, :amount])
+    params.expect(discount: [:code, :amount, :percentage])
   end
 
 end

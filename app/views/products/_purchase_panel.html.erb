@@ -1,7 +1,5 @@
-<div class="hero-purchase-panel" id="hero-purchase">
-    <p class="panel-title">Select variant &amp; purchase</p>
-
-<%= form_with url: orders_path, method: :post, data: { turbo: false, controller: "checkout-form", action: "submit->checkout-form#submit" },
+<%= form_with url: orders_path, method: :post, data: { turbo: false, 
+        controller: "checkout-form", action: "submit->checkout-form#submit" },
         html: { class: "hero-purchase-form" } do |form| %>
 
         <%= form.text_field :contact_me_by_fax_only, 
@@ -18,7 +16,10 @@
             <p class="v-name"><%= variant.title %></p>
         </div>
         <div>
-            <p class="hero-variant-price"><%= convert_from_cents(variant.price) %>€</p>
+            <div class="hero-variant-price-row">
+                <p class="hero-variant-price"><%= convert_from_cents(variant.price) %>€</p>
+                <p class="hero-variant-price-discounted" hidden></p>
+            </div>
             <p class="hero-variant-stock"><%= variant.stock %> in stock</p>
         </div>
         </label>
@@ -26,6 +27,7 @@
     </div>
 
     <%= form.hidden_field :quantity, value: 1 %>
+    <%= form.hidden_field :code, value: "none" %>
 
         <%= form.label :email, "Email (required)" %>
         <%= form.email_field :email, placeholder: "you@example.com", required: true,
@@ -34,24 +36,23 @@
     <%= form.label :discord, "Instagram / Discord (optional)" %>
     <%= form.text_field :discord, placeholder: "username" %>
 
-    <%# Payment method badges — drop these PNGs into app/assets/images/ %>
     <div class="hero-payment-badges">
-    <span class="hero-payment-label">Supported methods:</span>
-    <span class="payment-badge">
-        <%= image_tag 'visa.png', alt: 'Visa', loading: "lazy", class: 'payment-logo--paypal-pay' %>
-    </span>
-    <span class="payment-badge">
-        <%= image_tag 'mastercard.png', alt: 'Mastercard', loading: "lazy" %>
-    </span>
-    <span class="payment-badge">
-        <%= image_tag 'paypal.png', alt: 'PayPal', loading: "lazy",  class: 'payment-logo--paypal-pay' %>
-    </span>
-    <span class="payment-badge">
-        <%= image_tag 'apple-pay.png', alt: 'Apple Pay', class: 'payment-logo--apple-pay', loading: "lazy" %>
-    </span>
-    <span class="payment-badge">
-        <%= image_tag 'google-pay.png', alt: 'Google Pay', class: 'payment-logo--google-pay', loading: "lazy" %>
-    </span>
+        <span class="hero-payment-label">Supported methods:</span>
+        <span class="payment-badge">
+            <%= image_tag 'visa.png', alt: 'Visa', loading: "lazy", class: 'payment-logo--paypal-pay' %>
+        </span>
+        <span class="payment-badge">
+            <%= image_tag 'mastercard.png', alt: 'Mastercard', loading: "lazy" %>
+        </span>
+        <span class="payment-badge">
+            <%= image_tag 'paypal.png', alt: 'PayPal', loading: "lazy",  class: 'payment-logo--paypal-pay' %>
+        </span>
+        <span class="payment-badge">
+            <%= image_tag 'apple-pay.png', alt: 'Apple Pay', class: 'payment-logo--apple-pay', loading: "lazy" %>
+        </span>
+        <span class="payment-badge">
+            <%= image_tag 'google-pay.png', alt: 'Google Pay', class: 'payment-logo--google-pay', loading: "lazy" %>
+        </span>
     </div>
 
     <%= button_tag type: 'submit', class: 'hero-checkout-btn' do %>
@@ -62,4 +63,3 @@
     🔒 Secure checkout powered by Stripe
     </p>
 <% end %>
-</div>

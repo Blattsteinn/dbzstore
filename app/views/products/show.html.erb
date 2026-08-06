@@ -38,8 +38,16 @@
 
       </div>
 
-      <%# Purchase panel %>
-      <%= render 'products/purchase_panel' %>
+      <div class="hero-purchase-panel" id="hero-purchase">
+        <p class="panel-title">Select variant &amp; purchase</p>
+      
+        <%# Purchase panel %>
+        <%= render 'products/purchase_panel' %>
+
+        <%# Discount form %>
+        <%= render 'products/discount_form' %>
+      </div>
+      
 
     </div>
   </div>

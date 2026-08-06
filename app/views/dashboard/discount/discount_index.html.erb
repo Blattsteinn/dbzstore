@@ -19,6 +19,7 @@
                 <th>Code</th>
                 <th>Amount</th>
                 <th>Remaining</th>
+                <th>Percentage ( % )</th>
                 <th>Created</th>
                 <th class="text-right">Actions</th>
               </tr>
@@ -33,6 +34,7 @@
                       <%= discount.remaining %>
                     </span>
                   </td>
+                  <td> <%= discount.percentage %><td>
                   <td><%= discount.created_at.strftime("%b %d, %Y") %></td>
                   <td>
                     <div class="action-group">
