@@ -20,20 +20,20 @@ class DiscountsControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------
 
   test "index redirects unauthenticated visitors to sign in" do
-    get discounts_url
+    get dashboard_discounts_url
     assert_redirected_to new_user_session_path
   end
 
   test "index blocks non-admin users" do
     sign_in_as_user
-    get discounts_url
+    get dashboard_discounts_url
     assert_redirected_to root_path
     assert_equal "You must be an admin", flash[:alert]
   end
 
   test "admin can list discounts" do
     sign_in_as_admin
-    get discounts_url
+    get dashboard_discounts_url
     assert_response :success
     assert_select "body", /WELCOME10/
   end
@@ -42,17 +42,7 @@ class DiscountsControllerTest < ActionDispatch::IntegrationTest
   # GET /discounts/:id (show)
   # ---------------------------------------------------------------
 
-  test "show redirects unauthenticated visitors to sign in" do
-    get discount_url(@discount)
-    assert_redirected_to new_user_session_path
-  end
-
-  test "admin can view a discount" do
-    sign_in_as_admin
-    get discount_url(@discount)
-    assert_response :success
-    assert_select "body", /WELCOME10/
-  end
+  # Does not have such path
 
   # ---------------------------------------------------------------
   # GET /discounts/new (new)
@@ -91,7 +81,7 @@ class DiscountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "SUMMER", discount.code
     assert_equal 20, discount.amount
     assert_equal 20, discount.remaining
-    assert_redirected_to discounts_path
+    assert_redirected_to dashboard_discounts_url
   end
 
   test "create with invalid params re-renders the new form" do
@@ -133,7 +123,7 @@ class DiscountsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as_admin
     patch discount_url(@discount), params: { discount: { code: "NEWCODE", amount: 25, remaining: 5 } }
 
-    assert_redirected_to discounts_path
+    assert_redirected_to dashboard_discounts_url
     assert_equal "NEWCODE", @discount.reload.code
     assert_equal 25, @discount.amount
     assert_equal 5, @discount.remaining
