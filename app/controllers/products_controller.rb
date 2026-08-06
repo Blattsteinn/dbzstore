@@ -17,6 +17,7 @@ class ProductsController < ApplicationController
             redirect_to products_path
         end
 
+        @images = @product.product_images.to_a
         @descriptions = @product.localized_descriptions
         @text = "## Contact (if no email received)
 - Instagram / Discord: @dokkanarnis

@@ -1,0 +1,26 @@
+<%# Language switcher %>
+<div class="lang-switcher"
+        data-action="click->language-switcher#toggleDropdown"
+        data-language-switcher-target="langSwitcher">
+    <span class="lang-current">
+    <%= image_tag 'globe.png', alt: 'Language', class: 'lang-globe' %>
+    <span class="lang-label" data-language-switcher-target="langLabel">EN</span>
+    </span>
+    <span class="lang-dropdown-arrow">▾</span>
+    <div class="lang-dropdown" data-language-switcher-target="dropdown">
+    <% @descriptions.each do |desc| %>
+        <button type="button" class="lang-option"
+                data-language-switcher-target="langButton"
+                data-action="click->language-switcher#switchTo"
+                data-language-switcher-lang-param="<%= desc.language.name %>">
+        <%= desc.language.full_name %>
+        </button>
+    <% end %>
+    </div>
+</div>
+
+<% @descriptions.each do |desc| %>
+    <div class="hero-desc-body" id= <%=desc.language.name%> hidden>
+    <%= raw markdown(desc.description) %>
+    </div>
+<% end %>
