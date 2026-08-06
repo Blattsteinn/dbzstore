@@ -15,7 +15,7 @@ class DiscountsController < ApplicationController
 
   def create
     @discount = Discount.new(discount_params)
-    @discount.update(remaining: discount.amount)
+    @discount.remaining = @discount.amount
     
     if @discount.save
       redirect_to discounts_path
@@ -40,8 +40,8 @@ class DiscountsController < ApplicationController
 
   def destroy
     @discount = Discount.find(params[:id])
-    @discount = Discount.destroy
-    redirect_to discount_path
+    @discount = @discount.destroy
+    redirect_to discounts_path
   end
 
   private
