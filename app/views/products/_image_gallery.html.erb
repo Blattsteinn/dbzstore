@@ -1,0 +1,24 @@
+<div id="product-image-container" data-controller="product-view" style="margin-top: 2rem;">
+    <% @images.each do |image| %>
+    <%= image_tag image.image, alt: @product.title, loading: "lazy",
+        data: { product_view_target: "image", action: "click->product-view#openLightbox" },
+        style: "cursor: zoom-in" %>
+    <% end %>
+
+    <% if @images.size > 1 %>
+    <button type="button" class="carousel-arrow carousel-prev" data-action="click->product-view#prevImage" aria-label="Previous image">‹</button>
+    <button type="button" class="carousel-arrow carousel-next" data-action="click->product-view#nextImage" aria-label="Next image">›</button>
+
+    <div class="carousel-dots">
+        <% @images.each_with_index do |_, i| %>
+        <button type="button" class="carousel-dot <%= 'active' if i == 0 %>"
+                data-product-view-target="dot"
+                data-index="<%= i %>"
+                data-action="click->product-view#goToImage"
+                aria-label="Image <%= i + 1 %>"></button>
+        <% end %>
+    </div>
+
+    <span class="carousel-counter" data-product-view-target="imageCounter">1 / <%= images.size %></span>
+    <% end %>
+</div>

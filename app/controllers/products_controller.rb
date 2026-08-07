@@ -17,6 +17,7 @@ class ProductsController < ApplicationController
             redirect_to products_path
         end
 
+        @images = @product.product_images.to_a
         @descriptions = @product.localized_descriptions
         @text = "## Contact (if no email received)
 - Instagram / Discord: @dokkanarnis
@@ -124,16 +125,6 @@ class ProductsController < ApplicationController
     def set_game
         @game = Game.find_by!(name: params[:game]) if params[:game].present?
     end
-
-    #solution proposed by AI, name is game's name is derived from product if smth fails
-    # def set_game
-    #     @game = if params[:game].present?
-    #         Game.find_by!(name: params[:game])
-    #     elsif params[:id].present?
-    #         product = Product.find_by(id: params[:id])
-    #         Game.find_by(name: product&.game_name) if product
-    #     end
-    # end
 
     def set_product_for_designs
         @product = Product.includes(:variants, product_images: :image_attachment).find(params[:id])

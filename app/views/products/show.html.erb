@@ -1,9 +1,8 @@
-<% images = @product.product_images.to_a %>
-
 <div class="product-hero-wrapper">
 
   <%= link_to "← Back", game_products_path(@game.name), class: "hero-back-link" %>
 
+  <%# Large banner image at the top  %>
   <div class="product-hero-stage" data-controller="product-view">
       <%= image_tag @product.primary_image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image", loading: "lazy",
           style: "cursor: zoom-in",
@@ -22,156 +21,40 @@
   <div class="product-hero-detail">
     <div class="product-hero-detail-grid">
 
-      <%# Description %>
       <div class="hero-desc-panel" id="hero-description"
            data-controller="language-switcher"
            data-language-switcher-languages-value='["en","es","fr","de","it"]'>
+
         <%# Language switcher %>
-        <div class="lang-switcher"
-             data-action="click->language-switcher#toggleDropdown"
-             data-language-switcher-target="langSwitcher">
-          <span class="lang-current">
-            <%= image_tag 'globe.png', alt: 'Language', class: 'lang-globe' %>
-            <span class="lang-label" data-language-switcher-target="langLabel">EN</span>
-          </span>
-          <span class="lang-dropdown-arrow">▾</span>
-          <div class="lang-dropdown" data-language-switcher-target="dropdown">
-            <% @descriptions.each do |desc| %>
-              <button type="button" class="lang-option"
-                      data-language-switcher-target="langButton"
-                      data-action="click->language-switcher#switchTo"
-                      data-language-switcher-lang-param="<%= desc.language.name %>">
-                <%= desc.language.full_name %>
-              </button>
-            <% end %>
-          </div>
-        </div>
-
-        <% @descriptions.each do |desc| %>
-          <div class="hero-desc-body" id= <%=desc.language.name%> hidden>
-            <%= raw markdown(desc.description) %>
-          </div>
-        <% end %>
-
+        <%= render 'products/language_switcher' %> 
       
         <%# Gallery — always shown, click to open fullscreen %>
-        <div id="product-image-container" data-controller="product-view" style="margin-top: 2rem;">
-          <% images.each do |image| %>
-            <%= image_tag image.image, alt: @product.title, loading: "lazy",
-                data: { product_view_target: "image", action: "click->product-view#openLightbox" },
-                style: "cursor: zoom-in" %>
-          <% end %>
+        <%= render 'products/image_gallery' %>
 
-          <% if images.size > 1 %>
-            <button type="button" class="carousel-arrow carousel-prev" data-action="click->product-view#prevImage" aria-label="Previous image">‹</button>
-            <button type="button" class="carousel-arrow carousel-next" data-action="click->product-view#nextImage" aria-label="Next image">›</button>
-
-            <div class="carousel-dots">
-              <% images.each_with_index do |_, i| %>
-                <button type="button" class="carousel-dot <%= 'active' if i == 0 %>"
-                        data-product-view-target="dot"
-                        data-index="<%= i %>"
-                        data-action="click->product-view#goToImage"
-                        aria-label="Image <%= i + 1 %>"></button>
-              <% end %>
-            </div>
-
-            <span class="carousel-counter" data-product-view-target="imageCounter">1 / <%= images.size %></span>
-          <% end %>
-        </div>
-
+        <%# Description %>
         <div class="hero-desc-body">
-        <%= raw markdown(@text) %>
+          <%= raw markdown(@text) %>
         </div>
 
       </div>
 
-
-
-
-      <%# Purchase panel %>
       <div class="hero-purchase-panel" id="hero-purchase">
         <p class="panel-title">Select variant &amp; purchase</p>
+      
+        <%# Purchase panel %>
+        <%= render 'products/purchase_panel' %>
 
-        <%= form_with url: orders_path, method: :post, data: { turbo: false, controller: "checkout-form", action: "submit->checkout-form#submit" },
-              html: { class: "hero-purchase-form" } do |form| %>
+        <%# Discount form %>
+        <%= render 'products/discount_form' %>
 
-              <%= form.text_field :contact_me_by_fax_only, 
-              style: "position:absolute;left:-9999px;", 
-              tabindex: "-1", 
-              autocomplete: "off", hidden: true%>
-
-          <div class="hero-variant-list">
-            <% @product.variants.each do |variant| %>
-              <% next if variant.stock <= 0 %>
-              <label class="hero-variant-option" data-price="<%= convert_from_cents(variant.price) %>">
-                <%= form.radio_button :variant_id, variant.id, required: true %>
-                <div class="hero-variant-info">
-                  <p class="v-name"><%= variant.title %></p>
-                </div>
-                <div>
-                  <p class="hero-variant-price"><%= convert_from_cents(variant.price) %>€</p>
-                  <p class="hero-variant-stock"><%= variant.stock %> in stock</p>
-                </div>
-              </label>
-            <% end %>
-          </div>
-
-          <%= form.hidden_field :quantity, value: 1 %>
-
-              <%= form.label :email, "Email (required)" %>
-              <%= form.email_field :email, placeholder: "you@example.com", required: true,
-                data: { action: "focus->checkout-form#positionEmailField" } %>
-
-          <%= form.label :discord, "Instagram / Discord (optional)" %>
-          <%= form.text_field :discord, placeholder: "username" %>
-
-          <%# Payment method badges — drop these PNGs into app/assets/images/ %>
-          <div class="hero-payment-badges">
-            <span class="hero-payment-label">Supported methods:</span>
-            <span class="payment-badge">
-              <%= image_tag 'visa.png', alt: 'Visa', loading: "lazy", class: 'payment-logo--paypal-pay' %>
-            </span>
-            <span class="payment-badge">
-              <%= image_tag 'mastercard.png', alt: 'Mastercard', loading: "lazy" %>
-            </span>
-            <span class="payment-badge">
-              <%= image_tag 'paypal.png', alt: 'PayPal', loading: "lazy",  class: 'payment-logo--paypal-pay' %>
-            </span>
-            <span class="payment-badge">
-              <%= image_tag 'apple-pay.png', alt: 'Apple Pay', class: 'payment-logo--apple-pay', loading: "lazy" %>
-            </span>
-            <span class="payment-badge">
-              <%= image_tag 'google-pay.png', alt: 'Google Pay', class: 'payment-logo--google-pay', loading: "lazy" %>
-            </span>
-          </div>
-
-          <%= button_tag type: 'submit', class: 'hero-checkout-btn' do %>
-            Continue to secure payment
-          <% end %>
-
-          <p class="hero-payment-methods">
-            🔒 Secure checkout powered by Stripe
-          </p>
-        <% end %>
       </div>
-
-
+      
 
     </div>
-
-
-
   </div>
 
   <%# Stripe redirect loading overlay %>
-  <div id="stripe-loading-overlay" class="stripe-loading-overlay">
-    <div class="stripe-loading-card">
-      <div class="stripe-loading-spinner"></div>
-      <p>Redirecting to secure checkout, please wait…</p>
-    </div>
-  </div>
-
+  <%= render 'products/stripe_loading' %>
 
 </div>
 

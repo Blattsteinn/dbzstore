@@ -21,4 +21,8 @@ class Rack::Attack
     req.ip if req.path == "/support_messages" && req.post?
   end
 
+  throttle("discount/check_discount", limit: 2, period: 1.hour) do |req|
+    req.ip if req.path == "/discounts/check_discount" && req.get?
+  end
+
 end

@@ -30,6 +30,7 @@ class StripeWebhooksController < ApplicationController
       # Can't use deliver_later; smth goes wrong & it never gets sent
       PurchaseSuccessMailer.successful_purchase(order).deliver_now
       ToSelfMailer.mail_self(order).deliver_now
+      order.discount&.redeem!
 
     elsif event.type == "checkout.session.expired"
       order = Order.find_by(stripe_session_id: event.data.object.id)

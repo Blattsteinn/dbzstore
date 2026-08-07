@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_05_093129) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_06_161804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -95,6 +95,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_05_093129) do
     t.index ["user_id"], name: "index_cart_items_on_user_id"
   end
 
+  create_table "discounts", force: :cascade do |t|
+    t.integer "amount", null: false
+    t.string "code", null: false
+    t.datetime "created_at", null: false
+    t.integer "percentage", default: 0, null: false
+    t.integer "remaining", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_discounts_on_code", unique: true
+  end
+
   create_table "faqs", force: :cascade do |t|
     t.text "answer"
     t.datetime "created_at", null: false
@@ -153,6 +163,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_05_093129) do
   create_table "orders", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "discord"
+    t.bigint "discount_id"
+    t.integer "discount_percentage"
     t.string "email"
     t.string "public_id"
     t.string "status", default: "pending"
@@ -160,6 +172,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_05_093129) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["created_at"], name: "index_orders_on_created_at"
+    t.index ["discount_id"], name: "index_orders_on_discount_id"
     t.index ["public_id"], name: "index_orders_on_public_id", unique: true
     t.index ["status"], name: "index_orders_on_status"
     t.index ["stripe_session_id"], name: "index_orders_on_stripe_session_id", unique: true
@@ -246,6 +259,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_05_093129) do
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "order_items", "variants"
+  add_foreign_key "orders", "discounts"
   add_foreign_key "orders", "users"
   add_foreign_key "product_images", "products"
   add_foreign_key "support_messages", "orders"
