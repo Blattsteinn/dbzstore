@@ -157,4 +157,38 @@ class DiscountsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to discounts_path
   end
+
+  # ---------------------------------------------------------------
+  # GET /discounts/check_discount (check_discount) — used during purchase
+  # ---------------------------------------------------------------
+
+  test "check_discount is publicly accessible without authentication" do
+    get check_discount_url, params: { code: "WELCOME10" }
+    assert_response :success
+  end
+
+  test "check_discount returns valid and the percentage for an available code" do
+    discount = Discount.create!(code: "SAVE20", amount: 10, remaining: 5, percentage: 20)
+
+    get check_discount_url, params: { code: "SAVE20" }
+
+    assert_response :success
+    assert_equal({ "valid" => true, "percentage" => 20 }, response.parsed_body)
+  end
+
+  test "check_discount returns invalid for an unknown code" do
+    get check_discount_url, params: { code: "DOES_NOT_EXIST" }
+
+    assert_response :success
+    assert_equal({ "valid" => false }, response.parsed_body)
+  end
+
+  test "check_discount returns invalid when the discount is exhausted" do
+    Discount.create!(code: "GONE", amount: 10, remaining: 0, percentage: 20)
+
+    get check_discount_url, params: { code: "GONE" }
+
+    assert_response :success
+    assert_equal({ "valid" => false }, response.parsed_body)
+  end
 end

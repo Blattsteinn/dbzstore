@@ -119,6 +119,7 @@ class OrdersController < ApplicationController
     def set_discount(code)
         discount = Discount.find_by(code: code)
         return [nil, 0] if discount.nil?
+        return [nil, 0] unless discount.available?
 
         [discount.id, discount.percentage]
     end

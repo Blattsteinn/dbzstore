@@ -139,6 +139,96 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   # ---------------------------------------------------------------
+  # POST /orders (create) — purchase with a discount code
+  # ---------------------------------------------------------------
+
+  test "valid params with a discount code apply the discount to the order and the price" do
+    discount = Discount.create!(code: "SAVE20", amount: 10, remaining: 5, percentage: 20)
+    fake_session = Struct.new(:id, :url).new("cs_test_123", "https://checkout.stripe.com/pay/cs_test_123")
+    captured = nil
+
+    Stripe::Checkout::Session.stub :create, ->(params) { captured = params; fake_session } do
+      assert_difference ["Order.count", "OrderItem.count"], 1 do
+        post orders_url, params: {
+          email: @email,
+          variant_id: @variant.id,
+          quantity: 1,
+          code: "SAVE20"
+        }
+      end
+    end
+
+    order = Order.last
+    assert_equal discount.id, order.discount_id
+    assert_equal 20, order.discount_percentage
+
+    # 20% off a 1000 price variant -> 800, reflected both on the order item
+    # and in the Stripe session line item.
+    assert_equal 800, order.order_items.first.price
+    assert_equal 800, captured[:line_items].first[:price_data][:unit_amount]
+  end
+
+  test "an unknown discount code is ignored and the order keeps the full price" do
+    fake_session = Struct.new(:id, :url).new("cs_test_123", "https://checkout.stripe.com/pay/cs_test_123")
+
+    Stripe::Checkout::Session.stub :create, ->(params) { fake_session } do
+      assert_difference ["Order.count", "OrderItem.count"], 1 do
+        post orders_url, params: {
+          email: @email,
+          variant_id: @variant.id,
+          quantity: 1,
+          code: "DOES_NOT_EXIST"
+        }
+      end
+    end
+
+    order = Order.last
+    assert_nil order.discount_id
+    assert_equal 0, order.discount_percentage
+    assert_equal @variant.price, order.order_items.first.price
+  end
+
+  test "a missing discount code is ignored and the order keeps the full price" do
+    fake_session = Struct.new(:id, :url).new("cs_test_123", "https://checkout.stripe.com/pay/cs_test_123")
+
+    Stripe::Checkout::Session.stub :create, ->(params) { fake_session } do
+      assert_difference ["Order.count", "OrderItem.count"], 1 do
+        post orders_url, params: {
+          email: @email,
+          variant_id: @variant.id,
+          quantity: 1
+        }
+      end
+    end
+
+    order = Order.last
+    assert_nil order.discount_id
+    assert_equal 0, order.discount_percentage
+    assert_equal @variant.price, order.order_items.first.price
+  end
+
+  test "an exhausted discount code is ignored at order time and the order keeps the full price" do
+    Discount.create!(code: "GONE", amount: 10, remaining: 0, percentage: 20)
+    fake_session = Struct.new(:id, :url).new("cs_test_123", "https://checkout.stripe.com/pay/cs_test_123")
+
+    Stripe::Checkout::Session.stub :create, ->(params) { fake_session } do
+      assert_difference ["Order.count", "OrderItem.count"], 1 do
+        post orders_url, params: {
+          email: @email,
+          variant_id: @variant.id,
+          quantity: 1,
+          code: "GONE"
+        }
+      end
+    end
+
+    order = Order.last
+    assert_nil order.discount_id
+    assert_equal 0, order.discount_percentage
+    assert_equal @variant.price, order.order_items.first.price
+  end
+
+  # ---------------------------------------------------------------
   # GET /orders/:public_id/cancel (cancel_stripe_checkout)
   # ---------------------------------------------------------------
 
