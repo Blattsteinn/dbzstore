@@ -13,6 +13,14 @@ export default class extends Controller {
     const response = await fetch(`${this.element.action}?code=${encodeURIComponent(code)}`, {
       headers: { "Accept": "application/json" }
     })
+
+    if (!response.ok) {            // 429/403 -> throttled
+      this.statusTarget.textContent = "Too many attempts. Try again later."
+      this.statusTarget.classList.add('error')
+      this.statusTarget.classList.remove('success')
+      return
+    }
+    
     const data = await response.json()
 
     if (data.valid) {

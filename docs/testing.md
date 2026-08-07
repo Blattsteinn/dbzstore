@@ -15,8 +15,8 @@ The full CI gate (also runs tests) is `bin/ci` — see `config/ci.rb`.
 ## Current state (be honest about it)
 
 - **Only two controller tests are real and comprehensive:**
-  - `test/controllers/discounts_controller_test.rb` — admin/user/auth flows, CRUD, `remaining` defaults to `amount`, invalid params.
-  - `test/controllers/orders_controller_test.rb` — checkout via stubbed Stripe (`Stripe::Checkout::Session.stub` with `minitest/mock`), honeypot, input validation, order + order_item creation, cancel flow, admin status update.
+  - `test/controllers/discounts_controller_test.rb` — admin/user/auth flows, CRUD, `remaining` defaults to `amount`, invalid params, and `check_discount` validation (public access; `valid` + `percentage` for an available code; `invalid` for unknown **and** exhausted codes).
+  - `test/controllers/orders_controller_test.rb` — checkout via stubbed Stripe (`Stripe::Checkout::Session.stub` with `minitest/mock`), honeypot, input validation, order + order_item creation, cancel flow, admin status update, and **discount application at checkout**: a valid code applies the discount to the order (`discount_id`/`discount_percentage`) and to the Stripe `unit_amount` (1000 → 800 at 20% off); unknown, missing, or exhausted codes keep the full price.
 - **Everything else is an empty scaffold** (model tests, mailer tests, most controller tests just contain `# test "the truth"` comments). `test/integration/` is empty. There are **no system tests**.
 - **Mailer previews**: `test/mailers/previews/purchase_success_mailer_preview.rb` is functional (uses `Order.joins(:order_items).last`); `to_self_mailer_preview.rb` is empty.
 

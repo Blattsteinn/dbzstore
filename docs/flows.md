@@ -39,7 +39,7 @@ sequenceDiagram
     F-->>O: POST /orders (email, variant_id, quantity, code, contact_me_by_fax_only="")
     O->>O: honeypot_check → params[contact_me_by_fax_only] present? → head :ok (STOP)
     O->>O: validate email regex + variant_id + quantity
-    O->>O: set_discount(code) → [discount_id, percentage] (nil/0 if not found)
+    O->>O: set_discount(code) → [discount_id, percentage] (nil/0 if not found or exhausted)
     O->>O: Order.create!(status=pending) + OrderItem(price = variant.price × (100−pct)/100, rounded)
     O->>S: Stripe::Checkout::Session.create(mode=payment, eur, line_items, success_url=instructions_url, cancel_url=.../orders/:public_id/cancel)
     O->>O: order.update!(stripe_session_id)
@@ -58,7 +58,7 @@ Key implementation details (`OrdersController#create`):
 
 1. **Honeypot** — `before_action :honeypot_check` fires first. If the hidden `contact_me_by_fax_only` field is filled (bot), respond `head :ok` and do nothing.
 2. **Validation** — email must match `URI::MailTo::EMAIL_REGEXP`, `variant_id` + `quantity` present. `quantity` must be exactly `1` (by design).
-3. **Discount** — `set_discount(code)` looks up `Discount.find_by(code:)` and returns `[discount.id, percentage]` or `[nil, 0]`. It does **not** check availability and does **not** decrement anything.
+3. **Discount** — `set_discount(code)` looks up `Discount.find_by(code:)` and returns `[discount.id, percentage]`, or `[nil, 0]` when the code is not found **or no longer available** (`remaining.positive?`). It does **not** decrement anything (redemption is deferred to the webhook).
 4. **Price** — `OrderItem.price = (variant.price × (100 − percentage) / 100.0).round` (integer cents).
 5. **Stripe** — session `mode: "payment"`, currency `eur`, `customer_email`, `client_reference_id: order.id`, `success_url: instructions_url`, `cancel_url: cancel_stripe_checkout_order_url(public_id: order.public_id)`.
 6. **Failure** — `rescue Stripe::StripeError` destroys the just-created order and redirects back to the game's products page with the error message.
@@ -113,7 +113,8 @@ flowchart LR
     D --> E[Payment completes<br/>webhook → discount.redeem!<br/>remaining -= 1]
 ```
 
-- `DiscountsController#check_discount` (`GET /discounts/check_discount?code=`) — public, returns `{valid: true, percentage: n}` if the code exists **and** `available?` (`remaining.positive?`), else `{valid: false}`. Used by the `discount` Stimulus controller to preview the discount on the product page.
+- `DiscountsController#check_discount` (`GET /discounts/check_discount?code=`) — public, returns `{valid: true, percentage: n}` if the code exists **and** `available?` (`remaining.positive?`), else `{valid: false}`. Used by the `discount` Stimulus controller to preview the discount on the product page. Rate-limited to 2/hour/IP (see `security.md`).
+- `OrdersController#set_discount` **re-checks** `available?` at order time — an exhausted code is treated as no discount (`[nil, 0]`) even if submitted directly to `POST /orders`, so the UI check can't be bypassed by crafting the request.
 - Redemption is **deferred to payment success** — a code that's redeemed-then-cancelled doesn't burn a use, and `remaining` is only decremented once a sale actually completes.
 - `redeem!` guards against over-redemption (`return false unless available?`).
 

@@ -48,6 +48,9 @@ The hidden field `contact_me_by_fax_only` is rendered off-screen in the purchase
 | `orders/email` | 10 | 1 hour | `POST /orders` per email (downcased) — *"10 bcz stripe can be glitchy"* |
 | `feedbacks/ip` | 5 | 1 hour | `POST /feedbacks` per IP |
 | `support_messages/ip` | 3 | 1 hour | `POST /support_messages` per IP |
+| `discount/check_discount` | 2 | 1 hour | `GET /discounts/check_discount` per IP — anti code-enumeration (AJAX) |
+
+The `discount/check_discount` throttle matches `req.path == "/discounts/check_discount" && req.get?` (it's a **GET** endpoint, so `req.post?` would never fire). The frontend (`discount` Stimulus controller) treats any non-`ok` response as "too many attempts" and surfaces that to the shopper instead of silently failing.
 
 ## Stripe webhook verification
 
@@ -71,6 +74,6 @@ This is the **only unauthenticated state-changing endpoint** in the app — keep
 
 ## Known security-adjacent notes
 
-- `resources :discounts` exposes public `check_discount` (safe — read-only, no decrement).
+- `resources :discounts` exposes public `check_discount` (read-only, no decrement) — rate-limited to 2/hour/IP to deter code brute-forcing.
 - The `admin` flag has no audit trail or escalation path; granting admin requires DB access anyway.
 - No rate limit on admin sign-in beyond Devise defaults (no `lockable`).
