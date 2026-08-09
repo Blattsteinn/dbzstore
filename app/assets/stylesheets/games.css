@@ -11,63 +11,6 @@
 }
 
 /* ========================== */
-/* == Hero Banner == */
-#games-banner {
-  width: 100%;
-  min-height: 300px;
-  border-radius: 16px;
-  overflow: hidden;
-  position: relative;
-  background-image: url('/banner.gif');
-  background-size: cover;
-  background-position: center;
-}
-
-#games-banner .banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.55) 50%, rgba(0, 0, 0, 0.45) 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 32px 36px;
-  text-align: center;
-}
-
-#games-banner .banner-title {
-  margin: 0;
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: 0.03em;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 0, 0, 0.5);
-  line-height: 1.2;
-}
-
-#games-banner .banner-subtitle,
-#games-banner .banner-tagline {
-  margin: 12px 0 0;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #ffffff;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.4);
-  max-width: 600px;
-}
-
-#games-banner .banner-discord {
-  margin: 16px 0 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #ffffff;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
-  background: rgba(0, 0, 0, 0.45);
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-/* ========================== */
 /* == Section Header == */
 .games-section-header {
   width: 100%;
@@ -238,29 +181,4 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
-/* ========================== */
-/* == Responsive == */
-@media (max-width: 800px) {
-  #games-banner {
-    min-height: 220px;
-  }
 
-  #games-banner .banner-title {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 500px) {
-  #games-banner {
-    min-height: 180px;
-  }
-
-  #games-banner .banner-title {
-    font-size: 1.6rem;
-  }
-
-  #games-banner .banner-subtitle,
-  #games-banner .banner-tagline {
-    font-size: 0.9rem;
-  }
-}

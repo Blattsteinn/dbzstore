@@ -118,6 +118,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 | `language_switcher_controller.js` / `_instructions_controller.js` | Language dropdown toggles per-language description divs |
 | `insert_variant_controller.js`, `insert_image_controller.js` | Admin product form dynamic rows (clone templates `NEW_RECORD` / `NEW_IMAGE`) |
 | `clipboard_controller.js`, `collapse_controller.js` | Copy-to-clipboard, accordion |
+| `nav_controller.js` | Site nav (layout `nav.site-nav`): mobile hamburger + games dropdown; closes on outside click/Escape |
 | `price_controller.js`, `hello_controller.js` | **Legacy/unused** (no cart UI; scaffold) |
 
 ### Config (`config/`)

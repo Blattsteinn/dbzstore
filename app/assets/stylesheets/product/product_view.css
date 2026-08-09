@@ -37,9 +37,6 @@
     border-radius: var(--border-radius)
 }
 
-body.products-show {
-  background-color: var(--color-background);
-}
 /* ========================== */
 /* == First column == */
 #product-view-first-column{

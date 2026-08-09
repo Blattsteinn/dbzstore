@@ -16,8 +16,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet"></noscript>
     <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="48x48">
     <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
     <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
@@ -29,47 +29,48 @@
   </head>
 
   <body class="<%= controller_name %>-<%= action_name %>">
-    <div class="itls-blur-bg">
-      <img src="/banner.gif" alt="" loading="lazy" width="1920" height="400">
-    </div>
 
+    <nav class="site-nav" data-controller="nav" aria-label="Main navigation">
+      <%= link_to "ACCOUNT RIFT", games_path, class: "nav-brand", aria: { label: "Account Rift home" } %>
 
-    <% if user_signed_in? %>
-      <nav class="<%= controller_name %>-<%= action_name %>">
-        <%= link_to "Products", root_path %>
-        <%= link_to "Support", new_support_message_path %>
-        <%# link_to "Feedback", feedbacks_path %>
-        <%= link_to "FAQ", faqs_path %>
-        
-        <% if current_user.admin? %>
-          <%= link_to "Dashboard", dashboard_path %>
-        <% end %>
+      <button type="button" class="nav-toggle" data-action="nav#toggleMenu" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="site-nav-links">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
 
-        
-          <div class="nav-right">
-            
-              <span class="nav-user"><%= current_user.email %> (<%= current_user.admin? ? "admin" : "user" %>)</span>
-              <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete } %>
-              <%= link_to "Sign In", new_user_session_path %>
-            
-
+      <div class="nav-links" id="site-nav-links" data-nav-target="menu">
+        <div class="nav-dropdown" data-nav-target="dropdown">
+          <button type="button" class="nav-link nav-dropdown-trigger<%= " is-active" if params[:game].present? || nav_active?("games") %>" data-nav-target="dropdownTrigger" data-action="nav#toggleDropdown" aria-haspopup="true" aria-expanded="false">
+            <%= params[:game].present? ? params[:game].capitalize : "Games" %>
+            <svg class="nav-caret" width="8" height="8" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-dropdown-menu" data-nav-target="dropdownMenu" role="menu">
+            <%= link_to "All Games", games_path, class: "nav-dropdown-item#{params[:game].blank? ? " is-active" : ""}" %>
+            <% navigation_games.each do |game| %>
+              <%= link_to game.official_name.presence || game.name.capitalize, game_products_path(game.name), class: "nav-dropdown-item#{params[:game] == game.name ? " is-active" : ""}" %>
+            <% end %>
           </div>
-        
-      </nav>
+        </div>
 
-    <% else %>
+        <%= link_to "Products", (params[:game].present? ? game_products_path(params[:game]) : games_path), class: "nav-link#{nav_active?("products") ? " is-active" : ""}" %>
+        <%= link_to "Support", new_support_message_path, class: "nav-link#{nav_active?("support_messages") ? " is-active" : ""}" %>
+        <%= link_to "FAQ", faqs_path, class: "nav-link#{nav_active?("faqs") ? " is-active" : ""}" %>
 
-      <%# Display this if not signed in %>
+        <% if user_signed_in? && current_user.admin? %>
+          <%= link_to "Dashboard", dashboard_path, class: "nav-link#{nav_active?("dashboard") ? " is-active" : ""}" %>
+        <% end %>
+      </div>
 
-      <nav class="<%= controller_name %>-<%= action_name %>">
-        <%= link_to "Products", root_path %>
-        <%= link_to "Support", new_support_message_path %>
-        <%# link_to "Feedback", feedbacks_path %>
-        <%= link_to "FAQ", faqs_path %>
-
-      </nav>
-
-    <% end %>
+      <div class="nav-right">
+        <% if user_signed_in? %>
+          <span class="nav-user"><%= current_user.email %></span>
+          <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-link" %>
+        <% else %>
+          <%= link_to "Admin", new_user_session_path, class: "nav-link" %>
+        <% end %>
+      </div>
+    </nav>
 
     <% flash.each do |type, message| %>
       <% 
