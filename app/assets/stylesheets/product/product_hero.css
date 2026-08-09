@@ -8,9 +8,7 @@
   min-height: calc(100vh - 56px);
   display: flex;
   flex-direction: column;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #0a0a0d;
+  background: transparent;
 }
 
 /* Blurred background image (like card design) */
@@ -34,30 +32,46 @@
 .product-hero-stage {
   position: relative;
   z-index: 1;
-  min-height: 60vh;
+  min-height: 68vh;
   display: flex;
   align-items: flex-end;
-  background: #000;
+  background: #06080c;
+}
+
+.product-hero-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to right, #06080c 0%, 
+    transparent 38%, 
+    transparent 40%, 
+    #06080c 100%);
 }
 
 .product-hero-bg {
   position: absolute;
   inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
   opacity: 0.85;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
 }
 
 .product-hero-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     to top,
-    #0c0c0d 0%,
-    rgba(12, 12, 13, 0.8) 15%,
-    rgba(12, 12, 13, 0.1) 60%,
-    rgba(12, 12, 13, 0.3) 100%
+    #06080c 0%,
+    rgba(6, 8, 12, 0.8) 15%,
+    rgba(6, 8, 12, 0.1) 60%,
+    rgba(6, 8, 12, 0.3) 100%
   );
 }
 
@@ -171,10 +185,7 @@
 .product-hero-detail {
   position: relative;
   z-index: 1;
-  background: linear-gradient(
-    to bottom,
-    #0c0c0d 160px
-  );
+  background: #06080c;
   padding: 3rem 2.5rem;
 }
 
@@ -372,9 +383,222 @@
   background: #000;
 }
 
+/* ---- Carousel (inside gallery) ---- */
+#product-image-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+#product-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: opacity 0.25s ease;
+}
+
+#product-image-container img[hidden] {
+  display: none;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  padding: 0;
+}
+
+.carousel-arrow:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.carousel-prev { left: 8px; }
+.carousel-next { right: 8px; }
+
+.carousel-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.carousel-dot:hover { background: rgba(255, 255, 255, 0.6); }
+.carousel-dot.active { background: white; transform: scale(1.25); }
+
+.carousel-counter {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 3px 8px;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* ---- Image lightbox ---- */
+#image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  opacity: 0;
+  animation: lightbox-in 0.15s ease forwards;
+}
+
+#image-lightbox.fade-out {
+  animation: lightbox-out 0.15s ease forwards;
+}
+
+@keyframes lightbox-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes lightbox-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+#image-lightbox img {
+  width: 90vw;
+  height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: default;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+#image-lightbox .lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+#image-lightbox .lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+#image-lightbox .lightbox-counter {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 10px;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+#image-lightbox .lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+#image-lightbox .lightbox-arrow:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+#image-lightbox .lightbox-prev { left: 16px; }
+#image-lightbox .lightbox-next { right: 16px; }
+
+#image-lightbox .lightbox-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+#image-lightbox .lightbox-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s, transform 0.15s;
+}
+
+#image-lightbox .lightbox-dot:hover { background: rgba(255, 255, 255, 0.6); }
+#image-lightbox .lightbox-dot.active { background: white; transform: scale(1.25); }
+
 /* Purchase panel */
 .hero-purchase-panel {
-  background: rgba(12, 12, 13, 0.55);
+  background: var(--primary-box-color);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -412,7 +636,7 @@
 }
 
 .hero-variant-option:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary-box-color);
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -703,7 +927,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--primary-box-color);
   backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
@@ -730,7 +954,7 @@
   }
 
   .product-hero-stage {
-    min-height: 50vh;
+    min-height: 56vh;
   }
 
   .product-hero-content {
@@ -806,7 +1030,7 @@
 /* Mobile — 480px */
 @media (max-width: 480px) {
   .product-hero-stage {
-    min-height: 45vh;
+    min-height: 50vh;
   }
 
   .product-hero-bg {

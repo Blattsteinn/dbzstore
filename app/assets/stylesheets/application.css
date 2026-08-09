@@ -13,9 +13,12 @@
 body{
     --color-dark-blue: #161617;
     --color-lighter-blue: #0d1521;
+
+    --primary-box-color: rgba(255, 255, 255, 0.035);
+
     max-width: 1400px;
     margin: 0 auto;
-    background-color: var(--color-dark-blue);
+    background: #06080c;
     color: white;
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
@@ -49,39 +52,6 @@ body{
 
 .field_with_errors label {
   color: red;
-}
-
-/* ========================== */
-/* == Shared page gradient (products, feedbacks, faqs, support) == */
-body.games-index,
-body.products-index,
-body.feedbacks-index,
-body.feedbacks-new,
-body.faqs-index,
-body.faqs-new,
-body.faqs-edit,
-body.support_messages-new,
-body.support_messages-index,
-body.support_messages-show {
-  background: linear-gradient(135deg, #07070d 0%, #080c17 40%, #051422 70%, #1a112b 100%);
-  background-attachment: fixed;
-}
-
-nav.games-index,
-nav.products-index,
-nav.feedbacks-index,
-nav.feedbacks-new,
-nav.faqs-index,
-nav.faqs-new,
-nav.faqs-edit,
-nav.support_messages-new,
-nav.support_messages-index,
-nav.support_messages-show {
-  background-color: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: none;
 }
 
 /* ========================== */
