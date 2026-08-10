@@ -46,7 +46,7 @@
   pointer-events: none;
   background: linear-gradient(to right, #06080c 0%, 
     transparent 38%, 
-    transparent 40%, 
+    transparent 80%, 
     #06080c 100%);
 }
 
@@ -58,18 +58,19 @@
   height: 100%;
   object-fit: contain;
   opacity: 0.85;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 52%, #000 78%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 52%, #000 78%, transparent);
 }
 
 .product-hero-overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
+  pointer-events: none;
   background: linear-gradient(
     to top,
     #06080c 0%,
-    rgba(6, 8, 12, 0.8) 15%,
+    rgba(6, 8, 12, 0.8) 5%,
     rgba(6, 8, 12, 0.1) 60%,
     rgba(6, 8, 12, 0.3) 100%
   );
@@ -990,7 +991,7 @@
   }
 
   .hero-desc-panel {
-    order: 1;
+    order: -1;
   }
 
   .hero-desc-panel #product-image-container {
@@ -1010,7 +1011,7 @@
   }
 
   .hero-purchase-panel {
-    order: -1;
+    order: 1;
     position: static;
   }
 
@@ -1083,11 +1084,11 @@
   }
 
   .hero-desc-panel {
-    order: 1;
+    order: -1;
   }
 
   .hero-purchase-panel {
-    order: -1;
+    order: 1;
     padding: 1rem;
     border-radius: 12px;
   }

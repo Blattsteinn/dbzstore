@@ -4,9 +4,9 @@
 
   <%# Large banner image at the top  %>
   <div class="product-hero-stage" data-controller="product-view">
-      <%= image_tag @product.primary_image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image", loading: "lazy",
+      <%= image_tag @product.hero_image, class: "product-hero-bg", alt: @product.title, id: "hero-bg-image", loading: "lazy",
           style: "cursor: zoom-in",
-          data: { action: "click->product-view#openLightbox" } if @product.primary_image %>
+          data: { action: "click->product-view#openLightbox", product_view_target: "image" } if @product.hero_image %>
 
     <div class="product-hero-overlay"></div>
 

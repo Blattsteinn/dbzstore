@@ -4,22 +4,12 @@ class Ahoy::Visit < ApplicationRecord
   has_many :events, class_name: "Ahoy::Event"
   belongs_to :user, optional: true
 
-  after_create :geocode_ip, unless: -> { ip.blank? || ip == "127.0.0.1" || ip == "::1" }
 
-  private
+  after_create_commit :geocode_ip_later, unless: -> { ip.blank? || ip == "127.0.0.1" || ip == "::1" }
 
-  def geocode_ip
-    result = Geocoder.search(ip).first
-    return unless result
+  private 
 
-    update_columns(
-      country: result.country,
-      city: result.city,
-      region: result.respond_to?(:region) ? result.region : nil,
-      latitude: result.try(:latitude),
-      longitude: result.try(:longitude)
-    )
-  rescue => e
-    Rails.logger.warn "[Ahoy] Geocode failed for IP #{ip}: #{e.message}"
+  def geocode_ip_later
+    GeocodeVisitJob.perform_later(id)
   end
 end

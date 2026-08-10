@@ -4,15 +4,21 @@ class ProductsController < ApplicationController
 
     def index
         @products = Product.visible.includes(:variants, product_images: { image_attachment: :blob })
-        @products = @products.where(game_name: params[:game])
-        # @products = @products.where("title ILIKE ?", "%#{params[:product_name]}%") if params[:product_name].present?
-        @products = @products.order(priority: :asc)
+            .where(game_name: params[:game])
+            .order(priority: :asc)
 
         ahoy.track "Viewed products", game: @game&.name
+
+        fresh_when(etag: [@products.maximum(:updated_at), params[:game]],
+                    last_modified: @products.maximum(:updated_at))
     end
 
     def show
-        @product = Product.includes(:variants, :localized_descriptions, product_images: :image_attachment).find(params[:id])
+        @product = Product.includes(:variants, 
+                :localized_descriptions, 
+                product_images: { image_attachment: :blob })
+            .find(params[:id])
+
         unless @product.visibility == "live"
             redirect_to products_path
         end
@@ -22,6 +28,8 @@ class ProductsController < ApplicationController
         @text = "## Contact (if no email received)
 - Instagram / Discord: @dokkanarnis
 - Email: dokkanriftmanagement@tuta.com"
+
+        fresh_when(@product)
     end
 
     def new
@@ -68,14 +76,23 @@ class ProductsController < ApplicationController
     end
 
     def duplicate_product
-        @original_p = Product.includes(:variants).find(params[:id])
+        @original_p = Product.includes(:variants, :localized_descriptions).find(params[:id])
         @original_v = @original_p.variants
+        @original_d = @original_p.localized_descriptions
 
         @product = Product.create!(@original_p.attributes.except("id","created_at","updated_at"))
         @product.update!(title: @product.title + " Copy")
+
         @original_v.each do |variant|
             v = Variant.create!(variant.attributes.except("id", "created_at","updated_at"))
             v.update!(product_id: @product.id)
+        end
+
+        @original_d.each do |description|
+            d = LocalizedDescription.create!(
+                description: description.description, 
+                language_id: description.language_id,
+                product_id: @product.id)
         end
 
         redirect_to edit_product_path(@product)
