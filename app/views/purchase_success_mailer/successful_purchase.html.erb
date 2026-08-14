@@ -1,27 +1,27 @@
 
 <!-- Header -->
 <div style="margin-bottom: 1.5rem;">
-  <h1 style="font-size: 22px; font-weight: 500; margin: 0 0 6px 0; color: #f0f0f0;">Order Confirmed</h1>
-  <p style="font-size: 14px; color: #999; margin: 0;">Thanks for your purchase. Your order <strong style="color: #f0f0f0;">#<%= @order.public_id %></strong> has been received and payment confirmed.</p>
+  <h1 class="h1" style="font-size: 22px; font-weight: 500; margin: 0 0 6px 0; color: #f0f0f0;">Order Confirmed</h1>
+  <p class="sm" style="font-size: 14px; color: #999; margin: 0;">Thanks for your purchase. Your order <strong style="color: #f0f0f0;">#<%= @order.public_id %></strong> has been received and payment confirmed.</p>
 </div>
 
 <!-- Order Summary -->
-<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
+<div class="card" style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
   <h2 style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin: 0 0 12px 0;">Order Summary</h2>
-  <table style="width: 100%; border-collapse: collapse;" cellpadding="0" cellspacing="0" border="0">
+  <table class="stack" style="width: 100%; border-collapse: collapse;" cellpadding="0" cellspacing="0" border="0">
     <tbody>
       <% @order.order_items.each do |item| %>
       <tr>
-        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #ddd;">
+        <td class="sm" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #ddd;">
           <%= item.product.title %>
         </td>
-        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888;">
+        <td class="xs" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888;">
           <%= item.variant.title %>
         </td>
-        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888; text-align: center;">
+        <td class="xs" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888; text-align: center;">
           ×<%= item.quantity %>
         </td>
-        <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #f0f0f0; text-align: right; font-weight: 500;">
+        <td class="sm right" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #f0f0f0; text-align: right; font-weight: 500;">
           €<%= format("%.2f", item.price / 100.0) %>
         </td>
       </tr>
@@ -29,8 +29,8 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="3" style="padding: 10px 0 0 0; font-size: 13px; color: #888; text-align: right;">Total</td>
-        <td style="padding: 10px 0 0 0; font-size: 15px; color: #f0f0f0; text-align: right; font-weight: 500;">
+        <td class="xs" colspan="3" style="padding: 10px 0 0 0; font-size: 13px; color: #888; text-align: right;">Total</td>
+        <td class="sm right" style="padding: 10px 0 0 0; font-size: 15px; color: #f0f0f0; text-align: right; font-weight: 500;">
           €<%= format("%.2f", @order.order_items.sum(:price) / 100.0) %>
         </td>
       </tr>
@@ -38,47 +38,58 @@
   </table>
 </div>
 
+<!-- Next-Purchase Discount -->
+<div class="card" style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
+  <h2 style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin: 0 0 12px 0;">Your next-purchase discount</h2>
+  <p class="sm" style="font-size: 15px; color: #ddd; margin: 0 0 8px 0;">Thanks again! As a thank-you, you received a <strong style="color: #f0f0f0;"><%= @discount.percentage %>% off</strong> discount on your <strong style="color: #f0f0f0;">next purchase</strong>.</p>
+  <div style="background: #111112; border: 0.5px solid #3a3a3c; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+    <p class="xs" style="font-size: 13px; color: #888; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.07em;">Discount code</p>
+    <p class="code-box" style="font-size: 18px; color: #f0f0f0; font-weight: 600; margin: 0; letter-spacing: 0.05em;"><%= @discount.code %></p>
+  </div>
+  <p class="xs" style="font-size: 13px; color: #777; margin: 10px 0 0 0;">Enter this code at checkout on your next order to apply the discount (one-time use).</p>
+</div>
+
 <!-- Delivery Instructions Header -->
 <div style="margin-bottom: 1.5rem; margin-top: 2rem;">
-  <h1 style="font-size: 22px; font-weight: 500; margin: 0 0 6px 0; color: #f0f0f0;">Account delivery instructions</h1>
-  <p style="font-size: 14px; color: #999; margin: 0;">Please read carefully before contacting me.</p>
+  <h1 class="h1" style="font-size: 22px; font-weight: 500; margin: 0 0 6px 0; color: #f0f0f0;">Account delivery instructions</h1>
+  <p class="sm" style="font-size: 14px; color: #999; margin: 0;">Please read carefully before contacting me.</p>
 </div>
 
 <!-- Step 1 -->
-<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
+<div class="card" style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
   <h2 style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin: 0 0 12px 0;">Step 1 — Contact me on </h2>
-  <table style="width: 100%; border-collapse: collapse;" cellpadding="0" cellspacing="0" border="0">
+  <table class="stack" style="width: 100%; border-collapse: collapse;" cellpadding="0" cellspacing="0" border="0">
     <tr>
-      <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888; min-width: 120px;"> Instagram (preferably here) </td>
-      <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #f0f0f0; font-weight: 500;">@dokkanarnis</td>
+      <td class="xs" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888;"> Instagram (preferably here) </td>
+      <td class="sm" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #f0f0f0; font-weight: 500;">@dokkanarnis</td>
     </tr>
         <tr>
-      <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888; min-width: 120px;"> Discord </td>
-      <td style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #f0f0f0; font-weight: 500;">@dokkanarnis</td>
+      <td class="xs" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 13px; color: #888;"> Discord </td>
+      <td class="sm" style="padding: 8px 0; border-bottom: 0.5px solid #2a2a2c; font-size: 15px; color: #f0f0f0; font-weight: 500;">@dokkanarnis</td>
     </tr>
     <tr>
-      <td style="padding: 8px 0; font-size: 13px; color: #888;">Email </td>
-      <td style="padding: 8px 0; font-size: 15px; color: #f0f0f0; font-weight: 500;">dokkanriftmanagement@tuta.com</td>
+      <td class="xs" style="padding: 8px 0; font-size: 13px; color: #888;">Email </td>
+      <td class="sm" style="padding: 8px 0; font-size: 15px; color: #f0f0f0; font-weight: 500;">dokkanriftmanagement@tuta.com</td>
     </tr>
   </table>
 </div>
 
 <!-- Step 2 -->
-<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
+<div class="card" style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
   <h2 style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin: 0 0 12px 0;">Step 2 — Include in your message</h2>
-  <p style="font-size: 15px; color: #ddd; margin: 0 0 8px 0;">1. Order ID: <span style="color: #f0f0f0; font-weight: 500;">#<%= @order.public_id %></span></p>
-  <p style="font-size: 15px; color: #ddd; margin: 0 0 8px 0;">2. Operating system — <strong style="color: #f0f0f0;">iOS</strong> or <strong style="color: #f0f0f0;">Android</strong> (you bought <%= @order.order_items.first.variant.title %>)</p>
-  <p style="font-size: 15px; color: #ddd; margin: 0;">3. A Google account <strong style="color: #f0f0f0;">email and password</strong> for linking — create a fresh one, don't use your personal account</p>
+  <p class="sm" style="font-size: 15px; color: #ddd; margin: 0 0 8px 0;">1. Order ID: <span style="color: #f0f0f0; font-weight: 500;">#<%= @order.public_id %></span></p>
+  <p class="sm" style="font-size: 15px; color: #ddd; margin: 0 0 8px 0;">2. Operating system — <strong style="color: #f0f0f0;">iOS</strong> or <strong style="color: #f0f0f0;">Android</strong> (you bought <%= @order.order_items.first.variant.title %>)</p>
+  <p class="sm" style="font-size: 15px; color: #ddd; margin: 0;">3. A Google account <strong style="color: #f0f0f0;">email and password</strong> for linking — create a fresh one, don't use your personal account</p>
 </div>
 
 <!-- Step 3 -->
-<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
+<div class="card" style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 12px;">
   <h2 style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin: 0 0 12px 0;">Response time</h2>
-  <p style="color: #ccc; font-size: 15px; margin: 0 0 8px 0;">I try to link all accounts immediately after purchase. Google usually triggers a security check, so <strong style="color: #f0f0f0;">you'll need to be online</strong> to confirm it.</p>
-  <p style="font-size: 13px; color: #777; margin: 10px 0 0 0;">Allow up to 10 hours for a response — I may be offline.</p>
+  <p class="sm" style="color: #ccc; font-size: 15px; margin: 0 0 8px 0;">We try to link all accounts immediately after purchase. Google usually triggers a security check, so <strong style="color: #f0f0f0;">you'll need to be online</strong> to confirm it.</p>
+  <p class="xs" style="font-size: 13px; color: #777; margin: 10px 0 0 0;">Allow up to 10 hours for a response — we may be offline.</p>
 </div>
 
 <!-- Warning -->
-<div style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-left: 3px solid #666; border-radius: 0; padding: 12px 14px; font-size: 14px; color: #aaa; margin-top: 4px;">
-  <strong style="color: #f0f0f0;">Important:</strong> I will never ask for your <em>primary</em> personal account password. If anyone does, don't share it.
+<div class="card sm" style="background: #1a1a1b; border: 0.5px solid #3a3a3c; border-left: 3px solid #666; border-radius: 0; padding: 12px 14px; font-size: 14px; color: #aaa; margin-top: 4px;">
+  <strong style="color: #f0f0f0;">Important:</strong> We will never ask for your <em>primary</em> personal account password. If anyone does, don't share it.
 </div>

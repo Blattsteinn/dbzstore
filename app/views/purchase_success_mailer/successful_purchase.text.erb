@@ -1,0 +1,38 @@
+ORDER CONFIRMED
+===============
+Thanks for your purchase. Your order #<%= @order.public_id %> has been received and payment confirmed.
+
+ORDER SUMMARY
+-------------
+<% @order.order_items.each do |item| %>
+- <%= item.product.title %> — <%= item.variant.title %> × <%= item.quantity %> — €<%= format("%.2f", item.price / 100.0) %>
+<% end %>
+Total: €<%= format("%.2f", @order.order_items.sum(:price) / 100.0) %>
+
+YOUR NEXT-PURCHASE DISCOUNT
+---------------------------
+Thanks again! As a thank-you, you received a <%= @discount.percentage %>% off discount on your next purchase.
+
+Discount code: <%= @discount.code %>
+
+Enter this code at checkout on your next order to apply the discount (one-time use).
+
+ACCOUNT DELIVERY INSTRUCTIONS
+=============================
+Please read carefully before contacting me.
+
+Step 1 — Contact me on
+  Instagram (preferably here): @dokkanarnis
+  Discord: @dokkanarnis
+  Email: dokkanriftmanagement@tuta.com
+
+Step 2 — Include in your message
+  1. Order ID: #<%= @order.public_id %>
+  2. Operating system — iOS or Android (you bought <%= @order.order_items.first.variant.title %>)
+  3. A Google account email and password for linking — create a fresh one, don't use your personal account
+
+Response time
+We try to link all accounts immediately after purchase. Google usually triggers a security check, so you'll need to be online to confirm it.
+Allow up to 10 hours for a response — we may be offline.
+
+Important: We will never ask for your primary personal account password. If anyone does, don't share it.

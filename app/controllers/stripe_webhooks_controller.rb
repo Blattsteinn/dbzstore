@@ -35,9 +35,8 @@ class StripeWebhooksController < ApplicationController
         order.update!(status: "paid")
       end
 
-      # Async mailers — Solid Queue runs in production and both mailers retry
-      # transient failures (see ApplicationMailer#retry_on), so nothing is lost.
-      PurchaseSuccessMailer.successful_purchase(order).deliver_later
+      discount = Discount.create!(code: SecureRandom.alphanumeric(10).upcase, amount: 1, remaining: 1, percentage: 20);
+      PurchaseSuccessMailer.successful_purchase(order, discount).deliver_later
       ToSelfMailer.mail_self(order).deliver_later
       order.discount&.redeem!
 

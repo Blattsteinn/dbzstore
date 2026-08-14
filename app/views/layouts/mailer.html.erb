@@ -3,8 +3,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="supported-color-schemes" content="dark">
     <style>
       body { margin: 0; padding: 0; background-color: #0d0d0d; }
+
+      /* Responsive overrides for narrow screens.
+         Inline styles win over the stylesheet, so these use !important.
+         Clients without @media support simply keep the desktop layout. */
+      @media only screen and (max-width: 600px) {
+        .outer-pad { padding: 24px 12px !important; }
+        .card { padding: 14px 14px !important; }
+        .h1 { font-size: 20px !important; }
+        .sm { font-size: 15px !important; }
+        .xs { font-size: 14px !important; }
+        .code-box { font-size: 17px !important; }
+        /* Stack table rows/cells vertically so nothing overflows on mobile */
+        .stack td {
+          display: block !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+          text-align: left !important;
+          word-break: break-word !important;
+        }
+      }
     </style>
   </head>
   <body style="margin:0;padding:0;background-color:#0d0d0d;">
@@ -12,7 +34,7 @@
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
            style="background-color:#0d0d0d;" bgcolor="#0d0d0d">
       <tr>
-        <td align="center" style="padding:32px 16px;">
+        <td align="center" class="outer-pad" style="padding:32px 16px;">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
                  style="max-width:680px;background-color:#0d0d0d;color:#ddd;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;">
             <tr>
