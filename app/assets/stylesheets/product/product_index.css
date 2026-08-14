@@ -64,6 +64,15 @@
   padding: 0 20px;
  }
 
+ .products-intro{
+  max-width: 720px;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.6);
+  margin: 6px 0 0;
+ }
+
 
  /* ======================== */
  /* == All products displayed in this */

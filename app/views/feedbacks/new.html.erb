@@ -1,9 +1,12 @@
+<% content_for(:title) { "Leave Feedback — Account Rift" } %>
+<% content_for(:meta_description) { "Share your experience with your Account Rift order. Honest reviews help us improve." } %>
+
 <div id="feedback-new-page">
   <div class="feedback-form-card">
 
     <div class="feedback-form-header">
-      <h2>Leave Feedback</h2>
-      <p>Your feedback helps us improve. Please be honest — reviews are tied to a real order.</p>
+      <h1>Leave Feedback</h1>
+      <p>Your feedback helps us improve. Please be honest — reviews are tied to a real order and may be displayed publicly.</p>
     </div>
 
     <% if @feedback.errors.any? %>

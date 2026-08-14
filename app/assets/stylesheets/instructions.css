@@ -38,7 +38,7 @@
 .itls-blur-bg { position: fixed; inset: 0; z-index: -88; overflow: hidden; pointer-events: none; }
 .itls-blur-bg img { width: 100%; height: 100%; object-fit: cover; filter: blur(60px) brightness(0.10) saturate(0.5); transform: scale(1.1); }
 .itls-banner { padding: 2rem 2rem 0; }
-.itls-banner h1 { font-size: 2rem; font-weight: 800; color: #fff; letter-spacing: 0.02em; margin: 0; }
+.itls-banner h1, .itls-banner h2 { font-size: 2rem; font-weight: 800; color: #fff; letter-spacing: 0.02em; margin: 0; }
 .itls-banner p { font-size: 0.95rem; color: rgba(255,255,255,0.5); margin-top: 6px; }
 .itls-banner .itls-banner-discord { display: inline-block; margin-top: 10px; font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); }
 .itls-card { background: rgba(24,24,27,0.75); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; backdrop-filter: blur(12px); }
@@ -58,7 +58,7 @@
   .itls-layout { grid-template-columns: 1fr; }
   .itls-sidebar { position: static; }
   .itls-banner { min-height: 150px; border-radius: 12px; }
-  .itls-banner h1 { font-size: 1.5rem; }
+  .itls-banner h1, .itls-banner h2 { font-size: 1.5rem; }
 }
 
 

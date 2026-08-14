@@ -1,5 +1,8 @@
 
 
+<% content_for(:title) { "#{@game.official_name} Accounts — Account Rift" } %>
+<% content_for(:meta_description) { "Buy #{@game.official_name} accounts and in-game items at Account Rift. Instant email delivery, secure Stripe checkout, and support before and after your order." } %>
+
 <div id="product-index-page">
 
   <div id="games-banner">
@@ -8,6 +11,13 @@
       <p class="banner-discord">Instagram / Discord: @dokkanarnis</p>
     </div>
   </div>
+
+  <p class="products-intro">
+    All <%= @game.official_name %> accounts below are delivered by email after payment — usually within 15–60 minutes, or up to 24 hours during busy periods. Every order is secured by Stripe and delivery instructions are included with your purchase.
+  </p>
+  <p class="products-intro">
+    Every account is manually checked before listing. Delivery works by linking the account to a fresh Google account you provide — full instructions are included with your order, and support is available on Instagram or Discord (@dokkanarnis).
+  </p>
 
   <% if @products.empty? %>
     <div class="empty-state">

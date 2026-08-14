@@ -21,6 +21,6 @@
 
 <% @descriptions.each do |desc| %>
     <div class="hero-desc-body" id= <%=desc.language.name%> hidden>
-    <%= raw markdown(desc.description) %>
+    <%= raw demote_headings(markdown(desc.description)) %>
     </div>
 <% end %>

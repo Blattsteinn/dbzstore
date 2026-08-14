@@ -2,12 +2,16 @@
   <%= stylesheet_link_tag "support_messages" %>
 <% end %>
 
+<% content_for(:title) { "Contact Support — Account Rift" } %>
+<% content_for(:meta_description) { "Having an issue with your order? Contact Account Rift support via Discord, Instagram, or the contact form — replies usually within 24 hours." } %>
+
 <div id="support-message-new-page">
   <div class="support-form-card">
 
     <div class="feedback-form-header">
-      <h2>Contact Support</h2>
-      <p>Having an issue with your order? Contact me on Discord / Instagram (@dokkanarnis) or fill in the form below and we'll get back to you.</p>
+      <h1>Contact Support</h1>
+      <p>Having an issue with your order? Contact me on Discord / Instagram (@dokkanarnis) or fill in the form below and we'll get back to you — usually within 24 hours.</p>
+      <p>For the fastest response, include your order ID and the operating system of your device (iOS or Android).</p>
     </div>
 
     <% if @support_message.errors.any? %>
@@ -48,7 +52,7 @@
       </div>
 
       <div class="form-actions">
-        <%= link_to "Cancel", support_messages_path, class: "btn-cancel" %>
+        <%= link_to "Cancel", games_path, class: "btn-cancel" %>
         <%= form.submit "Send Message", class: "btn-submit" %>
       </div>
 

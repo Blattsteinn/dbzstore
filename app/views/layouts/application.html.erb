@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "Account Rift" %></title>
+    <meta name="description" content="<%= content_for(:meta_description) || "Buy game accounts and in-game items instantly — secure Stripe checkout and fast email delivery at Account Rift." %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Account Rift">
@@ -19,7 +20,6 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="48x48">
     <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
     <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <%# Storefront ships only storefront CSS; admin pages keep everything (:app). %>
     <% if admin_page? %>
@@ -93,6 +93,11 @@
     
     <footer class="site-footer">
       <span>&copy; <%= Time.current.year %> Account Rift</span>
+      <%= link_to "Games", games_path %>
+      <%= link_to "FAQ", faqs_path %>
+      <%= link_to "Support", new_support_message_path %>
+      <%= link_to "Feedback", feedbacks_path %>
+      <%= link_to "Delivery", instructions_path %>
       <%= link_to "Terms of Service", tos_path %>
       <%= link_to "Privacy Policy", privacy_path %>
     </footer>

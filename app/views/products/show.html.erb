@@ -1,3 +1,6 @@
+<% content_for(:title) { "#{@product.title} — Account Rift" } %>
+<% content_for(:meta_description) { "Buy \"#{@product.title}\" for #{@game.official_name}. Instant email delivery with secure Stripe checkout at Account Rift." } %>
+
 <div class="product-hero-wrapper">
 
   <%= link_to "← Back", game_products_path(@game.name), class: "hero-back-link" %>
@@ -33,7 +36,13 @@
 
         <%# Description %>
         <div class="hero-desc-body">
-          <%= raw markdown(@text) %>
+          <%# Contact block is literal HTML (not markdown) so the email address is NOT
+              auto-linked as a naked anchor — the only link has descriptive text. %>
+          <h2>Contact (if no email received)</h2>
+          <ul>
+            <li>Instagram / Discord: @dokkanarnis</li>
+            <li>Email: dokkanriftmanagement@tuta.com — <a href="mailto:dokkanriftmanagement@tuta.com" target="_blank" rel="noopener noreferrer">send us an email</a></li>
+          </ul>
         </div>
 
       </div>

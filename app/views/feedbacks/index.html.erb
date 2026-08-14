@@ -1,8 +1,13 @@
+<% content_for(:title) { "Customer Feedback — Account Rift" } %>
+<% content_for(:meta_description) { "Real reviews from Account Rift customers — every review is tied to a completed order." } %>
+
 <div id="feedbacks-index-page">
   <div class="feedbacks-header-row">
-    <h2 class="feedbacks-title">Feedback</h2>
+    <h1 class="feedbacks-title">Feedback</h1>
     <%= link_to "Leave Feedback", new_feedback_path, class: "feedback-new-link" %>
   </div>
+
+  <p class="feedbacks-intro">Customer feedback helps us improve the store and helps other buyers shop with confidence. Every review below comes from a completed order, and each order can leave one review.</p>
 
   <%== @pagy.series_nav %>
   <br>

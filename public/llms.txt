@@ -1,0 +1,27 @@
+# Account Rift
+
+> Buy game accounts and in-game items instantly — secure Stripe checkout, fast email delivery. No account registration required.
+
+Account Rift is a userless e-commerce storefront selling game accounts and in-game items. Customers pick a product, pay with Stripe Checkout, and receive delivery instructions by email. Support is available via Instagram, Discord, and a contact form.
+
+## Products
+
+- [DBZ Dokkan Battle accounts](https://accountrift.com/dokkan/products): Dragon Stones accounts with various bonuses and units.
+- [DRAGON BALL LEGENDS accounts](https://accountrift.com/legends/products): Chrono Crystals accounts.
+
+## Buying
+
+- Orders are paid through Stripe Checkout (EUR).
+- Delivery is by email, usually within 15–60 minutes (up to 24 hours during busy periods).
+- [Delivery instructions](https://accountrift.com/instructions): how account linking works and what to include in your message.
+
+## Support
+
+- [FAQ](https://accountrift.com/faqs): answers to common questions.
+- [Contact support](https://accountrift.com/support_messages/new): form for order issues.
+- [Customer feedback](https://accountrift.com/feedbacks): reviews from completed orders.
+
+## Legal
+
+- [Terms of Service](https://accountrift.com/tos)
+- [Privacy Policy](https://accountrift.com/privacy)

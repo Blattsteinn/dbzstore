@@ -1,1 +1,10 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Disallow: /users
+Disallow: /dashboard
+Disallow: /orders
+Disallow: /stripe
+
+Sitemap: https://accountrift.com/sitemap.xml
+
