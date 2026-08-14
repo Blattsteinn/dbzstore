@@ -25,8 +25,8 @@ class DashboardController < ApplicationController
         @recent_orders   = Order.order(created_at: :desc).limit(8)
 
         # For Ahoy
-        @product_views        = Rails.cache.fetch("dashboard_product_views", expires_in: 5.minutes) { Ahoy::Event.where(name: "Viewed products").count }
-        @product_views_today  = Rails.cache.fetch("dashboard_product_views_today", expires_in: 5.minutes) { Ahoy::Event.where(name: "Viewed products").where(time: Time.current.all_day).count }
+        @product_views        = Rails.cache.fetch("dashboard_product_views", expires_in: 5.minutes) { Ahoy::Event.where(name: "Viewed product").count }
+        @product_views_today  = Rails.cache.fetch("dashboard_product_views_today", expires_in: 5.minutes) { Ahoy::Event.where(name: "Viewed product").where(time: Time.current.all_day).count }
         @unique_visitors_week = Rails.cache.fetch("dashboard_unique_visitors_week", expires_in: 5.minutes) { Ahoy::Visit.where(started_at: 7.days.ago..).count }
     end
 
@@ -69,6 +69,29 @@ class DashboardController < ApplicationController
                                 .select("ahoy_visits.*, (SELECT COUNT(*) FROM ahoy_events WHERE ahoy_events.visit_id = ahoy_visits.id) AS events_count")
                                 .order(started_at: :desc),
                               limit: 20)
+    end
+
+    def product_views
+        scope = Ahoy::Event.includes(:visit)
+            .where(name: "Viewed product")
+            .order(time: :desc)
+
+        @pagy, @views = pagy(:offset, scope, limit: 25)
+
+        # All-time most-viewed products (grouped by the product id stored on the event).
+        top = Ahoy::Event.where(name: "Viewed product")
+            .where.not("properties->>'product' IS NULL")
+            .group("properties->>'product'")
+            .count
+            .sort_by { |_, count| -count }
+            .first(10)
+
+        @top_counts = top
+        @top_products = Product.where(id: top.map { |id, _| id.to_i }).index_by(&:id)
+
+        # Resolve products for the current page of events in one query (for linking).
+        page_ids = @views.map { |e| e.properties&.[]("product") }.compact.map(&:to_i).uniq
+        @page_products = Product.where(id: page_ids).index_by(&:id)
     end
 
     def discount_index

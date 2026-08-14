@@ -34,6 +34,8 @@ class DashboardQueryAuditTest < ActionDispatch::IntegrationTest
       v = Ahoy::Visit.create!(started_at: i.hours.ago, visitor_token: "tok#{i}", ip: "1.2.3.#{i % 250}", user_agent: "Chrome")
       Ahoy::Event.create!(visit: v, name: "Viewed products", time: i.hours.ago, properties: {})
     end
+    Ahoy::Event.create!(visit: Ahoy::Visit.first, name: "Viewed product", time: 1.hour.ago,
+                        properties: { product: @product.id, title: @product.title, game: "dokkan" })
   end
 
   test "dashboard pages stay within bounded query counts (no N+1)" do
@@ -48,6 +50,7 @@ class DashboardQueryAuditTest < ActionDispatch::IntegrationTest
       "feedback_index" => ["/dashboard/feedback_index", 12],
       "feedback_show"  => ["/dashboard/feedback_show/#{Feedback.first.id}", 10],
       "visitors"       => ["/dashboard/visitors", 12],
+      "product_views"  => ["/dashboard/product_views", 14],
       "discounts"      => ["/dashboard/discount_index", 12],
       "faqs"           => ["/dashboard/faq_index", 12]
     }

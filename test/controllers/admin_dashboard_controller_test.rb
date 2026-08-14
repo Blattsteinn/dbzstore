@@ -53,6 +53,7 @@ class AdminDashboardControllerTest < ActionDispatch::IntegrationTest
       dashboard_feedback_show_url(@feedback),
       dashboard_faqs_url,
       dashboard_visitors_url,
+      dashboard_product_views_url,
       dashboard_discounts_url
     ]
   end

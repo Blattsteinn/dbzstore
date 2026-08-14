@@ -30,7 +30,9 @@ class ProductsController < ApplicationController
 - Instagram / Discord: @dokkanarnis
 - Email: dokkanriftmanagement@tuta.com"
 
-        fresh_when(@product)
+        if stale?(@product)
+            ahoy.track "Viewed product", product: @product.id, title: @product.title, game: @product.game_name
+        end
     end
 
     def new

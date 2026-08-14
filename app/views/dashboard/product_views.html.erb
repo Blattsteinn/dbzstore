@@ -1,0 +1,109 @@
+<div id="dashboard-container">
+  <%= render "dashboard/sidebar" %>
+
+  <main id="dashboard-main">
+    <header class="dashboard-page-header">
+      <h1>Product Views</h1>
+      <p class="text-muted">Exactly which products were visited</p>
+    </header>
+
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3>Most Viewed Products</h3>
+        <span class="text-muted">All time, top <%= @top_counts.size %></span>
+      </div>
+      <div class="card-body">
+        <% if @top_counts.any? %>
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Game</th>
+                <th>Views</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @top_counts.each_with_index do |(product_id, count), i| %>
+                <% product = @top_products[product_id.to_i] %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td>
+                    <% if product %>
+                      <%= link_to product.title, game_product_path(product.game_name, product), target: "_blank", rel: "noopener" %>
+                    <% else %>
+                      <span class="text-muted">Deleted product #<%= product_id %></span>
+                    <% end %>
+                  </td>
+                  <td><%= product&.game_name || "—" %></td>
+                  <td><strong><%= count %></strong></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="empty-state">No product views yet.</p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <%== @pagy.series_nav %>
+      <%== @pagy.info_tag %>
+      <div class="card-header">
+        <h3>Latest Product Views</h3>
+        <span class="text-muted"><%= @views.size %> shown</span>
+      </div>
+      <div class="card-body">
+        <% if @views.any? %>
+          <div style="overflow-x: auto;">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Product</th>
+                  <th>Game</th>
+                  <th>Country</th>
+                  <th>Device</th>
+                  <th>Browser</th>
+                  <th>IP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @views.each do |event| %>
+                  <% props = event.properties || {} %>
+                  <% product = @page_products[props["product"].to_i] %>
+                  <tr>
+                    <td title="<%= event.time&.strftime("%Y-%m-%d %H:%M UTC") %>">
+                      <%= time_ago_in_words(event.time) %> ago
+                    </td>
+                    <td>
+                      <% if product %>
+                        <%= link_to (props["title"].presence || product.title), game_product_path(product.game_name, product), target: "_blank", rel: "noopener" %>
+                      <% else %>
+                        <%= props["title"].presence || "Deleted product ##{props['product']}" %>
+                      <% end %>
+                    </td>
+                    <td><%= props["game"].presence || "—" %></td>
+                    <td>
+                      <% if event.visit&.country.present? %>
+                        <%= event.visit.country %>
+                      <% else %>
+                        <span class="text-muted">—</span>
+                      <% end %>
+                    </td>
+                    <td><%= event.visit&.device_type&.titleize || "—" %></td>
+                    <td><%= event.visit&.browser || "—" %></td>
+                    <td><%= event.visit&.ip || "—" %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-muted" style="padding: 2rem; text-align: center;">No product views recorded yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

@@ -88,6 +88,32 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_match %r{srcset="[^"]*600w, [^"]*1200w"}, response.body
   end
 
+  test "show renders live product and tracks a product view event" do
+    assert_difference "Ahoy::Event.count", 1 do
+      get game_product_url("dokkan", @product), headers: { "User-Agent" => BROWSER_UA }
+    end
+
+    assert_response :ok
+
+    event = Ahoy::Event.last
+    assert_equal "Viewed product", event.name
+    assert_equal @product.id, event.properties["product"]
+    assert_equal @product.title, event.properties["title"]
+    assert_equal @product.game_name, event.properties["game"]
+  end
+
+  test "show conditional GET returns 304 and does not track a product view" do
+    get game_product_url("dokkan", @product), headers: { "User-Agent" => BROWSER_UA }
+    assert_response :ok
+
+    assert_no_difference "Ahoy::Event.count" do
+      get game_product_url("dokkan", @product),
+          headers: { "User-Agent" => BROWSER_UA, "If-None-Match" => response.headers["ETag"] }
+    end
+
+    assert_response :not_modified
+  end
+
   test "admin dashboard ships dashboard.css" do
     admin = User.create!(email: "admin@example.com", password: "password", admin: true)
     sign_in admin

@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   get "dashboard/faq_index", to: "dashboard#faq_index", as: "dashboard_faqs"
 
   get "dashboard/visitors", to: "dashboard#visitors", as: "dashboard_visitors"
+  get "dashboard/product_views", to: "dashboard#product_views", as: "dashboard_product_views"
   get "dashboard/discount_index", to: "dashboard#discount_index", as: "dashboard_discounts"
 
   # -----------------------------

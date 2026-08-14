@@ -42,7 +42,7 @@ The app has two very different "faces" served by one Rails app:
 | Entry | `/dokkan/products` | `/dashboard` |
 | Controller | Products, Games, Instructions, FAQs, Feedback, SupportMessages, Orders, Discounts (public bits) | `DashboardController` (one controller, many actions) + admin-only actions on the resource controllers |
 
-**Admin is not a namespace.** `DashboardController` hosts `products_index`, `orders_index`, `order_show`, `feedback_index/show`, `faq_index`, `visitors`, `discount_index` and renders partials under `app/views/dashboard/{product,order,feedback,faq,discount}/`. Resource CRUD for products/discounts/faqs/feedbacks/support_messages is spread across their normal controllers with `before_action :authenticate_admin!` on the admin-only actions.
+**Admin is not a namespace.** `DashboardController` hosts `products_index`, `orders_index`, `order_show`, `feedback_index/show`, `faq_index`, `visitors`, `product_views`, `discount_index` and renders partials under `app/views/dashboard/{product,order,feedback,faq,discount}/` (plus top-level `dashboard/visitors.html.erb` and `dashboard/product_views.html.erb`). Resource CRUD for products/discounts/faqs/feedbacks/support_messages is spread across their normal controllers with `before_action :authenticate_admin!` on the admin-only actions.
 
 ## Conventions worth knowing
 

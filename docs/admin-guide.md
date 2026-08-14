@@ -18,7 +18,7 @@ If you're not an admin you'll be bounced back to the storefront with *"You must 
 - **Revenue** — sum of paid order items (cached for 1 hour; refresh takes up to an hour)
 - **Order counts** — total, paid, pending
 - **Recent orders** — last 8
-- **Store stats** — product views (today), unique visitors (week), from Ahoy
+- **Store stats** — product views (today), unique visitors (week), from Ahoy. **Dashboard → Product Views** (`/dashboard/product_views`) lists exactly which products were visited (top products + per-view log with country/device/IP) — click the "Product Views (Today)" stat or the sidebar link.
 
 ## Managing products
 

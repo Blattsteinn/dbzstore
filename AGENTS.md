@@ -21,9 +21,8 @@ bin/rails server         # same, explicit
 
 bin/rails test           # run the test suite
 bin/rails test test/controllers/orders_controller_test.rb   # single file
-bin/ci                   # full pipeline: rubocop → bundler-audit → importmap audit → brakeman → test → db:seed:replant
+bin/ci                   # full pipeline: bundler-audit → importmap audit → brakeman → test → db:seed:replant
 
-bin/rubocop              # style (rubocop-rails-omakase)
 bin/brakeman             # security scan
 bin/bundler-audit        # gem vulnerabilities
 bin/rails db:prepare     # create/migrate
@@ -89,10 +88,10 @@ Storefront (userless)          Admin (Devise + admin flag)
 | File | Key behavior |
 |---|---|
 | `application_controller.rb` | `include Pagy::Method`; `authenticate_admin!` (sign-in + `admin?`, else redirect root with "You must be an admin"); **`honeypot_check`** — if `params[:contact_me_by_fax_only]` present, `head :ok` and short-circuit (spam trap) |
-| `products_controller.rb` | `index` (visible products filtered by `params[:game]`, ordered by priority, tracks Ahoy view inside a `stale?` block — 304 conditional GETs do zero DB writes) / `show` (any visibility but redirects unless live; hardcoded contact markdown `@text`) / admin CRUD + `product_visibility` toggle (live↔hidden) + `duplicate_product` (deep-copy + variants, appends " Copy"). **Dead code:** `show_hero/minimal/split/card/gallery` |
+| `products_controller.rb` | `index` (visible products filtered by `params[:game]`, ordered by priority, tracks `"Viewed products"` Ahoy event inside a `stale?` block — 304 conditional GETs do zero DB writes) / `show` (any visibility but redirects unless live; hardcoded contact markdown `@text`; tracks `"Viewed product"` event with `product`/`title`/`game` properties inside a `stale?` block) / admin CRUD + `product_visibility` toggle (live↔hidden) + `duplicate_product` (deep-copy + variants, appends " Copy"). **Dead code:** `show_hero/minimal/split/card/gallery` |
 | `orders_controller.rb` | **Checkout endpoint.** `create`: honeypot → validate email/variant/quantity → `set_discount(params[:code])` (returns `[discount_id, percentage]`, or `[nil, 0]` for unknown **or exhausted** codes) → `Order.create!` (pending) → `OrderItem` with discounted price → build Stripe Checkout Session → redirect to Stripe. `cancel_stripe_checkout` (GET `orders/:public_id/cancel`) destroys pending orders. Admin `update` (status) / `destroy`. See [`docs/flows.md`](docs/flows.md#checkout-flow) |
 | `stripe_webhooks_controller.rb` | `POST /stripe/webhooks`, CSRF skipped, **no auth**, signature-verified. `checkout.session.completed` → transaction (decrement stock with ≥ 0 guard, `status: paid`) → mailers `deliver_later` → `discount.redeem!` → `DashboardController.invalidate_stats!`. `checkout.session.expired` → destroy pending order. See [`docs/flows.md`](docs/flows.md#stripe-webhook) |
-| `dashboard_controller.rb` | `authenticate_admin!` everywhere. `index` (revenue cached 1h; aggregate counts cached 5 min — `invalidate_stats!` clears them on order changes), `products_index`, `orders_index` (status filter), `order_show`, `feedback_index/show`, `faq_index`, `visitors` (Pagy 20), `discount_index` |
+| `dashboard_controller.rb` | `authenticate_admin!` everywhere. `index` (revenue cached 1h; aggregate counts cached 5 min — `invalidate_stats!` clears them on order changes), `products_index`, `orders_index` (status filter), `order_show`, `feedback_index/show`, `faq_index`, `visitors` (Pagy 20), `product_views` (Pagy 25 log of `"Viewed product"` events + top-10 most-viewed, resolves products in one query), `discount_index` |
 | `discounts_controller.rb` | Admin CRUD + public **`check_discount`** JSON endpoint (`{valid:, percentage:}` — does NOT decrement). `create` sets `remaining = amount`. `check_discount` is rate-limited 2/hr/IP (see [`docs/security.md`](docs/security.md#rate-limiting-rackattack)) |
 | `feedbacks_controller.rb` | Public `index` (Pagy 10, ordered `created_at: :desc`) + `new/create` keyed by **order `public_id`**; admin `edit/update/destroy` |
 | `support_messages_controller.rb` | Public `new/create` (keyed by order `public_id`); admin `index/show/update(status)/destroy` (destroy has no redirect) |
@@ -123,7 +122,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 
 ### Config (`config/`)
 
-- `routes.rb` — see the quirks in Gotchas #1–2. Key routes: `/:game/products`, `resources :orders` (only create/destroy/update), `GET orders/:public_id/cancel`, `POST stripe/webhooks`, `dashboard/*`, root redirects to `/dokkan/products`.
+- `routes.rb` — see the quirks in Gotchas #1–2. Key routes: `/:game/products`, `resources :orders` (only create/destroy/update), `GET orders/:public_id/cancel`, `POST stripe/webhooks`, `dashboard/*` (incl. `dashboard/product_views` → `dashboard_product_views_path`), root redirects to `/dokkan/products`.
 - `initializers/stripe.rb` (Stripe API key + open/read timeouts), `resend.rb`, `ahoy.rb` (JS tracking OFF, geocode OFF — geocoding manual in model), `geocoder.rb` (GeoIP2 MaxMind DB at `vendor/GeoLite2-Country.mmdb`), `rack_attack.rb` (throttles, see [`docs/security.md`](docs/security.md)), `mailer_retries.rb` (retries for async mailer delivery).
 - `database.yml` — Postgres; production uses 4 connections (primary/cache/queue/cable) all from `DATABASE_URL`.
 - `storage.yml` — disk in dev/test, **Cloudflare R2 (S3-compatible)** in production.
@@ -152,13 +151,14 @@ Full diagrams + detail in [`docs/flows.md`](docs/flows.md). Short version:
 10. **Honeypot spam trap**: any form posting to orders/feedbacks/support_messages must include hidden field `contact_me_by_fax_only` (rendered off-screen). Presence → `head :ok` short-circuit.
 11. **Legacy/dead code** — don't build on it: `show_hero/minimal/split/card/gallery` + `set_product_for_designs` (products controller), `price_controller.js`, `hello_controller.js`, commented-out product search in products index.
 12. **Controller tests now have full coverage** (2026-08-14): all files in `test/controllers/` are real — games/instructions/faqs/support_messages/admin_dashboard scaffolds were replaced, and feedbacks was completed. `fixtures :all` is commented out and most fixtures are empty templates — write tests with inline records (no factories). Known bugs asserted by tests: `SupportMessagesController#destroy` has no redirect (record is destroyed, Rails returns an implicit empty response); `FaqsController#create` was fixed to use `@faq` so the failed-save `new` render works.
+14. **Two distinct Ahoy view events**: products `index` tracks `"Viewed products"` (plural) and products `show` tracks `"Viewed product"` (singular, properties `product`/`title`/`game`). The dashboard overview "Product Views" stats and the `/dashboard/product_views` page count the singular event only. `show`'s `stale?` block means 304s never record a view.
 13. **`Game` model is empty** — game scoping is by `game_name` string on products, not an association.
 14. **Production hosts**: `accountrift.com`, `*.accountrift.com`, `*.up.railway.app` (see `config/environments/production.rb`).
 
 ## Conventions
 
 - **Strong params** use Rails 8 `params.expect(...)` (e.g. `params.expect(order: [:status])`).
-- **Style** is `rubocop-rails-omakase` — run `bin/rubocop` before CI.
+- **No linter** — RuboCop is intentionally disabled (the `Style: Ruby` step in `config/ci.rb` and the `lint` job in the GitHub workflow are commented out). Don't uncomment it or run it.
 - **Views** live under `app/views/{products,orders,dashboard/{product,order,feedback,faq,discount},...}`.
 - **Dashboard** is a single `DashboardController` with many actions + `_sidebar` partial, not a separate namespace.
 - **Flash keys** vary (`:successful_edit`, `:fail_edit`, `:alert`, ...) — follow the existing pattern per feature rather than assuming a standard.
