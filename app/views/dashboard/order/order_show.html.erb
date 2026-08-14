@@ -16,8 +16,8 @@
         <% copy_line = [
                     "##{@order.public_id}",
                     @order.email,
-                    @order.order_items.first.product.title,
-                    @order.order_items.first.variant.title,
+                    @order.order_items.first&.product&.title,
+                    @order.order_items.first&.variant&.title,
                     @order.status,
                     "#{convert_from_cents(@order.order_items.sum { |item| item.price * item.quantity })}",
                     @order.created_at.strftime("%Y-%m-%d %H:%M"),
@@ -56,11 +56,11 @@
             </div>
             <div class="detail-row">
               <dt>Product</dt>
-              <dd><%= @order.order_items.first.product.title  %></dd>
+              <dd><%= @order.order_items.first&.product&.title || "—" %></dd>
             </div>
             <div class="detail-row">
               <dt>Operating system</dt>
-              <dd><%= @order.order_items.first.variant.title %></dd>
+              <dd><%= @order.order_items.first&.variant&.title || "—" %></dd>
             </div>
           </dl> 
         </div>
@@ -102,8 +102,8 @@
           <tbody>
             <% @order.order_items.each do |item| %>
               <tr>
-                <td><%= item.product.title %></td>
-                <td><%= item.variant.title %></td>
+                <td><%= item.product&.title || "—" %></td>
+                <td><%= item.variant&.title || "—" %></td>
                 <td class="mono"><%= item.quantity %></td>
                 <td class="mono"><%= convert_from_cents(item.price) %> €</td>
                 <td class="mono"><%= convert_from_cents(item.price * item.quantity) %> €</td>

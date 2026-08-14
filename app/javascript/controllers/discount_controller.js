@@ -9,35 +9,53 @@ export default class extends Controller {
     const code = this.inputTarget.value.trim()
     if (!code) return
 
-    // Ask the server in the background (same URL your form would have used)
-    const response = await fetch(`${this.element.action}?code=${encodeURIComponent(code)}`, {
-      headers: { "Accept": "application/json" }
-    })
+    // Show feedback while we wait for the server to respond
+    this.setStatus("Checking code…", "loading")
+    this.setBusy(true)
 
-    if (!response.ok) {            // 429/403 -> throttled
-      this.statusTarget.textContent = "Too many attempts. Try again later."
-      this.statusTarget.classList.add('error')
-      this.statusTarget.classList.remove('success')
+    let response
+    try {
+      // Ask the server in the background (same URL your form would have used)
+      response = await fetch(`${this.element.action}?code=${encodeURIComponent(code)}`, {
+        headers: { "Accept": "application/json" }
+      })
+    } catch {
+      this.setStatus("Couldn't reach the server. Please try again.", "error")
+      this.setBusy(false)
       return
     }
-    
+
+    if (!response.ok) {            // 429/403 -> throttled
+      this.setStatus("Too many attempts. Try again later.", "error")
+      this.setBusy(false)
+      return
+    }
+
     const data = await response.json()
 
     if (data.valid) {
-      this.statusTarget.textContent = `Code activated. ${data.percentage}% off applied.`
-      this.statusTarget.classList.add('success')
-      this.statusTarget.classList.remove('error')
+      this.setStatus(`Code activated. ${data.percentage}% off applied.`, "success")
       // (a) write the code into the ORDER form's hidden field
       document.querySelector('.hero-purchase-form [name="code"]').value = code
       // (b) update the displayed prices
       this.applyPercentage(data.percentage)
-      this.inputTarget.disabled = true
-      this.buttonTarget.disabled = true
+      // (c) lock the code in
+      this.setBusy(true)
     } else {
-      this.statusTarget.textContent = "Invalid code"
-      this.statusTarget.classList.add('error')
-      this.statusTarget.classList.remove('success')
+      this.setStatus("Invalid code", "error")
+      this.setBusy(false)
     }
+  }
+
+  setStatus(message, kind) {
+    this.statusTarget.textContent = message
+    this.statusTarget.classList.remove('success', 'error', 'loading')
+    this.statusTarget.classList.add(kind)
+  }
+
+  setBusy(busy) {
+    this.inputTarget.disabled = busy
+    this.buttonTarget.disabled = busy
   }
 
   applyPercentage(percentage) {

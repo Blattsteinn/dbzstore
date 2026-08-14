@@ -27,7 +27,7 @@
           <%= form_with url: dashboard_products_path, method: :get do |form| %>
             <label class="filter-label" for="game_name">Game</label>
             <%= form.select :game_name,
-                [["All games", ""]] + Game.all.map { |game| [game.official_name, game.name] },
+                [["All games", ""]] + navigation_games.map { |game| [game.official_name, game.name] },
                 { selected: params[:game_name] },
                 class: "form-select filter-select" %>
 

@@ -26,8 +26,9 @@ class DashboardController < ApplicationController
     end
 
     def orders_index
-        @orders = Order.includes(order_items: [:product, :variant]).all.order(created_at: :desc)
-        @orders = @orders.where(status: params[:status]) if params[:status].present?
+        scope = Order.includes(order_items: [:product, :variant]).order(created_at: :desc)
+        scope = scope.where(status: params[:status]) if params[:status].present?
+        @pagy, @orders = pagy(:offset, scope, limit: 25)
         render "dashboard/order/orders_index"
     end
 
@@ -37,7 +38,7 @@ class DashboardController < ApplicationController
     end
 
     def feedback_index
-        @feedbacks = Feedback.all
+        @pagy, @feedbacks = pagy(:offset, Feedback.order(created_at: :desc), limit: 25)
         render "dashboard/feedback/feedback_index"
     end
 
@@ -52,9 +53,11 @@ class DashboardController < ApplicationController
     end
 
     def visitors
-        # @pagy, @records = pagy(:offset, Product.some_scope, **options)
-        @pagy, @visits = pagy(:offset, Ahoy::Visit.includes(:events)
-                              .order(started_at: :desc), limit: 20)
+        @pagy, @visits = pagy(:offset,
+                              Ahoy::Visit
+                                .select("ahoy_visits.*, (SELECT COUNT(*) FROM ahoy_events WHERE ahoy_events.visit_id = ahoy_visits.id) AS events_count")
+                                .order(started_at: :desc),
+                              limit: 20)
     end
 
     def discount_index

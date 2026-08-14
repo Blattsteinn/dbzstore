@@ -8,6 +8,8 @@
     </header>
 
     <div class="dashboard-card">
+      <%== @pagy.series_nav %>
+      <%== @pagy.info_tag %>
       <div class="card-header card-header--toolbar">
         <h3>All Orders</h3>
         <div class="toolbar-controls">
@@ -52,8 +54,8 @@
                   copy_line = [
                     "##{order.public_id}",
                     order.email,
-                    order.order_items.first.product.title,
-                    order.order_items.first.variant.title,
+                    order.order_items.first&.product&.title,
+                    order.order_items.first&.variant&.title,
                     order.status,
                     "#{convert_from_cents(order.order_items.sum { |item| item.price * item.quantity })}",
                     order.created_at.strftime("%Y-%m-%d %H:%M"),
@@ -68,11 +70,7 @@
                   </td>
                   <td class="cell-truncate"><%= order.email %></td>
                   <%# LMAO THE LENGTH %>
-                  <td class="cell-truncate"><%= order.order_items.first.product.title %></td>
-                  <!-- skip OS Here
-                  <%# Weird relationship %>
-                  <td class="cell-truncate"><%= order.order_items.first.variant.title %></td>
-                  -->
+                  <td class="cell-truncate"><%= order.order_items.first&.product&.title || "—" %></td>
                   <td><span class="status-badge status-<%= order.status %>"><%= order.status %></span></td>
                   <td class="mono"><%= convert_from_cents(order.order_items.sum { |item| item.price * item.quantity }) %>€</td>
                   <td class="status-date-font"><%= order.created_at.strftime("%Y-%m-%d %H:%M") %></td>

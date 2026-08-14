@@ -895,6 +895,29 @@
 .discount-status.success { color: #4ade80; }
 .discount-status.error { color: #f87171; }
 
+/* --- Loading feedback while the code is checked --- */
+.discount-status.loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #a5b4fc;
+}
+
+.discount-status.loading::before {
+  content: "";
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  border: 2px solid rgba(165, 180, 252, 0.3);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: discount-spin 0.7s linear infinite;
+}
+
+@keyframes discount-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* --- Discounted price (old price struck through) --- */
 .hero-variant-price-row {
   display: flex;
@@ -942,6 +965,14 @@
 .hero-back-link:hover {
   background: rgba(0, 0, 0, 0.7);
   color: white;
+}
+
+/* Expanded invisible hit area around the back link, so clicks near it
+   can't fall through to the hero image's lightbox handler */
+.hero-back-link::before {
+  content: "";
+  position: absolute;
+  inset: -1.25rem;
 }
 
 /* ================================================================

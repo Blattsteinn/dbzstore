@@ -132,7 +132,7 @@ class ProductsController < ApplicationController
     def product_params
         # Nested attributes include :id, because they are used only within product#edit/update
         # Destroy is an optimal parameter that marks for destruction.
-        params.expect(product: [:title, :visibility, :description, :italian_description, :payment_type, :deliverables, :game_name, :priority,
+        params.expect(product: [:title, :visibility, :payment_type, :deliverables, :game_name, :priority,
         product_images_attributes: [[:image, :priority, :_destroy, :id]],
         localized_descriptions_attributes: [[:language_id, :description, :_destroy, :id]],
         variants_attributes: [[:stock, :price, :title, :description, :_destroy, :id]]

@@ -8,7 +8,6 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @product = Product.create!(
       title: "Test Product",
-      description: "A test description",
       deliverables: "static_value",
       payment_type: "single_payment",
       visibility: "live",

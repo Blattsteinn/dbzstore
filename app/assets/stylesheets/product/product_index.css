@@ -248,10 +248,10 @@
   }
 
   .product-box .product-box-img {
+    /* Fixed height keeps layout stable while lazy images load (prevents CLS) */
     flex: 0 0 auto;
     width: 100%;
-    height: auto;
-    max-height: 220px;
+    height: 220px;
   }
 
   .product-box .product-box-img img {

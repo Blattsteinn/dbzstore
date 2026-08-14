@@ -113,7 +113,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 | Controller | Purpose |
 |---|---|
 | `checkout_form_controller.js` | Purchase form submit → shows `#stripe-loading-overlay`, honors HTML5 validation |
-| `discount_controller.js` | Fetches `check_discount?code=` JSON, applies `% off` to prices, injects code into form |
+| `discount_controller.js` | Fetches `check_discount?code=` JSON, applies `% off` to prices, injects code into form; shows "Checking code…" loading state (spinner) while fetching and locks input/button during the request |
 | `product_view_controller.js` | Image carousel + lightbox, variant selection, quantity +/- capped at stock, EUR price display |
 | `language_switcher_controller.js` / `_instructions_controller.js` | Language dropdown toggles per-language description divs |
 | `insert_variant_controller.js`, `insert_image_controller.js` | Admin product form dynamic rows (clone templates `NEW_RECORD` / `NEW_IMAGE`) |

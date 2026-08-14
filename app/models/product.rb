@@ -19,7 +19,6 @@ class Product < ApplicationRecord
     
 
     validates :deliverables,    presence: true
-    validates :description,     presence: true
     validates :payment_type,    presence: true
     validates :title,           presence: true
     validates :visibility,      presence: true

@@ -15,7 +15,6 @@ User.create!(email: "admin@admin", password: "password", admin: true)
 
 # ── Test product ──────────────────────────────────────────────
 product = Product.find_or_create_by!(title: "Test - 8,000 Dragon Stones (Global)") do |p|
-  p.description  = "A test account with 8,000 Dragon Stones for development."
   p.visibility   = "live"
   p.payment_type = "single_payment"
   p.deliverables = "static"
