@@ -13,19 +13,6 @@
     </div>
   </div>
 
-  <div class="games-intro">
-    <p>Account Rift is a marketplace for game accounts and in-game items. Every order is paid through Stripe checkout and delivered by email — no account registration is required, and delivery instructions are included with your purchase.</p>
-    <% if @games.any? %>
-      <p>We currently offer accounts for <%= @games.map { |g| g.official_name.presence || g.name }.join(" and ") %>. All products are manually checked before listing, and new stock is added regularly — if you don't see what you're looking for, check back soon or contact support.</p>
-    <% end %>
-    <ul>
-      <li>Instant email delivery (usually within 15–60 minutes)</li>
-      <li>Secure payments via Stripe</li>
-      <li>Support via Instagram, Discord, or the contact form</li>
-    </ul>
-    <p>Have questions before buying? Message @dokkanarnis on Instagram or Discord, or use the contact form on the Support page — we usually reply within 24 hours and are happy to help you choose the right account.</p>
-  </div>
-
   <% if @games.any? %>
     <div class="games-section-header">
       <h2>Choose Your Game</h2>

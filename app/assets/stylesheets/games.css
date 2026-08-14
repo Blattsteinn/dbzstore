@@ -33,40 +33,6 @@
 }
 
 /* ========================== */
-/* == Intro == */
-.games-intro {
-  width: 100%;
-  max-width: 680px;
-  text-align: center;
-}
-
-.games-intro p {
-  margin: 0 0 10px;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.games-intro ul {
-  list-style: none;
-  margin: 0 0 10px;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-
-.games-intro li {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 6px 12px;
-  border-radius: 20px;
-}
-
-/* ========================== */
 /* == Games Grid == */
 #games-container {
   display: grid;
