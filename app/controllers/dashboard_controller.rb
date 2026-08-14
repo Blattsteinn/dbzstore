@@ -2,21 +2,32 @@ class DashboardController < ApplicationController
     before_action :authenticate_admin!
     before_action :set_open_support #<-- dont remember implementing this
 
+    CACHE_KEYS = %w[
+      dashboard_revenue dashboard_total_orders dashboard_paid_orders
+      dashboard_pending_orders dashboard_product_views
+      dashboard_product_views_today dashboard_unique_visitors_week
+    ].freeze
+
+    def self.invalidate_stats!
+      # delete_multi normalizes keys with map!, so pass a mutable copy.
+      Rails.cache.delete_multi(CACHE_KEYS.dup)
+    end
+
     def index
         @revenue = Rails.cache.fetch("dashboard_revenue", expires_in: 1.hour) do
         Order.where(status: "paid").joins(:order_items)
             .sum("order_items.price * order_items.quantity")
         end
 
-        @total_orders    = Order.count
-        @paid_orders     = Order.where(status: "paid").count
-        @pending_orders  = Order.where(status: "pending").count
+        @total_orders    = Rails.cache.fetch("dashboard_total_orders", expires_in: 5.minutes) { Order.count }
+        @paid_orders     = Rails.cache.fetch("dashboard_paid_orders", expires_in: 5.minutes) { Order.where(status: "paid").count }
+        @pending_orders  = Rails.cache.fetch("dashboard_pending_orders", expires_in: 5.minutes) { Order.where(status: "pending").count }
         @recent_orders   = Order.order(created_at: :desc).limit(8)
 
         # For Ahoy
-        @product_views        = Ahoy::Event.where(name: "Viewed products").count
-        @product_views_today  = Ahoy::Event.where(name: "Viewed products").where(time: Time.current.all_day).count
-        @unique_visitors_week = Ahoy::Visit.where(started_at: 7.days.ago..).count
+        @product_views        = Rails.cache.fetch("dashboard_product_views", expires_in: 5.minutes) { Ahoy::Event.where(name: "Viewed products").count }
+        @product_views_today  = Rails.cache.fetch("dashboard_product_views_today", expires_in: 5.minutes) { Ahoy::Event.where(name: "Viewed products").where(time: Time.current.all_day).count }
+        @unique_visitors_week = Rails.cache.fetch("dashboard_unique_visitors_week", expires_in: 5.minutes) { Ahoy::Visit.where(started_at: 7.days.ago..).count }
     end
 
     def products_index

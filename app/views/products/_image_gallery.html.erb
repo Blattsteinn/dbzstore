@@ -1,6 +1,8 @@
 <div id="product-image-container" data-controller="product-view" style="margin-top: 2rem;">
     <% @images.each do |image| %>
     <%= image_tag image.display, alt: @product.title, loading: "lazy",
+        srcset: "#{url_for(image.thumbnail)} 600w, #{url_for(image.display)} 1200w",
+        sizes: "(max-width: 768px) 100vw, 600px",
         data: { product_view_target: "image", action: "click->product-view#openLightbox" },
         style: "cursor: zoom-in" %>
     <% end %>

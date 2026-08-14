@@ -10,8 +10,8 @@ class FaqsController < ApplicationController
   end
 
   def create
-    faq = Faq.new(faq_params)
-    if faq.save
+    @faq = Faq.new(faq_params)
+    if @faq.save
       redirect_to dashboard_faqs_path
     else
       render :new, status: :unprocessable_entity

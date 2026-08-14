@@ -10,10 +10,20 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
+  helper_method :admin_page?
+
   private
+  def admin_page?
+    @admin_page == true
+  end
+
   def authenticate_admin!
     authenticate_user!
-    redirect_to root_path, alert: "You must be an admin" unless current_user.admin?
+    if current_user.admin?
+      @admin_page = true
+    else
+      redirect_to root_path, alert: "You must be an admin"
+    end
   end
 
   def honeypot_check

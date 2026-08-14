@@ -30,6 +30,9 @@
 
         <div class="product-box-img">
           <%= image_tag product.thumbnail, class: "product-box-img-img", alt: product.title, loading: "lazy" if product.primary_image %>
+          <% if product.hot? %>
+            <span class="hot-tag">Hot</span>
+          <% end %>
         </div>
 
         <div class="product-box-body">

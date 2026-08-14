@@ -7,10 +7,11 @@ class ProductsController < ApplicationController
             .where(game_name: params[:game])
             .order(priority: :asc)
 
-        ahoy.track "Viewed products", game: @game&.name
+        updated_at = @products.maximum(:updated_at)
 
-        fresh_when(etag: [@products.maximum(:updated_at), params[:game]],
-                    last_modified: @products.maximum(:updated_at))
+        if stale?(etag: [updated_at, params[:game]], last_modified: updated_at)
+            ahoy.track "Viewed products", game: @game&.name
+        end
     end
 
     def show
@@ -132,7 +133,7 @@ class ProductsController < ApplicationController
     def product_params
         # Nested attributes include :id, because they are used only within product#edit/update
         # Destroy is an optimal parameter that marks for destruction.
-        params.expect(product: [:title, :visibility, :payment_type, :deliverables, :game_name, :priority,
+        params.expect(product: [:title, :visibility, :payment_type, :deliverables, :game_name, :priority, :hot,
         product_images_attributes: [[:image, :priority, :_destroy, :id]],
         localized_descriptions_attributes: [[:language_id, :description, :_destroy, :id]],
         variants_attributes: [[:stock, :price, :title, :description, :_destroy, :id]]

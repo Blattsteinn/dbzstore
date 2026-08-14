@@ -68,7 +68,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 
 | File | Contents |
 |---|---|
-| `product.rb` | `has_many` images/variants/order_items/localized_descriptions; `visible` scope (`visibility: "live"`); `primary_image`, `thumbnail` (600×600 webp); nested attrs for images/variants/localized descriptions |
+| `product.rb` | `has_many` images/variants/order_items/localized_descriptions; `visible` scope (`visibility: "live"`); `primary_image`, `thumbnail` (600×600 webp); **`hot` boolean** → "Hot" tag on `/:game/products` cards (admin sets it in product form); nested attrs for images/variants/localized descriptions |
 | `variant.rb` | belongs_to product; price (cents) + stock; no price validation |
 | `game.rb` | **Empty** — just `name` (unique) + `official_name` columns |
 | `order.rb` | statuses `pending paid processing delivered cancelled refunded`; `before_validation :generate_public_id` (20-char upcased alphanumeric); `paid?`; belongs_to user/discount (optional) |
@@ -89,12 +89,12 @@ Storefront (userless)          Admin (Devise + admin flag)
 | File | Key behavior |
 |---|---|
 | `application_controller.rb` | `include Pagy::Method`; `authenticate_admin!` (sign-in + `admin?`, else redirect root with "You must be an admin"); **`honeypot_check`** — if `params[:contact_me_by_fax_only]` present, `head :ok` and short-circuit (spam trap) |
-| `products_controller.rb` | `index` (visible products filtered by `params[:game]`, ordered by priority, tracks Ahoy view) / `show` (any visibility but redirects unless live; hardcoded contact markdown `@text`) / admin CRUD + `product_visibility` toggle (live↔hidden) + `duplicate_product` (deep-copy + variants, appends " Copy"). **Dead code:** `show_hero/minimal/split/card/gallery` |
+| `products_controller.rb` | `index` (visible products filtered by `params[:game]`, ordered by priority, tracks Ahoy view inside a `stale?` block — 304 conditional GETs do zero DB writes) / `show` (any visibility but redirects unless live; hardcoded contact markdown `@text`) / admin CRUD + `product_visibility` toggle (live↔hidden) + `duplicate_product` (deep-copy + variants, appends " Copy"). **Dead code:** `show_hero/minimal/split/card/gallery` |
 | `orders_controller.rb` | **Checkout endpoint.** `create`: honeypot → validate email/variant/quantity → `set_discount(params[:code])` (returns `[discount_id, percentage]`, or `[nil, 0]` for unknown **or exhausted** codes) → `Order.create!` (pending) → `OrderItem` with discounted price → build Stripe Checkout Session → redirect to Stripe. `cancel_stripe_checkout` (GET `orders/:public_id/cancel`) destroys pending orders. Admin `update` (status) / `destroy`. See [`docs/flows.md`](docs/flows.md#checkout-flow) |
-| `stripe_webhooks_controller.rb` | `POST /stripe/webhooks`, CSRF skipped, **no auth**, signature-verified. `checkout.session.completed` → decrement stock, `status: paid`, send mailers `deliver_now`, `discount.redeem!`. `checkout.session.expired` → destroy pending order. See [`docs/flows.md`](docs/flows.md#stripe-webhook) |
-| `dashboard_controller.rb` | `authenticate_admin!` everywhere. `index` (revenue cached 1h from paid orders, order stats, Ahoy stats), `products_index`, `orders_index` (status filter), `order_show`, `feedback_index/show`, `faq_index`, `visitors` (Pagy 20), `discount_index` |
+| `stripe_webhooks_controller.rb` | `POST /stripe/webhooks`, CSRF skipped, **no auth**, signature-verified. `checkout.session.completed` → transaction (decrement stock with ≥ 0 guard, `status: paid`) → mailers `deliver_later` → `discount.redeem!` → `DashboardController.invalidate_stats!`. `checkout.session.expired` → destroy pending order. See [`docs/flows.md`](docs/flows.md#stripe-webhook) |
+| `dashboard_controller.rb` | `authenticate_admin!` everywhere. `index` (revenue cached 1h; aggregate counts cached 5 min — `invalidate_stats!` clears them on order changes), `products_index`, `orders_index` (status filter), `order_show`, `feedback_index/show`, `faq_index`, `visitors` (Pagy 20), `discount_index` |
 | `discounts_controller.rb` | Admin CRUD + public **`check_discount`** JSON endpoint (`{valid:, percentage:}` — does NOT decrement). `create` sets `remaining = amount`. `check_discount` is rate-limited 2/hr/IP (see [`docs/security.md`](docs/security.md#rate-limiting-rackattack)) |
-| `feedbacks_controller.rb` | Public `index` (Pagy 10) + `new/create` keyed by **order `public_id`**; admin `edit/update/destroy` |
+| `feedbacks_controller.rb` | Public `index` (Pagy 10, ordered `created_at: :desc`) + `new/create` keyed by **order `public_id`**; admin `edit/update/destroy` |
 | `support_messages_controller.rb` | Public `new/create` (keyed by order `public_id`); admin `index/show/update(status)/destroy` (destroy has no redirect) |
 | `faqs_controller.rb` | Public `index`; admin CRUD (admin index is actually served by dashboard) |
 | `games_controller.rb` | `index` only — `Game.all` + `fresh_when` |
@@ -106,7 +106,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 
 - `app/helpers/products_helper.rb` — **the only real helper**: `MARKDOWN_RENDERER` (Redcarpet, sanitized, autolinks, tables), `convert_from_cents(cents)`, `markdown(text)`. All other helpers are empty modules.
 - `app/mailers/` — `ApplicationMailer` (from `noreply@accountrift.com`); `PurchaseSuccessMailer#successful_purchase` (to customer, "Order {public_id} delivery"); `ToSelfMailer#mail_self` (to owner, "Order received, {price} EUR"); `UserMailer#welcome_email` (**not called** — commented out).
-- `app/jobs/` — only `ApplicationJob`. **No jobs exist.** Mailers are sent synchronously from the webhook (see Gotchas #3).
+- `app/jobs/` — `ApplicationJob`, `ProcessImageVariantsJob` (preprocesses 600/1200/1600 webp variants after upload; backfill via `rake images:backfill_variants`), `GeocodeVisitJob` (async Ahoy visit geocoding). Mailers are sent async from the webhook (`deliver_later`; retries via `config/initializers/mailer_retries.rb` — see Gotchas #3).
 
 ### Frontend (`app/javascript/controllers/` — Stimulus, importmap)
 
@@ -114,7 +114,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 |---|---|
 | `checkout_form_controller.js` | Purchase form submit → shows `#stripe-loading-overlay`, honors HTML5 validation |
 | `discount_controller.js` | Fetches `check_discount?code=` JSON, applies `% off` to prices, injects code into form; shows "Checking code…" loading state (spinner) while fetching and locks input/button during the request |
-| `product_view_controller.js` | Image carousel + lightbox, variant selection, quantity +/- capped at stock, EUR price display |
+| `product_view_controller.js` | Image carousel + lightbox (Android/system back button closes it via History API + `popstate`; close uses `replaceState`, **not** `history.back()`, to avoid triggering a Turbo Drive page restore), variant selection, quantity +/- capped at stock, EUR price display |
 | `language_switcher_controller.js` / `_instructions_controller.js` | Language dropdown toggles per-language description divs |
 | `insert_variant_controller.js`, `insert_image_controller.js` | Admin product form dynamic rows (clone templates `NEW_RECORD` / `NEW_IMAGE`) |
 | `clipboard_controller.js`, `collapse_controller.js` | Copy-to-clipboard, accordion |
@@ -124,7 +124,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 ### Config (`config/`)
 
 - `routes.rb` — see the quirks in Gotchas #1–2. Key routes: `/:game/products`, `resources :orders` (only create/destroy/update), `GET orders/:public_id/cancel`, `POST stripe/webhooks`, `dashboard/*`, root redirects to `/dokkan/products`.
-- `initializers/stripe.rb`, `resend.rb`, `ahoy.rb` (JS tracking OFF, geocode OFF — geocoding manual in model), `geocoder.rb` (GeoIP2 MaxMind DB at `vendor/GeoLite2-Country.mmdb`), `rack_attack.rb` (throttles, see [`docs/security.md`](docs/security.md)).
+- `initializers/stripe.rb` (Stripe API key + open/read timeouts), `resend.rb`, `ahoy.rb` (JS tracking OFF, geocode OFF — geocoding manual in model), `geocoder.rb` (GeoIP2 MaxMind DB at `vendor/GeoLite2-Country.mmdb`), `rack_attack.rb` (throttles, see [`docs/security.md`](docs/security.md)), `mailer_retries.rb` (retries for async mailer delivery).
 - `database.yml` — Postgres; production uses 4 connections (primary/cache/queue/cable) all from `DATABASE_URL`.
 - `storage.yml` — disk in dev/test, **Cloudflare R2 (S3-compatible)** in production.
 - `deploy.yml` (Kamal), `recurring.yml` (hourly SolidQueue cleanup @ minute 12, prod only), `queue.yml`/`cache.yml`/`cable.yml`, `puma.rb` (solid_queue plugin when `SOLID_QUEUE_IN_PUMA`).
@@ -134,7 +134,7 @@ Storefront (userless)          Admin (Devise + admin flag)
 Full diagrams + detail in [`docs/flows.md`](docs/flows.md). Short version:
 
 - **Checkout**: form (variant, qty=1, email, optional code, honeypot) → `OrdersController#create` → `Order` (pending) + `OrderItem` (discounted price in cents) → Stripe Checkout Session (EUR, `success_url: instructions_url`, cancel → `cancel_stripe_checkout`) → redirect to Stripe.
-- **Payment confirmed**: Stripe webhook `checkout.session.completed` → decrement variant stock → `status: paid` → `PurchaseSuccessMailer` + `ToSelfMailer` (`deliver_now`) → `discount.redeem!`.
+- **Payment confirmed**: Stripe webhook `checkout.session.completed` → transaction (decrement variant stock with ≥ 0 guard) → `status: paid` → `PurchaseSuccessMailer` + `ToSelfMailer` (`deliver_later`) → `discount.redeem!` → invalidate dashboard stats.
 - **Order lifecycle**: `pending → paid → processing → delivered` (admin sets via dashboard) / `cancelled` / `refunded`.
 - **Discount**: created with `remaining = amount`; `check_discount` returns validity + percentage; only redeemed at webhook time.
 
@@ -142,7 +142,7 @@ Full diagrams + detail in [`docs/flows.md`](docs/flows.md). Short version:
 
 1. **`dashboard/productss` typo route is load-bearing.** The URL path is `/dashboard/productss` but the helper `dashboard_products_path` is used in ~10 places. Do not "fix" the path without updating all callers.
 2. **`resources :discounts` has no `:index`/`:show` GET routes**, but `DiscountsController#destroy` redirects to `discounts_path` (undefined) — a **latent bug**. Don't silently refactor; note it if touched.
-3. **Mailers are sent with `deliver_now` from the Stripe webhook, not `deliver_later`.** Code comment: *"Can't use deliver_later; smth goes wrong & it never gets sent."* Do not "fix" this to async without verifying delivery works.
+3. **Mailers are sent async (`deliver_later`) from the Stripe webhook** (changed 2026-08-14 from `deliver_now`). The old code comment *"Can't use deliver_later; smth goes wrong & it never gets sent"* is obsolete — Solid Queue runs in production and `ActionMailer::MailDeliveryJob` has `retry_on` (5 attempts, exponential backoff) via `config/initializers/mailer_retries.rb`, so transient Resend failures retry instead of being lost. Verify delivery still works on the next production deploy.
 4. **Cart/wishlist tables (`cart_items`, `wish_lists`) are schema-only** — no models/controllers/views. Don't assume cart functionality exists.
 5. **Money is in cents.** `OrderItem#price`, `Variant#price` are integer cents. Never treat as dollars.
 6. **Discount redemption happens only in the webhook** (`order.discount&.redeem!`). `check_discount` never decrements. Both `check_discount` and order-time `set_discount` check `available?` — exhausted codes are never applied.
@@ -151,7 +151,7 @@ Full diagrams + detail in [`docs/flows.md`](docs/flows.md). Short version:
 9. **Known bug**: `cancel_stripe_checkout`'s else-branch (non-pending order) hits a missing template (documented in `orders_controller_test.rb`).
 10. **Honeypot spam trap**: any form posting to orders/feedbacks/support_messages must include hidden field `contact_me_by_fax_only` (rendered off-screen). Presence → `head :ok` short-circuit.
 11. **Legacy/dead code** — don't build on it: `show_hero/minimal/split/card/gallery` + `set_product_for_designs` (products controller), `price_controller.js`, `hello_controller.js`, commented-out product search in products index.
-12. **Tests are mostly empty scaffolds.** Only `discounts_controller_test.rb` and `orders_controller_test.rb` are real. `fixtures :all` is commented out and most fixtures are empty templates — write tests with inline records (no factories).
+12. **Controller tests now have full coverage** (2026-08-14): all files in `test/controllers/` are real — games/instructions/faqs/support_messages/admin_dashboard scaffolds were replaced, and feedbacks was completed. `fixtures :all` is commented out and most fixtures are empty templates — write tests with inline records (no factories). Known bugs asserted by tests: `SupportMessagesController#destroy` has no redirect (record is destroyed, Rails returns an implicit empty response); `FaqsController#create` was fixed to use `@faq` so the failed-save `new` render works.
 13. **`Game` model is empty** — game scoping is by `game_name` string on products, not an association.
 14. **Production hosts**: `accountrift.com`, `*.accountrift.com`, `*.up.railway.app` (see `config/environments/production.rb`).
 

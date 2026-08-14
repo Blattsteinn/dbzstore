@@ -22,15 +22,27 @@ class StripeWebhooksController < ApplicationController
       return unless order
       return if order.paid?
 
-      order.order_items.includes(:variant).find_each do |item|
-        item.variant.decrement!(:stock, item.quantity)
+      Order.transaction do
+        order.order_items.includes(:variant).find_each do |item|
+          if item.variant.stock >= item.quantity
+            item.variant.decrement!(:stock, item.quantity)
+          else
+            Rails.logger.warn(
+              "Insufficient stock for variant ##{item.variant.id} " \
+              "(stock: #{item.variant.stock}, needed: #{item.quantity})")
+          end
+        end
+        order.update!(status: "paid")
       end
-      order.update!(status: "paid")
 
-      # Can't use deliver_later; smth goes wrong & it never gets sent
-      PurchaseSuccessMailer.successful_purchase(order).deliver_now
-      ToSelfMailer.mail_self(order).deliver_now
+      # Async mailers — Solid Queue runs in production and both mailers retry
+      # transient failures (see ApplicationMailer#retry_on), so nothing is lost.
+      PurchaseSuccessMailer.successful_purchase(order).deliver_later
+      ToSelfMailer.mail_self(order).deliver_later
       order.discount&.redeem!
+
+      # Dashboard aggregates are cached; drop them so the sale shows up promptly.
+      DashboardController.invalidate_stats!
 
     elsif event.type == "checkout.session.expired"
       order = Order.find_by(stripe_session_id: event.data.object.id)

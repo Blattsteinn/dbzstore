@@ -43,6 +43,7 @@ class OrdersController < ApplicationController
         # -- The volume of this website is not that huge for it to actually matter.
         @order = Order.create!(email: @email, discord: @discord,
                     discount_id: @discount_id, discount_percentage: @percentage)
+        DashboardController.invalidate_stats!
         
         discount_multiplier = (100 - @percentage) / 100.0
         discounted_price =  @variant.price * discount_multiplier
@@ -88,6 +89,7 @@ class OrdersController < ApplicationController
         if @order.status == "pending"
             product = @order.order_items.first.product
             @order.destroy
+            DashboardController.invalidate_stats!
             redirect_to game_products_path(product.game_name), alert: "Payment was cancelled"
         else
             redirect_to instructions_url
@@ -98,12 +100,14 @@ class OrdersController < ApplicationController
     def update
         @order = Order.find(params[:id])
         @order.update!(update_params)
+        DashboardController.invalidate_stats!
         redirect_to dashboard_order_path(@order)
     end
 
     def destroy
         @order = Order.find(params[:id])
         @order.destroy
+        DashboardController.invalidate_stats!
         redirect_to dashboard_orders_path
     end
 

@@ -19,7 +19,7 @@ Start with [`../AGENTS.md`](../AGENTS.md) — it's the orientation map. These pa
 ## One-line summary
 
 Userless storefront (`/:game/products`) → instant Stripe Checkout (qty always 1) →
-Stripe webhook marks order `paid`, decrements stock, emails customer + owner synchronously →
+Stripe webhook marks order `paid`, decrements stock, emails customer + owner asynchronously →
 owner fulfills from the admin dashboard (`/dashboard`) and flips status to `processing` / `delivered`.
 
 ## Maintenance rule

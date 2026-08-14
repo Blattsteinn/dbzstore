@@ -14,17 +14,24 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet"></noscript>
+  <link rel="preload" href="<%= asset_path("inter.woff2") %>" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="<%= asset_path("orbitron.woff2") %>" as="font" type="font/woff2" crossorigin>
     <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="48x48">
     <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
     <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# Storefront ships only storefront CSS; admin pages keep everything (:app). %>
+    <% if admin_page? %>
+      <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <% else %>
+      <%= stylesheet_link_tag "reset", "application", "nav", "games", "banner", "search_bar",
+                              "pagy", "discounts", "feedbacks", "faqs", "instructions",
+                              "legal", "tos", "support_messages", "fonts",
+                              "product/product_index", "product/product_hero",
+                              "product/product_view", "product/instant_checkout",
+                              "data-turbo-track": "reload" %>
+    <% end %>
     <%= javascript_importmap_tags %>
   </head>
 

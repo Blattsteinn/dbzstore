@@ -88,6 +88,14 @@ export default class extends Controller {
     }
     document.addEventListener('keydown', this._escHandler)
 
+    // ---- Android/system back button ----
+    // Push a history entry so the browser/OS "back" button closes the
+    // lightbox (via popstate) instead of navigating away from the page.
+    this._prevState = history.state
+    this._onPopState = () => this.closeLightbox(true)
+    window.addEventListener('popstate', this._onPopState)
+    history.pushState({ lightboxOpen: true }, '')
+
     // ---- Touch swipe ----
     if (sources.length > 1) {
       let touchStartX = 0
@@ -126,7 +134,7 @@ export default class extends Controller {
     }
   }
 
-  closeLightbox() {
+  closeLightbox(byBackButton = false) {
     const overlay = document.getElementById('image-lightbox')
     if (overlay) {
       overlay.classList.add('fade-out')
@@ -134,7 +142,15 @@ export default class extends Controller {
         overlay.remove()
         document.body.style.overflow = ''
         document.removeEventListener('keydown', this._escHandler)
+        window.removeEventListener('popstate', this._onPopState)
       }, 150)
+    }
+    // Undo the pushed history entry without triggering popstate. Calling
+    // history.back() here would make Turbo Drive treat it as a real
+    // navigation and restore/re-render the page from cache. replaceState
+    // just clears our marker so a later back press behaves normally.
+    if (!byBackButton && history.state?.lightboxOpen) {
+      history.replaceState(this._prevState, '')
     }
   }
 

@@ -28,22 +28,10 @@ class Product < ApplicationRecord
     end
 
     def thumbnail
-      return unless primary_image.attached?
-
-      primary_image.variant(
-          resize_to_limit: [600, 600],
-          format: :webp,
-          saver: { quality: 75 }
-      )
+      product_images.first&.thumbnail
     end
 
     def hero_image
-      return unless primary_image&.attached?
-
-      primary_image.variant(
-          resize_to_limit: [1600, 1600],
-          format: :webp,
-          saver: { quality: 80 }
-      )
+      product_images.first&.hero
     end
 end
