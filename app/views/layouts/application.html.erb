@@ -10,8 +10,6 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
@@ -21,18 +19,16 @@
     <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
     <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
 
-    <%# Storefront ships only storefront CSS; admin pages keep everything (:app). %>
+    <%# Global CSS: needed on every storefront page. Page-specific CSS loads per-view via content_for(:head). %>
     <% if admin_page? %>
       <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <% else %>
-      <%= stylesheet_link_tag "reset", "application", "nav", "games", "banner", "search_bar",
-                              "pagy", "discounts", "feedbacks", "faqs", "instructions",
-                              "legal", "tos", "support_messages", "fonts",
-                              "product/product_index", "product/product_hero",
-                              "product/product_view", "product/instant_checkout",
+      <%= stylesheet_link_tag "reset", "application", "nav", "fonts",
                               "data-turbo-track": "reload" %>
     <% end %>
     <%= javascript_importmap_tags %>
+    <%# Per-page styles load after globals so they can override them. %>
+    <%= yield :head %>
   </head>
 
   <body class="<%= controller_name %>-<%= action_name %>">

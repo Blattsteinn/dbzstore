@@ -1,18 +1,20 @@
 
 
+<% content_for :head do %>
+  <%= stylesheet_link_tag "games", "banner" %>
+<% end %>
+
 <% content_for(:title) { "Account Rift — Buy Game Accounts & Items" } %>
 <% content_for(:meta_description) { "Buy game accounts and in-game items instantly at Account Rift. Secure Stripe checkout, fast email delivery, and real customer support." } %>
 
 <div id="games-index-page">
 
   <div id="games-banner">
-    <img src="/banner.jpg" loading="lazy">
+    <img src="/banner.jpg" loading="lazy" alt="banner image for the store">>
     <div class="banner-overlay">
-
       <h1 class="banner-title">Account Rift</h1>
       <p class="banner-subtitle">Premium game accounts — safe, fast, and trusted by thousands of gamers worldwide.</p>
       <p class="banner-discord">Discord / Instagram: @dokkanarnis</p>
-      
     </div>
   </div>
 
@@ -21,10 +23,7 @@
       <h2>Choose Your Game</h2>
       <p>Select a game to browse available accounts</p>
     </div>
-
     <div id="games-container">
-    <%# Yes DB query in views, 
-      but not the end of the world, rarely visited page now anyway  #%>
       <% @games.each do |game| %>
         <%= link_to game_products_path(game.name), class: "game-card" do %>
           <div class="game-card-image">

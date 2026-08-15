@@ -1,3 +1,8 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag "product/product_hero", "product/product_view",
+                          "product/instant_checkout", "discounts" %>
+<% end %>
+
 <% content_for(:title) { "#{@product.title} — Account Rift" } %>
 <% content_for(:meta_description) { "Buy \"#{@product.title}\" for #{@game.official_name}. Instant email delivery with secure Stripe checkout at Account Rift." } %>
 
