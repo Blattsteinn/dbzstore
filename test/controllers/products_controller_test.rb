@@ -76,6 +76,16 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_match %r{srcset="[^"]*600w, [^"]*1200w"}, response.body
   end
 
+  test "show renders the carousel when a product has multiple images" do
+    2.times { attach_image(@product) }
+
+    get game_product_url("dokkan", @product), headers: { "User-Agent" => BROWSER_UA }
+
+    assert_response :ok
+    assert_match %r{carousel-counter[^>]*>1 / 2}, response.body
+    assert_select ".carousel-dot", 2
+  end
+
   test "show renders live product and tracks a product view event" do
     assert_difference "Ahoy::Event.count", 1 do
       get game_product_url("dokkan", @product), headers: { "User-Agent" => BROWSER_UA }
