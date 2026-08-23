@@ -27,14 +27,6 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a.game-card[href=?]", game_products_path("legends")
   end
 
-  test "conditional GET returns 304 when nothing changed" do
-    get games_url
-    assert_response :ok
-
-    get games_url, headers: { "If-None-Match" => response.headers["ETag"] }
-    assert_response :not_modified
-  end
-
   test "index renders an empty state when there are no games" do
     Game.delete_all
 

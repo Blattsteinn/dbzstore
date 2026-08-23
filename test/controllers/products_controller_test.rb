@@ -39,18 +39,6 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a.product-box", 1
   end
 
-  test "conditional GET returns 304 and does not track an Ahoy event" do
-    get game_products_url("dokkan"), headers: { "User-Agent" => BROWSER_UA }
-    assert_response :ok
-
-    assert_no_difference "Ahoy::Event.count" do
-      get game_products_url("dokkan"),
-          headers: { "User-Agent" => BROWSER_UA, "If-None-Match" => response.headers["ETag"] }
-    end
-
-    assert_response :not_modified
-  end
-
   test "hot products render the hot tag on the index" do
     Product.create!(title: "Hot Product", visibility: "live", game_name: "dokkan",
                     deliverables: "Account", payment_type: "stripe", hot: true)
@@ -100,18 +88,6 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @product.id, event.properties["product"]
     assert_equal @product.title, event.properties["title"]
     assert_equal @product.game_name, event.properties["game"]
-  end
-
-  test "show conditional GET returns 304 and does not track a product view" do
-    get game_product_url("dokkan", @product), headers: { "User-Agent" => BROWSER_UA }
-    assert_response :ok
-
-    assert_no_difference "Ahoy::Event.count" do
-      get game_product_url("dokkan", @product),
-          headers: { "User-Agent" => BROWSER_UA, "If-None-Match" => response.headers["ETag"] }
-    end
-
-    assert_response :not_modified
   end
 
   test "admin dashboard ships dashboard.css" do

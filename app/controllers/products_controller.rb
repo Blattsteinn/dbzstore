@@ -7,11 +7,7 @@ class ProductsController < ApplicationController
             .where(game_name: params[:game])
             .order(priority: :asc)
 
-        updated_at = @products.maximum(:updated_at)
-
-        if stale?(etag: [updated_at, params[:game]], last_modified: updated_at)
-            ahoy.track "Viewed products", game: @game&.name
-        end
+        ahoy.track "Viewed products", game: @game&.name
     end
 
     def show
@@ -30,9 +26,7 @@ class ProductsController < ApplicationController
 - Instagram / Discord: @dokkanarnis
 - Email: dokkanriftmanagement@tuta.com"
 
-        if stale?(@product)
-            ahoy.track "Viewed product", product: @product.id, title: @product.title, game: @product.game_name
-        end
+        ahoy.track "Viewed product", product: @product.id, title: @product.title, game: @product.game_name
     end
 
     def new
