@@ -53,13 +53,13 @@ export default class extends Controller {
     prevArrow.className = 'lightbox-arrow lightbox-prev'
     prevArrow.innerHTML = '‹'
     prevArrow.setAttribute('aria-label', 'Previous')
-    prevArrow.addEventListener('click', (e) => { e.stopPropagation(); this._lightboxNavigate(-1, sources, img, counter, dots) })
+    prevArrow.addEventListener('click', (e) => { e.stopPropagation(); this._lightboxNavigate(-1, sources, img, counter, dotElements) })
 
     const nextArrow = document.createElement('button')
     nextArrow.className = 'lightbox-arrow lightbox-next'
     nextArrow.innerHTML = '›'
     nextArrow.setAttribute('aria-label', 'Next')
-    nextArrow.addEventListener('click', (e) => { e.stopPropagation(); this._lightboxNavigate(1, sources, img, counter, dots) })
+    nextArrow.addEventListener('click', (e) => { e.stopPropagation(); this._lightboxNavigate(1, sources, img, counter, dotElements) })
 
     // ---- Dots ----
     const dots = document.createElement('div')

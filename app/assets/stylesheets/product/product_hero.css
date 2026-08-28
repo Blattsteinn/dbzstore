@@ -378,6 +378,8 @@
 
 /* Gallery — larger than the default 300px */
 .hero-desc-panel #product-image-container {
+  margin: 25px 0;
+
   height: 420px;
   border-radius: 12px;
   border: 1px solid #27272a;
@@ -805,6 +807,7 @@
 }
 
 .hero-payment-methods {
+  padding-bottom: 10px;
   text-align: center;
   font-size: 0.75rem;
   color: #52525b;
@@ -1023,7 +1026,8 @@
 
   .hero-desc-panel {
     order: -1;
-  }
+    padding: 0 5px;
+   }
 
   .hero-desc-panel #product-image-container {
     height: 280px;
