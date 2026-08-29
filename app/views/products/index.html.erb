@@ -49,7 +49,7 @@
           <div class="product-box-footer">
             <%# Taking first, the price will match anyway %>
             <p class="product-price"><%= convert_from_cents(product.variants.first&.price) %> EUR</p>
-            <p class="product-stock"><%= product.variants.sum(&:stock) %> in stock</p>
+            <%# <p class="product-stock"> <%= product.variants.sum(&:stock) (added percentage here)> in stock</p> %> 
           </div>
         </div>
 
